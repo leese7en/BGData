@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResQuotaDao">
+	<select id="getQuotaBase" resultType="com.magus.bd.entity.ResQuota">
+	SELECT
+	    id AS id,
+	    NAME AS name
+    FROM
+	   res_quota_base
+	</select>	
+	<select id="getPSType" resultType="com.magus.bd.entity.ResQuota">
+	SELECT DISTINCT
+		b.IndustryTypeName AS psType
+	FROM
+		res_baseinfo b 
+	</select>	
+	<select id="getEnterpriseInfo" resultType="com.magus.bd.entity.ResQuota">
+	SELECT
+		psCode AS psCode,
+		psName AS psName
+	FROM
+		res_baseinfo b
+	WHERE
+		Emphasis = 1
+	</select>	
+	
+	<select id="getCityQutoa" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		c.city_id as cityId,
+		c.city_name cityName,
+		avg(total) AS total
+	FROM
+		res_quota q
+	LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+	LEFT JOIN sys_city c ON b.city_id = c.city_id
+	WHERE
+		c.city_id != ''
+	AND q.date = #{date}
+	GROUP BY
+		c.city_id
+	ORDER BY
+		total
+	</select>	
+	<select id="getEnterprise" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			q.psCode AS psCode,
+			b.IndustryTypeName AS psType,
+			c.city_id AS cityId,
+			c.city_name cityName,
+			q.date as date,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+			effective AS effective,
+			complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_quota q
+		LEFT JOIN sys_city c ON q.city_id = c.city_id
+		LEFT JOIN res_baseinfo b ON q.pscode = b.pscode
+		WHERE
+			q.date BETWEEN #{beginTime} AND #{endTime}
+		<if test="waterOrGas!=null and waterOrGas!=''">
+			and q.waterOrGas = #{waterOrGas}
+		</if>
+		<if test="cityId!=null and cityId!=''" >
+			and q.city_id = #{cityId}
+		</if>
+		<if test="psType!=null and psType!=''">
+			and b.IndustryTypeName = #{psType}
+		</if>
+		<if test="psCode!=null and psCode!=''">
+			and q.psCode = #{psCode}
+		</if>
+		
+	</select>	
+	<select id="getEnterpriseByMonth" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			q.psCode AS psCode,
+			b.psName AS psName,
+			b.IndustryTypeName AS psType,
+			b.Latitude AS latitude,
+			b.Longitude AS longitude,
+			c.city_id AS cityId,
+			c.city_name cityName,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+			effective AS effective,
+			complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_baseinfo b
+		LEFT JOIN res_quota q ON q.pscode = b.pscode
+		LEFT JOIN sys_city c ON q.city_id = c.city_id
+		WHERE
+			q.date = #{date}
+			<if test="cityId != null and cityId != '-1' and cityId !=''">
+				and q.city_id = #{cityId}
+			</if>
+	</select>	
+	<select id="getImproveCity" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.city_id AS cityId,
+		c.city_name AS cityName,
+		avg(mutation) AS mutation,
+		avg(Handicapping) AS handicapping,
+		avg(Constant) AS constant,
+		avg(fluctuation) AS fluctuation,
+		avg(screenJump) AS screenJump,
+		avg(effective) AS effective,
+		avg(complete) AS complete,
+		avg(reliable) AS reliable,
+		avg(total) AS total
+	FROM
+		res_quota q
+	LEFT JOIN sys_city c ON q.city_id = c.city_id
+	WHERE
+		q.date BETWEEN #{beginTime} AND #{endTime}
+	<if test="waterOrGas!=null and waterOrGas!=''">
+		and q.waterOrGas = #{waterOrGas}
+	</if>
+	GROUP BY
+		q.city_id
+	</select>
+	<select id="getImproveCityDetailSta" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.city_id AS cityId,
+		c.city_name AS cityName,
+		avg(mutation) AS mutation,
+		avg(Handicapping) AS handicapping,
+		avg(Constant) AS constant,
+		avg(fluctuation) AS fluctuation,
+		avg(screenJump) AS screenJump,
+		avg(effective) AS effective,
+		avg(complete) AS complete,
+		avg(reliable) AS reliable,
+		avg(total) AS total
+	FROM
+		res_quota q
+	LEFT JOIN sys_city c ON q.city_id = c.city_id
+	WHERE
+		q.city_id = #{cityId} and 
+		q.date BETWEEN #{beginTime} AND #{endTime}
+	GROUP BY
+		q.city_id
+	</select>
+	<select id="getImproveCityDetailInterval" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			q.psCode AS psCode,
+			date as date,
+			q.city_id as cityId,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+			effective AS effective,
+			complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_quota q
+		WHERE
+			q.date BETWEEN #{beginTime} AND #{endTime}
+			and q.city_id = #{cityId}
+		ORDER BY q.city_id,q.month
+	</select>
+	
+	
+	<select id="getImprovePSType" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.IndustryType AS psType,
+		avg(mutation) AS mutation,
+		avg(Handicapping) AS handicapping,
+		avg(Constant) AS constant,
+		avg(fluctuation) AS fluctuation,
+		avg(screenJump) AS screenJump,
+		avg(effective) AS effective,
+		avg(complete) AS complete,
+		avg(reliable) AS reliable,
+		avg(total) AS total
+	FROM
+		res_quota q
+	WHERE
+		q.date BETWEEN #{beginTime} AND #{endTime}
+	<if test="waterOrGas!=null and waterOrGas!=''">
+		and q.waterOrGas = #{waterOrGas}
+	</if>
+	GROUP BY
+		q.IndustryType
+	</select>
+	<select id="getImprovePSTypeDetailSta" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.IndustryType AS psType,
+		avg(mutation) AS mutation,
+		avg(Handicapping) AS handicapping,
+		avg(Constant) AS constant,
+		avg(fluctuation) AS fluctuation,
+		avg(screenJump) AS screenJump,
+		avg(effective) AS effective,
+		avg(complete) AS complete,
+		avg(reliable) AS reliable,
+		avg(total) AS total
+	FROM
+		res_quota q
+	WHERE
+		q.date BETWEEN #{beginTime} AND #{endTime}
+	<if test="waterOrGas!=null and waterOrGas!=''">
+		and q.waterOrGas = #{waterOrGas}
+	</if>
+	GROUP BY
+		q.IndustryType
+	</select>
+	<select id="getImprovePSTypeDetailInterval" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			b.IndustryTypeName AS psType,
+			q.date as date,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+			effective AS effective,
+			complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_quota q
+		LEFT JOIN res_baseinfo b on q.PSCode = b.PSCode
+		WHERE
+			b.IndustryTypeName = #{psType}
+		and 
+			q.date BETWEEN #{beginTime} AND #{endTime}
+	</select>
+	
+	<select id="getImproveRes" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			q.PSCode AS psCode,
+			b.PSName AS psName,
+			q.date as date,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+		    effective AS effective,
+		    complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_quota q
+		LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+		WHERE
+			q.date BETWEEN #{beginTime} AND #{endTime}
+			and b.PSName like '%${psName}%'
+		<if test="waterOrGas!=null and waterOrGas!=''">
+			and q.waterOrGas = #{waterOrGas}
+		</if>
+		<if test="cityId!=null and cityId!=''">
+			and q.city_Id = #{cityId}
+		</if>
+	</select>
+	<select id="getImproveResCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.ResQuota">
+			SELECT
+				count(*) as count
+			FROM
+				res_quota q
+			LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+			WHERE
+				q.date BETWEEN #{beginTime} AND #{endTime}
+				and b.PSName like '%${psName}%'
+			<if test="waterOrGas!=null and waterOrGas!=''">
+				and q.waterOrGas = #{waterOrGas}
+			</if>
+			<if test="cityId!=null and cityId!=''">
+				and q.city_Id = #{cityId}
+			</if>
+	</select>
+	<select id="getImproveResDetailSta" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.PSCode AS psCode,
+		b.PSName AS psName,
+		avg(mutation) AS mutation,
+		avg(Handicapping) AS handicapping,
+		avg(Constant) AS constant,
+		avg(fluctuation) AS fluctuation,
+		avg(screenJump) AS screenJump,
+		avg(effective) AS effective,
+		avg(complete) AS complete,
+		avg(reliable) AS reliable,
+		avg(total) AS total
+	FROM
+		res_quota q
+	LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+	WHERE
+	 	q.pscode = #{psCode} and 
+		q.date BETWEEN #{beginTime} AND #{endTime}
+		and b.PSName like '%${psName}%'
+	<if test="waterOrGas!=null and waterOrGas!=''">
+		and q.waterOrGas = #{waterOrGas}
+	</if>
+	<if test="cityId!=null and cityId!=''">
+		and q.cityId = #{cityId}
+	</if>
+		group by q.pscode
+		limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="getImproveResDetailInterval" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+	SELECT
+		q.PSCode AS psCode,
+		b.PSName AS psName,
+		q.date as date,
+		mutation AS mutation,
+		Handicapping AS handicapping,
+		Constant AS constant,
+		fluctuation AS fluctuation,
+		screenJump AS screenJump,
+		effective AS effective,
+		complete AS complete,
+		reliable AS reliable,
+		total AS total
+	FROM
+		res_quota q
+	LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+	WHERE
+		q.pscode = #{psCode} and 
+		q.date BETWEEN #{beginTime} AND #{endTime}
+	</select>
+	<select id="getImproveYear" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			q.city_id AS cityId,
+			c.city_name AS cityName,
+			q. MONTH AS date,
+			b.IndustryTypeName AS psType,
+			mutation AS mutation,
+			Handicapping AS handicapping,
+			Constant AS constant,
+			fluctuation AS fluctuation,
+			screenJump AS screenJump,
+			effective AS effective,
+			complete AS complete,
+			reliable AS reliable,
+			total AS total
+		FROM
+			res_quota q
+		LEFT JOIN sys_city c ON q.city_id = c.city_id
+		LEFT JOIN res_baseinfo b ON q.PSCode = b.PSCode
+		WHERE
+			q. YEAR = #{date}
+			order by 
+			q.city_id,q.month
+	</select>
+	<select id="getReliability" resultType="com.magus.bd.entity.ResQuota" parameterType="java.util.List">
+		SELECT
+			psCode AS psCode,
+			beginTime AS beginTime,
+			endTime AS endTime
+		FROM
+			res_enterprise_reliability_time
+		WHERE
+			available = 1 and psCode in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+	   	</foreach>  
+	</select>
+	<insert id="addPSReliable"  parameterType="java.util.List">
+		insert into 
+			res_enterprise_reliability_time
+		(	
+			psCode ,
+			beginTime ,
+			endTime,
+			create_time
+		)
+		 values 
+		(
+			#{psCode},
+			#{beginTime},
+			#{endTime},
+			sysdate()
+		)
+	</insert>
+	<select id="getEnterpriseByInfo" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			psCode,
+			psName
+		FROM
+			res_baseinfo
+		WHERE
+			city_id = #{cityId}
+		AND psName like '%${psName}%'
+	</select>
+	<select id="getEnterpriseBIInfo" resultType="com.magus.bd.entity.ResQuota" parameterType="com.magus.bd.entity.ResQuota">
+		SELECT
+			t.*, al.algorithm_name AS algotirhmName
+		FROM
+			(
+				SELECT
+					PSCode AS psCode,
+					algorithm_Code AS algorithmCode,
+					sum(count) AS count,
+					sum(distance) AS distance
+				FROM
+					bi_result
+				WHERE
+					LEFT (dayinfo, 6) = #{date}
+				AND psCode = #{psCode}
+				GROUP BY
+					PSCode,
+					algorithm_Code
+			) t
+		LEFT JOIN bi_algorithm al ON t.algorithmCode = al.algorithm_Code
+	</select>
+</mapper>

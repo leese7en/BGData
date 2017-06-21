@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+#ShowText {
+	position: relative;
+}
+
+#ShowTip {
+	background: white;
+	border-left: solid 1px;
+	border-bottom: solid 1px;
+	border-right: solid 1px;
+	font-size: 12px;
+	color: black;
+}

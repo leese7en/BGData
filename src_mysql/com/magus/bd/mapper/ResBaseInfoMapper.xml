@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResBaseInfoDao">
+	
+	<select id="blurryBaseInfo" resultType="com.magus.bd.entity.ResBaseInfo" parameterType="com.magus.bd.entity.ResBaseInfo">
+	SELECT
+		PSCode AS psCode,
+		PSName AS psName,
+		PSType AS psType,
+		city.city_id as cityId,
+		city.city_name as cityName,
+		PSGroup AS psGroup,
+		PSStatus AS psStauts,
+		UnitTypeName AS unitTypeName,
+		SubjectionRelationName AS subjectionRelationName,
+		IndustryTypeName AS industryTypeName,
+		ValleyName AS valleyName,
+		AttentionDegreeName AS attentionDegreeName,
+		PSAddress AS psAddress,
+		base.Longitude AS longitude,
+		base.Latitude AS latitude,
+		PSEnvironmentDept AS psEnvironmentDept,
+		EnvironmentPrincipal AS environmentPrincipal,
+		EnvironmentMans AS environmentMans,
+		CorporationCode AS corporationCode,
+		CorporationName AS corporationName,
+		RunDate AS runDate,
+		OfficePhone AS officePhone,
+		Fax AS fax,
+		MobilePhone AS mobilePhone,
+		Email AS email,
+		PostalCode AS postalCode,
+		CommunicateAddr AS communicateAddr,
+		AreaName AS areaName,
+		PSClassName AS psClassName,
+		Linkman AS linkman,
+		COMMENT AS COMMENT,
+		DisposeTypeCode AS disposeTypeCode,
+		IfThirtyTenthousandkilowat AS ifThirtyTenthousandkilowat,
+		TotalArea AS totalArea,
+		IsMonitor AS isMonitor,
+		StateControlledTypeName AS stateControlledTypeName,
+		PsAlias AS psAlias,
+		UpdateTime AS updateTime
+	FROM
+		res_baseinfo base
+		left join sys_city  city  on base.city_id = city.city_id 
+		where base.PSName like '%${psName}%'
+		<if test="cityId !=null and cityId != '-1' ">
+			and base.city_id = #{cityId}
+		</if>
+		<if test="industryTypeName !=null and industryTypeName != '-1' ">
+			and base.IndustryTypeName = #{industryTypeName}
+		</if>
+		limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="blurryCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.ResBaseInfo">
+	SELECT
+		count(1)
+	FROM
+		res_baseinfo
+		where PSName like '%${psName}%'
+	</select>
+	<insert id="addBaseInfo" parameterType="com.magus.bd.entity.ResBaseInfo">
+	  insert into sys_user
+	  (
+		   user_name,
+		   job_no,
+		   password,
+		   description,
+		   email,
+		   emergency_phone,
+		   phone,
+		   create_date,
+		   dept_id
+	   )
+	  values
+	  (
+		  #{userName},
+		  #{jobNo},
+		  #{password},
+		  #{description},
+		  #{email},
+		  #{emergencyPhone},
+		  #{phone},
+		  #{createDate},
+		  #{deptId}
+	  )
+	</insert>
+	
+	<select id="getBaseInfoById" resultType="com.magus.bd.entity.ResBaseInfo" parameterType="com.magus.bd.entity.ResBaseInfo">
+	  select 
+	     user_id as id,
+	     user_name as name,
+	     password as password,
+	     create_date as createDate,
+	     is_admin as isAdmin
+	  from user
+	   where
+	   user_id = #{id}
+	</select>
+	<update id="updateBaseInfo" parameterType="com.magus.bd.entity.ResBaseInfo">
+      update user 
+      set
+      user_name = #{name},	hone
+      password = #{password}
+      where 
+      user_id = #{id}
+	</update>
+	
+	<select id="getTopTen" resultType="com.magus.bd.entity.ResBaseInfo" parameterType="com.magus.bd.entity.ResBaseInfo">
+	 SELECT
+		pscode AS psCode,
+		psName AS psName
+	FROM
+		res_baseinfo
+	WHERE
+		psname LIKE '%${psName}%'
+	LIMIT 0,10
+	</select>
+</mapper>

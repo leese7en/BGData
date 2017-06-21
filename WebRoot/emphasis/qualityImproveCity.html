@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>数据质量改善分析</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../css/calendar/SimpleCanleder.css" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+	</head>
+	<body class="easyui-layout">
+		<div class="easyui-tabs" data-options="fit:true">
+			<div title="时间/指标" style="overflow: hidden;">
+				<div id="qualityResCondition" data-options="region:'north',fit:false" style="padding-top: -5px; padding-left: 20px;">
+					<div style="width: 200px; float: left">
+						<span style="display: inline-block; width: 60px; margin-top: 8px; float: left;">开始时间:</span>
+						<div id="beginTime" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<div style="float: left; height: 31px;">
+						<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="endTime" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<span>盟市</span>
+					<select id="cityQuery" class="easyui-combobox" data-options="panelHeight:'auto'"
+						style="width: 100px; height: 28px;">
+					</select>
+					<span>得分类型：</span>
+					<select id="scoreType" class="easyui-combobox" data-options="panelHeight:'auto',editable:false" style="width: 80px; height: 28px;">
+						<option value="0">原始值</option>
+						<option value="1">权重值</option>
+					</select>
+					<a href="#" class="s_btns" onclick="imporveCityQuery()">查询</a>
+					<div class="help-tip" style="position: fixed;top: 50px;right: 20px">
+						<p></p>
+					</div>
+				</div>
+				<div data-options="region:'center',fit:false">
+					<div id="lineCityChart"  style="margin-top: 20px;"></div>
+				</div>
+			</div>
+			<div title="盟市指标对比" style="overflow: hidden;">
+				<div id="qualityResCondition" data-options="region:'north',fit:false" style="padding-top: 10px; padding-left: 20px;">
+					<span>年度</span>
+					<select id="yearQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px; height: 28px;">
+					</select>
+					<span>指标类型</span>
+					<select id="quotaQuotaQuery" class="easyui-combobox" data-options="panelHeight:'auto'"
+						style="width: 80px; height: 28px;">
+					</select>
+					<span>得分类型：</span>
+						<select id="scoreTypeCity" class="easyui-combobox" data-options="panelHeight:'auto',editable:false" style="width: 80px; height: 28px;">
+						<option value="0">原始值</option>
+						<option value="1">权重值</option>
+					</select>
+					<a href="#" class="s_btns" onclick="imporveLineQuery()">查询</a>
+					<div class="help-tip" style="position: fixed;top: 50px;right: 20px">
+						<p></p>
+					</div>
+				</div>
+				<div data-options="region:'center',fit:false">
+					<div id="lineChart"  style="margin-top: 20px; "></div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script src="../js/jquery.min.js">
+</script>
+	<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+	<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+	<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/echarts.min.js">
+</script>
+	<script src="../js/DatePicker/SimpleCanleder.js">
+</script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+	<script src="js/qualityImproveCity.js">
+</script>
+</html>

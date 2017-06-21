@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.AQIDayInfoDao">
+	<select id="getAQIDayInfo" resultType="com.magus.bd.entity.AQIDayInfo"
+		parameterType="com.magus.bd.entity.AQIDayInfo">
+		SELECT
+			aqi as aqi,
+			first_poll as firstPoll,
+			date as date
+		FROM
+			aqi_city_day
+		WHERE
+			date BETWEEN #{beginTime}
+			AND #{endTime}
+			AND city_id = #{cityId}
+		ORDER BY date
+	</select>	
+	<select id="getPollDayInfo" resultType="com.magus.bd.entity.AQIDayInfo"
+		parameterType="com.magus.bd.entity.AQIDayInfo">
+		SELECT
+			LEFT (pscode, 4) AS cityId,
+			DATE_FORMAT(date, '%Y-%m-%d') AS date,
+			polltype AS pollType,
+			avg(avgstrength) AS strength
+		FROM
+			gas_fac_day_analysis_aqi
+		WHERE
+			LEFT (psCode, 4) = #{cityId}
+		AND DATE_FORMAT(date, '%Y-%m-%d') BETWEEN #{beginTime}
+		AND #{endTime}
+		GROUP BY
+			LEFT (PSCODE, 4),
+			DATE_FORMAT(date, '%Y-%m-%d'),
+			polltype
+		ORDER BY
+			DATE_FORMAT(date, '%Y-%m-%d')
+	</select>	
+	<select id="getPollAmountInfo" resultType="com.magus.bd.entity.AQIDayInfo"
+		parameterType="com.magus.bd.entity.AQIDayInfo">
+		SELECT
+			LEFT (pscode, 4) AS cityId,
+			polltype AS pollType,
+			sum(amount/1000000) AS amount
+		FROM
+			gas_fac_day_analysis_aqi
+		WHERE
+			LEFT (pscode, 4) = #{cityId}
+		AND DATE_FORMAT(date, '%Y-%m-%d') BETWEEN #{beginTime}
+		AND #{endTime}
+		GROUP BY
+			LEFT (PSCODE, 4),
+			polltype
+	</select>	
+	<select id="getPowerPollAmountInfo" resultType="com.magus.bd.entity.AQIDayInfo"
+		parameterType="com.magus.bd.entity.AQIDayInfo">
+		SELECT
+			LEFT (a.pscode, 4) AS cityId,
+			polltype AS pollType,
+			sum(amount/1000000) AS amount
+		FROM
+			gas_fac_day_analysis_aqi a
+		LEFT JOIN res_baseinfo b ON a.pscode = b.pscode
+		WHERE
+			LEFT (a.pscode, 4) = #{cityId}
+		AND b.IndustryTypeName like '%电力%'
+		AND DATE_FORMAT(date, '%Y-%m-%d') BETWEEN #{beginTime}
+		AND #{endTime}
+		GROUP BY
+			LEFT (a.PSCODE, 4),polltype
+	</select>	
+</mapper>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ECharts">
+	<title>火电厂</title>
+	<link rel="shortcut icon" href="../asset/ico/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+	<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<script src="../js/echarts-all.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+<script src="js/annotation.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<style type="text/css">
+    .easyui-fluid {
+      height:100%;
+    }
+      .pagination-info{
+      margin-right:20px;
+      }
+      .panel-body{
+      padding:0;
+      }
+      .panel{
+      margin-bottom:0;
+      }
+      .s_btns, .s_btna{
+      border:none;
+      }
+      .s_btna{
+      padding:6px 16px;
+      }
+      .datagrid-view{
+      border-top:1px solid #e1e1e1;
+       }
+      .datagrid-wrap{
+       border-left:1px solid #e1e1e1;
+      }
+      .l-btn {
+	margin-bottom: 5px;
+	margin-top:3px;
+}
+
+.l-btn-text {
+	color: #fff;
+}
+
+.l-btn:hover {
+	color: #fff;
+	background: #569fe8;
+}
+.dialog-button{
+border-bottom:0;
+}
+    </style>
+</head>
+<body class="easyui-layout">
+<!-- 添加批注 -->
+<div id="addAnotationDialog" style="width: 530px; height:400px; font-size: 13px;margin-left:10px;display:none;">
+<table cellpadding="5" style="font-size: 13px; color: MidnightBlue; width: 100%;margin-top:10px;">
+	<tr>
+		<td align="right">污染物/硫分:</td>
+		<td>
+			<select id="addpollOrSulfur"  class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">污染因子:</td>
+		<td>
+			<select id="addpollutant"  class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">维度:</td>
+		<td>
+			<select id="addviewPoint" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+
+		</td>
+	</tr>
+	<tr>
+		<td align="right">盟市/集团:</td>
+		<td>
+			<select id="addgroupOrCity" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right">日期:</td>
+		<td>
+			<input id="addtime"  class="easyui-datetimespinner" required
+							data-options="formatter:myformatter,parser:myparser,selections:[[0,4],[5,7]]" style="width: 200px;height:28px;"></td>
+	</tr>
+	<tr>
+		<td align="right">批注内容:</td>
+		<td>
+			<textarea id="addcontent"  data-options="multiline:true"  style="width:400px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+		</td>
+	</tr>
+</table>
+</div>
+<!-- 编辑批注 -->
+<div id="editAnnotationDialog" style="width: 530px; height: 660px; font-size: 13px;margin-left:10px;display:none;">
+<table cellpadding="5" style="font-size: 13px; color: MidnightBlue; width: 100%;margin-top:10px;">
+	<tr>
+		<td align="right">污染物/硫分:</td>
+		<td>
+			<select id="epollOrSulfur"  class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">污染因子:</td>
+		<td>
+			<select id="epollutant"  class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">维度:</td>
+		<td>
+			<select id="eviewPoint"  class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">盟市/集团:</td>
+		<td>
+			<select id="egroupOrCity" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 200px;height:28px;"></select>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right">日期:</td>
+		<td>
+			<input id="etime"  class="easyui-datetimespinner" required
+							data-options="formatter:myformatter,parser:myparser,selections:[[0,4],[5,7]]" style="width: 200px;height:28px;"></td>
+	</tr>
+	<tr>
+		<td align="right">批注内容:</td>
+		<td>
+			<textarea id="econtent"  data-options="multiline:true" style="width:400px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+		</td>
+	</tr>
+</table>
+</div>
+<!-- 查询批注 -->
+<div data-options="region:'center'">
+<div id="editAnnotation" class="easyui-menu"
+						style="width: 100px; background-color: #fafafa; display: none;border-color:#ddd;">
+	<div iconCls="icon-add" name="basic">编辑批注</div>
+	<div iconCls="icon-delete" name="delete">删除批注</div>
+</div>
+<div style="padding-top:10px;padding-left:20px;">
+	<div style="float: left;">
+		<span>维度:</span>
+		<select id="viewPoint" class="easyui-combobox" data-options="panelHeight:'auto'" style="width:100px;height:28px;" editable="false">
+			<option value="2">盟市</option>
+			<option value="1">电力集团</option>
+		</select>
+	</div>
+
+	<div style="width: 200px; float: left">
+		<span style="display: inline-block; width: 60px; margin-top: 8px; float: left;">开始时间:</span>
+		<div id="beginTime" class="input-group date form_datetime" style="width: 130px">
+			<input class="form-control" type="text"  style="font-size: 12px; height: 32px;">
+			<span class="input-group-addon" style="height: 31px">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+		</div>
+	</div>
+	<div style="float: left; height: 31px;">
+		<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+	</div>
+	<div style="width: 135px; float: left">
+		<div id="endTime" class="input-group date form_datetime" style="width: 130px">
+			<input class="form-control" type="text" style="font-size: 12px; height: 32px;">
+			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+		</div>
+	</div>
+
+	<div style="float: left;">
+		<span>污染物类型:</span>
+		<select id="pollOrSulfur" class="easyui-combobox" data-options="panelHeight:'auto'" style="width:100px;height:28px;" editable="false">
+			<option value="-1">全部</option>
+			<option value="1">污染物</option>
+			<option value="2">硫分</option>
+		</select>
+	</div>
+
+	<button href="#" class="s_btns" onclick="queryAnotationData()" style="display: inline-block; padding: 6px 16px;">查询</button>
+	<button href="#" class="s_btna" onclick="anotationInsert()" style="display: inline-block;">添加</button>
+</div>
+<div id="strengthRanking" style="width: 100%;margin-top:10px;height:90%;border-bottom:1px solid #e1e1e1;">
+	<table id="annotationTable" class="easyui-datagrid" style="width:100%;height:100%;"
+								data-options="singleSelect:true,striped:true,rownumbers:true,pagination:true">
+		<thead>
+			<tr>
+				<th field="cityName" width="20%" align="center">盟市</th>
+				<th field="groupName" width="20%" align="center">集团</th>
+				<th field="year" width="16%" align="center">年份</th>
+				<th field="month" formatter="formatMonth" width="16%" align="center">月份</th>
+				<th field="pollutant" formatter="formatPollutant" width="16%" align="center">污染物类型</th>
+				<th field="content" width="16%" align="center">批注内容</th>
+				<th field="userName" width="15%" align="center">用户</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+</div>
+</body>
+
+</html>

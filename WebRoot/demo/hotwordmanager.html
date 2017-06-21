@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>自动监控管理热词搜索</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="js/ranking.js">
+</script>
+
+	</head>
+
+	<body class="easyui-layout">
+
+		<div data-options="region:'north'" id="condition"
+			style="height: 30px; padding-top: 2px; background: #2c81ba; border: #4789c4; color: #fff; padding-left: 20px; padding-top: 4px;">
+			<span>盟市:</span>
+			<input id="city" class="easyui-textbox" style="width: 120px" />
+			<span>企业:</span>
+			<input id="enterprise" class="easyui-textbox" style="width: 120px" />
+			<span>类型:</span>
+			<input id="type" class="easyui-textbox" style="width: 80px" />
+			<span>开始结束时间:</span>
+			<input id="beginTime" class="easyui-datetimebox" required style="width: 120px">
+			<span>-</span>
+			<input id="endTime" class="easyui-datetimebox" required style="width: 120px">
+			<span>热词</span>
+			<input id="hotword" class="easyui-textbox" style="width: 110px" />
+			<a href="#" class="s_btns" onclick="query()">查询</a>
+		</div>
+		<div data-options="region:'center'">
+			<div id="strengthRanking" style="width: 100%; height: 100%">
+				<table class="easyui-datagrid"
+					data-options="
+                fit:true,
+				rownumbers: true,
+				animate: true,
+				collapsible: true,
+				fitColumns: true,
+				pagination:true,
+				idField: 'ID',
+				singleSelect:false,
+				state:closed,
+				treeField: 'Name',
+				striped:true">
+					<thead>
+						<tr>
+							<th data-options="field:'itemid'" width="10%" align="center">
+								盟市
+							</th>
+							<th data-options="field:'productid'" width="10%" align="center">
+								企业
+							</th>
+							<th data-options="field:'listprice',align:'left'" width="20%" align="center">
+								热词
+							</th>
+							<th data-options="field:'unitcost',align:'right'" width="10%" align="center">
+								时间
+							</th>
+							<th data-options="field:'unitcost1',align:'left'" width="28%" align="center">
+								报告名称
+							</th>
+							<th data-options="field:'unitcost2',align:'left'" width="20%" align="center">
+								查看详情
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

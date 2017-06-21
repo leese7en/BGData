@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResHotwordDao">
+	<select id="blurryHotword" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			t.COUNT AS hotCount,
+			ht.name AS hotName,
+			c.city_Name AS cityName,
+			b.PSName AS psName,
+			hw. NAME AS name,
+			e.time AS date,
+			e.description AS description,
+			e.url AS url,
+			b.PSCode
+		FROM
+			res_enterprise_hotword e
+		LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+		LEFT JOIN res_hotword hw ON hr.hotword_id = hw.id
+		LEFT JOIN res_hotphrase hp ON hr.hot_phrase = hp.id
+		LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+		LEFT JOIN res_baseinfo b ON e.PSCode = b.PSCode
+		LEFT JOIN sys_city c ON LEFT (e.psCode, 4) = c.city_id
+		LEFT JOIN (SELECT
+						hr.hotword_id AS hotwordId,
+						COUNT(*) AS COUNT
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					LEFT JOIN res_hotword_type res ON res.pre_id = hr.hot_type
+					where 1=1
+					<if test="beginTime !=null and beginTime != '' and endTime != null and endTime != ''">
+						and e.date between #{beginTime} and #{endTime}
+					</if>
+					GROUP BY hr.hotword_id
+					)AS t ON t.hotwordId=hr.hotword_id
+		WHERE
+			b.psName LIKE '%${psName}%'
+		AND hw. NAME LIKE '%${name}%'
+		<if test="beginTime !=null and beginTime != '' and endTime != null and endTime != ''">
+			and e.date between #{beginTime} and #{endTime}
+		</if>
+		<if test="isPre!= null">
+			and hr.hot_type in(SELECT id FROM res_hotword_type WHERE pre_id = #{typeId}) 
+		</if>
+		<if test="typeId!=null and typeId!='-1' and typeId!= '1' and typeId!= '9' and typeId!= '13' and isPre== null">
+			and hr.hot_type in(SELECT id FROM res_hotword_type WHERE id = #{typeId}) 
+		</if>
+		<if test="cityId!=null and cityId!='-1'">
+			and c.city_id = #{cityId}
+		</if>
+		limit #{pageNumber},#{pageSize}
+	</select>
+	
+	<select id="blurryHotwordCount" resultType="java.lang.Integer"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			count(*) as count
+		FROM
+			res_enterprise_hotword e
+		LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+		LEFT JOIN res_hotword hw ON hr.hotword_id = hw.id
+		LEFT JOIN res_hotphrase hp ON hr.hot_phrase = hp.id
+		LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+		LEFT JOIN res_baseinfo b ON e.PSCode = b.PSCode
+		LEFT JOIN sys_city c ON LEFT (e.psCode, 4) = c.city_id
+		LEFT JOIN (SELECT
+						hr.hotword_id AS hotwordId,
+						COUNT(*) AS COUNT
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					LEFT JOIN res_hotword_type res ON res.pre_id = hr.hot_type
+					GROUP BY hr.hotword_id)AS t ON t.hotwordId=hr.hotword_id
+		WHERE
+			b.psName LIKE '%${psName}%'
+		AND hw. NAME LIKE '%${name}%'
+		<if test="beginTime !=null and beginTime != '' and endTime != null and endTime != ''">
+			and e.date between #{beginTime} and #{endTime}
+		</if>
+		<if test="isPre!= null">
+			and hr.hot_type in(SELECT id FROM res_hotword_type WHERE pre_id = #{typeId}) 
+		</if>
+		<if test="typeId!=null and typeId!='-1' and typeId!= '1' and typeId!= '9' and typeId!= '13' and isPre== null">
+			and hr.hot_type in(SELECT id FROM res_hotword_type WHERE id = #{typeId}) 
+		</if>
+		<if test="cityId!=null and cityId!='-1'">
+			and c.city_id = #{cityId}
+		</if>
+	</select>
+	
+	<select id="blurryHotPhrase" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			id AS id,
+			content AS name,
+			description AS description,
+			create_date AS createDate
+		FROM
+			res_hotphrase
+		WHERE
+			content LIKE '%${name}%'
+		AND description LIKE '%${description}%'
+		and is_delete = 0
+	</select>
+
+    <select id="getHotwords" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+    SELECT
+			h.hotword_id AS id,
+			h. NAME AS name,
+			t. NAME AS typeName,
+			e. PSCode AS PSCode,
+			h.create_date AS createDate,
+			h.description AS description
+		FROM
+			res_hotword h
+		LEFT JOIN res_hotword_type t ON h.type_id = t.type_id
+		LEFT JOIN res_enterprise_hotword e ON h.hotword_id = e.hotword_id
+    </select>
+    <select id="getHotwordFrequencyYear" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		    SELECT
+				t.id as id,
+				h. NAME AS name,
+				t.count AS times
+			FROM
+				(
+					SELECT
+						hr.hotword_id AS id,
+						count(*) AS count
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					WHERE
+						LEFT (date, 4) = #{date}
+					<if test="cityId!=null and cityId!='-1'">
+						AND LEFT (pscode, 4) = #{cityId}
+					</if>
+					GROUP BY
+						hr.hotword_id
+				) t
+			LEFT JOIN res_hotword h ON t.id = h.id
+			ORDER BY
+				t.count DESC
+				limit 0,6
+
+    </select>
+    <select id="getHotwordFrequencyMonth" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		    SELECT
+				t.id AS id,
+				h. NAME AS name,
+				t.count AS times,
+				t.month as date 
+			FROM
+				(
+					SELECT
+						hr.hotword_id AS id,
+						count(*) AS count,
+					right(date,2) as month
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					WHERE
+						LEFT (date, 4) = #{date}
+					<if test="cityId!=null and cityId!='-1'">
+						AND LEFT (pscode, 4) = #{cityId}
+					</if>
+					and hr.hotword_id in
+					<foreach item="item" index="index" collection="hotwordIds" open="("
+						separator="," close=")">
+						#{item}  
+				   </foreach>
+					GROUP BY
+						hr.hotword_id,right(date,2)
+				) t
+			LEFT JOIN res_hotword h ON t.id = h.id
+			ORDER BY
+				t.count DESC
+
+    </select>
+    <select id="countHotwordTimes" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		    SELECT
+				h. NAME AS NAME,
+				t.count AS times
+			FROM
+				(
+					SELECT
+						hr.hotword_id AS hotwordId,
+						count(*) AS count
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					GROUP BY
+						hr.hotword_id
+				) t
+		LEFT JOIN res_hotword h ON t.hotwordId = h.id
+    </select>
+    <select id="countHotwordTimesByWords" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		    SELECT
+				h. NAME AS name,
+				t.count AS times,
+				t.hotTypeId  AS typeId
+			FROM
+				(
+					SELECT
+						hr.hotword_id AS hotwordId,
+						hr.hot_type as hotTypeId,
+						count(*) AS count
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					LEFT JOIN res_hotword_type res ON res.pre_id = hr.hot_type
+					where e.date between #{beginTime} and #{endTime}
+					<if test="isPre!= null">
+			            and hr.hot_type in(SELECT id FROM res_hotword_type WHERE pre_id = #{typeId}) 
+		            </if>
+					<if test="typeId!=null and typeId!='-1'  and typeId!= '1' and typeId!= '9' and typeId!= '13' and isPre== null">
+						 and hr.hot_type IN(SELECT id FROM res_hotword_type WHERE id = #{typeId})
+					</if>
+					GROUP BY
+						hr.hotword_id
+				) t
+		LEFT JOIN res_hotword h ON t.hotwordId = h.id
+		ORDER BY times desc,name
+		limit 0,60
+    </select>
+    <select id="countHotwordByType" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		 SELECT
+				t.id as id,t.count as times, ht. name as name
+			FROM
+				(
+					SELECT
+						ht.pre_id AS id,
+						count(*) AS count
+					FROM
+						res_enterprise_hotword e
+					LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+					LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+					where e.date between #{beginTime} and #{endTime}
+					GROUP BY
+						ht.pre_id
+				) t
+			LEFT JOIN res_hotword_type ht ON t.id = ht.id
+    </select>
+    <select id="countHotwordByTypeChild" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			t.id AS id,
+			t.count AS times,
+			ht. NAME AS NAME
+		FROM
+			(
+				SELECT
+					ht.id AS id,
+					count(*) AS count
+				FROM
+					res_enterprise_hotword e
+				LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+				LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+				where e.date between #{beginTime} and #{endTime}
+				GROUP BY
+					ht.id
+			) t
+		LEFT JOIN res_hotword_type ht ON t.id = ht.id
+    </select>
+    <select id="countHotwordCityInfoByType" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			c.city_name AS cityName,
+			t.cityId AS cityId,
+			t.times AS times
+		FROM
+			(
+				SELECT
+					LEFT (pscode, 4) AS cityId,
+					count(*) AS times
+				FROM
+					res_enterprise_hotword e
+				LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+				LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+				WHERE
+					ht.pre_id = #{typeId}
+				    and e.date between #{beginTime} and #{endTime}
+				GROUP BY
+					LEFT (e.pscode, 4)
+			) t
+		LEFT JOIN sys_city c ON t.cityId = c.city_id
+    </select>
+     <select id="countHotwordPsCodeInfoByType" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			t.psCode AS psCode,
+			base.psName AS psName,
+			t.times AS times
+		FROM
+			(
+				SELECT
+					pscode AS psCode,
+					count(*) AS times
+				FROM
+					res_enterprise_hotword e
+				LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+				LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+				WHERE
+					LEFT (pscode, 4) = #{cityId}
+					and ht.pre_id = #{typeId}
+					and e.date between #{beginTime} and #{endTime}
+					GROUP BY
+					pscode
+			) t
+		LEFT JOIN res_baseinfo base ON t.pscode = base.pscode
+    </select>
+    <select id="countHotwordCityInfoByTypeDetail" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			c.city_name AS cityName,
+			t.cityId AS cityId,
+			t.times AS times
+		FROM
+			(
+				SELECT
+					LEFT (pscode, 4) AS cityId,
+					count(*) AS times
+				FROM
+					res_enterprise_hotword e
+				LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+				where hr.hot_type = #{typeId}
+				 and e.date between #{beginTime} and #{endTime}
+				GROUP BY
+					LEFT (e.pscode, 4)
+			) t
+		LEFT JOIN sys_city c ON t.cityId = c.city_id
+		where ifnull(c.city_id,null)
+    </select>
+    <select id="countHotwordPsCodeInfoByTypeDetail" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		SELECT
+			base.psname AS psName,
+			t.pscode AS psCode,
+			t.times AS times
+		FROM
+		(
+			SELECT
+				pscode AS psCode,
+				count(*) AS times
+			FROM
+				res_enterprise_hotword e
+			LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+			WHERE
+				LEFT (pscode, 4) = #{cityId}
+				AND hr.hot_type = #{typeId}
+				and e.date between #{beginTime} and #{endTime}
+				GROUP BY
+				pscode
+			) t
+		LEFT JOIN res_baseinfo base ON t.psCode = base.PSCode
+    </select>
+    <select id="countHotwordByBigType" resultType="com.magus.bd.entity.ResHotword"
+		parameterType="com.magus.bd.entity.ResHotword">
+		 SELECT
+					
+					COUNT(*) AS times,
+					ht.id as id,
+					ht.name as name
+				FROM
+					res_enterprise_hotword e
+				LEFT JOIN res_hot_relationship hr ON e.relation_id = hr.id
+				LEFT JOIN res_hotword_type ht ON hr.hot_type = ht.id
+				WHERE
+					ht.pre_id = #{typeId}
+					<!--<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">-->
+						 and e.date between #{beginTime} and #{endTime}
+					<!--</if>-->
+				GROUP BY
+					ht.id,ht.name
+    </select>
+    
+	<insert id="insertHotword" 
+		parameterType="com.magus.bd.entity.ResHotword">
+		INSERT INTO res_hotword (
+			id,
+			NAME,
+			type_id,
+			create_date,
+			description
+		)
+		VALUES
+			(#{id},#{name},#{typeId},#{createDate},#{description})
+	</insert>
+	<insert id="insertHotwordType" 
+		parameterType="com.magus.bd.entity.ResHotword">
+		INSERT INTO res_hotword_type (
+			id,
+			name,
+			description,
+			pre_id,
+			create_date
+		)
+		VALUES
+			(#{id},#{name},#{description},#{preId},#{createDate})
+	</insert>
+	<insert id="insertHotPhrase" 
+		parameterType="com.magus.bd.entity.ResHotword">
+		INSERT INTO res_hotphrase (
+			id,
+			content,
+			description,
+			create_date
+		)
+		VALUES
+			(#{id},#{name},#{description},#{createDate})
+	</insert>
+	<select id="getHotwordType" resultType="com.magus.bd.entity.ResHotword">
+		SELECT
+			p.id AS typeId,
+			p. NAME AS typeName,
+			c. NAME AS preName,
+			p.description AS description,
+			p.create_date AS createDate,
+			p.pre_id As preId
+		FROM
+			res_hotword_type p
+		LEFT JOIN res_hotword_type c ON p.pre_id = c.id
+		WHERE
+			p.is_delete = 0
+	</select>
+	
+	<select id="getHotwordTypeById" resultType="com.magus.bd.entity.ResHotword"
+	parameterType="java.lang.String">
+		SELECT
+			id AS typeId,
+			NAME AS typeName,
+			description AS description,
+			create_date AS createDate,
+			pre_id As preId
+		FROM
+			res_hotword_type 
+		WHERE
+			is_delete = 0
+			and id = #{typeId}
+	</select>
+	
+	<select id="getReport" resultType="com.magus.bd.entity.ResHotword">
+		SELECT
+			report_id AS reportId,
+			NAME AS reportName
+		FROM
+			res_report
+		WHERE
+			is_delete = 0
+	</select>
+	<insert id="insertHotwordEnterprise" parameterType="com.magus.bd.entity.ResHotword">
+		INSERT INTO res_enterprise_hotword (
+			pscode,
+			hotword_id,
+			time,
+			report_id,
+			url,
+			create_date,
+			description,
+			outputCode
+		)
+		VALUES
+			(#{psCode},#{id},#{time},#{reportId},#{url},#{createDate},#{description},#{outputCode})
+	</insert>
+	<select id="queryHotwordByType" resultType="com.magus.bd.entity.ResHotword" parameterType="com.magus.bd.entity.ResHotword">
+		INSERT INTO res_enterprise_hotword (
+			pscode,
+			hotword_id,
+			time,
+			report_id,
+			url,
+			create_date,
+			description
+		)
+		VALUES
+			(#{psCode},#{id},#{time},#{reportId},#{url},#{createDate},#{description})
+	</select>
+</mapper>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>重点污染源大数据分析|中</title>
+		<link rel="stylesheet" href="../js/fakeLoader/css/fakeLoader.css">
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/fakeLoader/js/fakeLoader.js">
+</script>
+		<script src="../js/echarts/echarts.js">
+</script>
+		<style type="text/css">
+body {
+	background: url(images/middle-bg.jpg) no-repeat;
+	background-size: cover;
+}
+
+.main {
+	margin: 0 auto;
+	width: 1024px;
+	height: 518px;
+}
+
+.centerTitle {
+	margin-top: -5px;
+}
+
+.backImg {
+	width: 1024px;
+	height: 488px;
+	background: url(images/map-bg.png) no-repeat;
+	background-size: 1024px 488px;
+}
+</style>
+	</head>
+	<body style="height: 100%; overflow-y: hidden;">
+		<div class="main">
+			<div class="container">
+				<div class="fakeloader"></div>
+			</div>
+			<div class="backImg">
+				<div id="powerMain" style="position: absolute;"></div>
+				<div id="installedBar" style="position: absolute; top: 50px;"></div>
+				<div id="powerBar" style="position: absolute; left: 15%; top: 50px;"></div>
+				<div id="contaminants" style="position: absolute; left: 30%; top: 50px;"></div>
+				<div style="position: absolute;left: 80%;top: 30px;">
+					<div id="powerComChart" style="width: 200px; height: 130px;"></div>
+					<div id="installedComChart" style="width: 200px; height: 130px;"></div>
+					<div id="hourComChart" style="width: 200px; height: 130px;"></div>
+				</div>
+			</div>
+		</div>
+		<div id="powerCount"
+			style="position: absolute; left: 2%; height:60px; width: 80%; top: 498px; z-index: 1000; color: #ffff11; font-size: 16px;">
+		</div>
+	</body>
+	<script src="js/changedata.js">
+</script>
+	<script src="js/screencenter.js">
+</script>
+</html>

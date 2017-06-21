@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>空气质量变化与污染物浓度专题· Example</title>
+	<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+	<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+	<script src="../js/echarts-all.js"></script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north'" style="height:40px; color:#393939;padding-left:20px;padding-top:10px;">
+		<span>类别：</span>
+		<select id="city" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;"></select>
+		<span>开始日期：</span>
+		<input id="beginTime" class="easyui-datebox" data-options="formatter:myformatter" required style="width: 160px;height:28px;" />
+		<span>结束日期：</span>
+		<input id="endTime" class="easyui-datebox" data-options="formatter:myformatter" required style="width: 160px;height:28px;"/>
+		<a href="#" class="s_btns" onclick="queryData()">查询</a>
+	</div>
+	<div data-options="region:'center',fit:false">
+		<div style="float: left;width: 70%">
+			<div id="main" class="main" style='width: 100%;margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0;margin-top:20px;'></div>
+			<div id="main2" class="main" style='width: 100%;margin-bottom: 1px; padding: 1px; border-width: 0 1px;'></div>
+		</div>
+		<div style="float: left;width: 25%; top:40px;">
+			<div id="pie" class="main" style='width:100%; margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0'></div>
+		</div>
+	</div>
+	<script src="../js/jquery-1.7.2.js"></script>
+	<script src="../js/jquery.easyui.min.js"></script>
+	<script src="../js/easyui-lang-zh_CN.js"></script>
+	<script src="../js/utils.js"></script>
+
+	<script src="js/qAndPLinkage.js"></script>
+</body>
+</html>

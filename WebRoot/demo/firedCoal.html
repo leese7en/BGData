@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ECharts">
+    <meta name="author" content="kener.linfeng@gmail.com">
+    <title>燃煤推算硫分· Example</title>
+    <link rel="shortcut icon" href="../asset/ico/favicon.png">
+    <link rel="stylesheet" type="text/css" href="../css/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <script src="../js/echarts-all.js"></script>
+</head>
+<body>
+    <div id="firedCoalDiv" class="easyui-tabs" data-options="fit:true">
+        <div title="时间">
+            <div id="main" class="main" style='margin-bottom:1px;padding-bottom:0;border-bottom-width:0'></div>
+        </div>
+        <div title="盟市">
+            <div style="margin:10px 20px;">
+                <span>年份：</span>
+                <select id="cityQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                    <option value="select">请选择</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                </select>
+                <a href="#" class="s_btns""  onclick="queryCity()">查询</a>
+            </div>
+            <div id="main1" class="main1" style='margin-bottom:1px;padding-bottom:0;border-bottom-width:0'></div>
+        </div>
+        <div title="集团">
+            <div style="margin:10px 20px;">
+                <span>年份：</span>
+                    <select id="industryQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                        <option value="select">请选择</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                    </select>
+                    <a href="#" class="s_btns" onclick="queryIndustry()">查询</a>
+            </div>
+            <div id="main2" class="main2" style='margin-bottom:1px;padding-bottom:0;border-bottom-width:0'></div>
+        </div>
+    </div>
+
+</body>
+    <script src="../js/jquery-1.7.2.js"></script>
+    <script src="../js/jquery.easyui.min.js"></script>
+    <!--<script src="../asset/js/echartsExample.js"></script>
+-->
+<script src="js/firedCoal.js"></script>
+</html>

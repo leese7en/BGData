@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>角色管理</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet" />
+		<link href="../js/bootstrap-table/css/bootstrap-table.min.css" rel="stylesheet" />
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet" />
+		<style>
+.con {
+	line-height: 100px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.color1 {
+	background: pink;
+}
+
+.color2 {
+	background: red;
+}
+
+.tableInfo td {
+	text-align: center; /*设置水平居中*/
+	vertical-align: middle; /*设置垂直居中*/
+}
+
+.confirmClass {
+	left: -100px;
+}
+</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-3">
+				<span class="input-group" style="color: black; padding: 3px;"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">角色名称</span> <input type="text" id="roleNameQuery" class="form-control"
+						placeholder="请输入角色名称"> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group" style="color: black; padding: 3px;"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">角色描述</span> <input type="text" id="descQuery" class="form-control"
+						placeholder="请输入角色描述" /> </span>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-right" style="color: black; padding: 3px;">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="roleQuery()">
+						<span class="glyphicon glyphicon-ok"></span> 查询
+					</button>
+					<button type="button" class="btn btn-success btn-sm" onclick="insertRoleModel()">
+						<span class="glyphicon glyphicon-plus"></span> 添加
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:60px;">
+		<table id="roleTable" >
+			
+		</table>
+		</nav>
+		<div class="modal fade in" id="roleMessageInsert" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 20px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeRoleInsertModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							添加角色
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">角色名称</span>
+										<input id="roleNameInsert" type="text" class="form-control" placeholder="请输入角色名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">角色描述</span>
+										<input id="roleDescInsert" type="text" class="form-control" placeholder="请输入角色描述">
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="insertRole()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeRoleInsertModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="roleMessage" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 20px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeRoleMessageoModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							角色信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="roleId" />
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">角色名称</span>
+										<input id="roleName" type="text" class="form-control" placeholder="请输入角色名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">角色描述</span>
+										<input id="roleDesc" type="text" class="form-control" placeholder="请输入角色描述">
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updateRoleMessage()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeRoleMessageoModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="roleMenuMessage" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 840px; margin-top: 20px; height: 400px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeRoleMenuMessageModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							编辑角色菜单信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="height: 300px; overflow-y: auto;">
+							<input type="hidden" id="roleMenuId">
+							<table id="roleMenuTable">
+								
+							</table>
+						</div>
+
+						<div>
+							<div class="easyui-panel" style="width: 808px;">
+								<div id="roleMenuPagination" class="easyui-pagination" style="margin: -1px; width: 99%;" data-options="total:0"></div>
+							</div>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-default" type="button" onclick="closeRoleMenuMessageModal()">
+									关闭
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+	<script type="text/javascript" src="../js/bootstrap-table/js/bootstrap-table.min.js">
+</script>
+<script type="text/javascript" src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/roleManage.js">
+</script>
+	</body>
+</html>

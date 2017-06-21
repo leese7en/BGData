@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResOutputDao">
+	<select id="getResOutputByPSCode" resultType="com.magus.bd.entity.ResOutput" 
+	parameterType ="com.magus.bd.entity.ResOutput"> 
+	  select 
+		  PSCode as pSCode,
+		  IOType as iOType,
+		  IOCode as iOCode,
+		  IOName as iOName,
+		  IONumber as iONumber,
+		  IOPosition as iOPosition
+      from sys_res_output
+        where 
+        PSCode = #{pSCode} 
+	</select>
+	<select id="getResOutputCodeByPSCode" resultType="com.magus.bd.entity.ResOutput" 
+	parameterType ="com.magus.bd.entity.ResOutput"> 
+	  select 
+		  PSCode as pSCode,
+		  IOType as iOType,
+		  IOCode as iOCode,
+		  IOName as iOName,
+		  IONumber as iONumber,
+		  IOPosition as iOPosition
+      from sys_res_output
+        where 
+        IOType  in (1,2)
+        and 
+        PSCode = #{pSCode} 
+	</select>
+</mapper>

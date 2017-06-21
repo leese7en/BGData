@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>热词频次分析</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+		<script src="../js/echarts.min.js">
+</script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+		<script src="js/efficientData.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'center',fit:false">
+		<div style="padding-top:10px;padding-left:20px;">
+			<span>年度：</span>
+			<select id="yearQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+				
+			</select>
+			<a href="#" class="s_btns" onclick="getEffectiveYear()">查询</a>
+			<div class="help-tip">
+				<p></p>
+			</div>
+		</div>
+			<div id="main" class="main"></div>
+		</div>
+	</body>
+	<body>
+		
+	</body>
+</html>

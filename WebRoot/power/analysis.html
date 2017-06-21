@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="../asset/ico/favicon.png">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+    <link rel="stylesheet" href="../css/tooltip/tooltip.css">
+    <script src="../js/echarts-all.js"></script>
+    <script src="../js/jquery-1.7.2.js"></script>
+    <script src="../js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/checkInput.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="../js/easyui-lang-zh_CN.js"></script>
+    <style type="text/css">
+       .panel-header{
+        background:#2c81ba;
+        border:1px solid #4789c4;
+        height:20px;
+        line-height:20px;
+        }
+        .panel-title {
+		    background:url('../images/tt.png') no-repeat 0 center;
+		    color:#fff;
+		    font-size:14px;
+		    padding-left:30px;
+		    margin-top:2px;
+		}   
+    .easyui-fluid {
+      height:100%;
+    }
+     .datagrid-header-row td:first-child, .datagrid-row td:first-child{
+      border-left:1px solid #e1e1e1;
+      }
+    </style>
+</head>
+
+<body class="easyui-layout">
+<div class="help-tip" style="position: fixed;top: 40px;right: 20px">
+    <p></p>
+</div>
+<div id="cityEnterprise" style="width: 500px; height: 270px; font-size: 15px; display: none;overflow:hidden;" >
+			 <table class="easyui-datagrid" id="cityEnterpriseInfo" style="width: 100%;height: 99%"
+    					data-options="singleSelect:true,striped:true" >
+                 <thead>
+                     <tr>
+                         <th data-options="field:'pSName'" width="10%" align="center">企业名称</th>
+                         <th data-options="field:'coalEffective'" width="15%" align="center" formatter="formatNumber">煤炭消耗绩效(g/kWh)</th>
+                         <th data-options="field:'waterEffective'" width="15%" align="center" formatter="formatNumber">水消耗绩效(kg/kWh)</th>
+                         <th data-options="field:'so2Concentration'" width="15%" align="center" formatter="formatNumber">SO2排放强度(kg/万元)</th>
+                         <th data-options="field:'noxConcentration'" width="15%" align="center" formatter="formatNumber">NOx排放强度(kg/万元)</th>
+                         <th data-options="field:'dustConcentration'" width="15%" align="center" formatter="formatNumber">粉尘排放强度(kg/万元)</th>
+                         <th data-options="field:'so2Effective'" width="10%" align="center" formatter="formatNumber">SO2排放绩效(g/kWh)</th>
+                         <th data-options="field:'noxEffective'" width="10%" align="center" formatter="formatNumber">NOx排放绩效(g/kWh)</th>
+                         <th data-options="field:'dustEffective'" width="10%" align="center" formatter="formatNumber">粉尘排放绩效(g/kWh)</th>
+                     </tr>
+                 </thead>
+             </table>
+</div>
+    <div data-options="region:'center',fit:false">
+        <div id="powerNetworkTab" class="easyui-tabs" data-options="fit:true">
+            <div title="重点企业一览" style="overflow:hidden;">
+                <div  style="padding-top:10px;padding-left:20px;">
+                  <span>年份：</span>
+                    <select id="queryYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;height:28px;">
+                    </select>
+                    <span>消耗类型：</span>
+                 	<select id="consumeType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;height:28px;" editable="false">
+                   	  	<option value="water">水耗</option>
+                        <option value="coal">煤耗</option>
+                    </select>
+                     <span>污染物类型：</span>
+                 	<select id="pollTypeEmphasis" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;height:28px;" editable="false">
+                        <option value="SO2">SO2</option>
+                        <option value="NOx">NOx</option>
+                        <option value="dust">烟尘</option>
+                    </select>
+                    <a href="#" class="s_btns" style="margin-top:5px;" onclick="queryEmphasis()">确定</a>   
+                </div>
+                <div id="main" class="main" style="width: 50%;height:80%;float:left;"></div>
+                <div id="dataRanking" style="width: 47%;float:right;height:50%;">
+                <div style="border-bottom:1px solid #e1e1e1;width: 100%;height:100%;">
+                    <table class="easyui-datagrid" id="emissionRanking"  title="最高排放企业" style="width: 100%; height:100%;overflow:auto;"
+           					data-options="singleSelect:true,method:'get',striped:true" rownumbers="true">
+                        <thead>
+                            <tr>
+                                <th data-options="field:'pSName'" width="30%" align="center">企业名称</th>
+                                <th data-options="field:'pollEffective'" width="19%" align="center" formatter="formatNumber">排放绩效(g/kWh)</th>
+                                <th data-options="field:'generateElectricityAmount',align:'right'" width="17%" align="center" formatter="formatNumber">发电量(万千瓦时)</th>
+                                <th data-options="field:'sumElectricity',align:'right'" width="18%" align="center" formatter="formatNumber">全区发电量(万千瓦时)</th>
+                                <th data-options="field:'percent',align:'right'" width="12%" align="center">发电量占比(%)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    </div>
+                    <div style="border-bottom:1px solid #e1e1e1;width: 100%;height:89%;">
+                     <table class="easyui-datagrid" id="consumeRanking"  title="最高能耗企业" style="width: 100%; height:100%;overflow:auto;"
+           					data-options="singleSelect:true,method:'get',striped:true" rownumbers="true">
+                        <thead>
+                            <tr>
+                                <th data-options="field:'pSName'" width="30%" align="center">企业名称</th>
+                                <th data-options="field:'consumeEffective'" width="19%" align="center" formatter="formatNumber" >消耗绩效(g/kWh)</th>
+                                <th data-options="field:'generateElectricityAmount',align:'right'" width="17%" align="center" formatter="formatNumber">发电量(万千瓦时)</th>
+                                <th data-options="field:'sumElectricity',align:'right'" width="18%" align="center" formatter="formatNumber">全区发电量(万千瓦时)</th>
+                                <th data-options="field:'percent',align:'right'" width="12%" align="center">发电量占比(%)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div title="全区排名一览" style="overflow:hidden;">
+                <div id="areaRank" style="padding-left:20px;padding-top:10px;">
+                    <span>年份：</span>
+                    <select id="queryCountryPowerYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                    </select>
+                    <a href="#" class="s_btns" style="margin-top:5px;" onclick="getRanking()">确定</a>
+                </div>
+                <div data-options="region:'center'" style="margin-top:10px;height:100%;">
+                    <div id="coalRanking" style="float: left; width: 49%;height:47%;margin:0 0.5%;">
+                        <table class="easyui-datagrid" id="coalConsumtion" title="煤消耗" style="width:100%; height:100%" 
+                        	data-options="singleSelect:true,striped:true" rownumbers="true" pagination="false">
+                            <thead>
+                                <tr>
+                                	<th data-options="field:'cityId'" width="5%" align="center" hidden="true">盟市编码</th>
+                                    <th data-options="field:'cityName'" width="50%" align="center">盟市</th>
+                                    <th data-options="field:'coalEffective'" width="46%" align="center" formatter="formatNumber">煤炭消耗绩效(g/kWh)</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="waterRanking" style="float: right; width: 49%;height:47%;margin:0 0.5%;">
+                        <table class="easyui-datagrid" id="waterConsumtion" title="水消耗" style="width:100%; height:100%;"
+              				 data-options="singleSelect:true,striped:true" rownumbers="true" pagination="false">
+                            <thead>
+                                <tr>
+                                    <th data-options="field:'cityId'" width="50%" align="center" hidden="true">盟市编码</th>
+                                    <th data-options="field:'cityName'" width="48%" align="center">盟市</th>
+                                    <th data-options="field:'waterEffective'" width="48%" align="center" formatter="formatNumber">水消耗绩效(kg/kWh)</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="strengthRanking" style="float: left; width: 49%;height:46%;margin:0 0.5%;border-bottom:1px solid #e1e1e1;">
+                      <table class="easyui-datagrid" id="emissionIntensity" title="排放强度" style="width: 100%; height:100%;" 
+                      		data-options="singleSelect:true,striped:true" rownumbers="true" pagination="false">
+                            <thead>
+                                <tr>
+                                	<th data-options="field:'cityId'" width="50%" align="center" hidden="true">盟市编码</th>
+                                    <th data-options="field:'cityName'" width="20%" align="center">盟市</th>
+                                    <th data-options="field:'so2Concentration'" width="26%" align="center" formatter="formatNumber">SO2排放强度(kg/万元)</th>
+                                    <th data-options="field:'noxConcentration'" width="26%" align="center" formatter="formatNumber">NOx排放强度(kg/万元)</th>
+                                    <th data-options="field:'dustConcentration'" width="24%" align="center" formatter="formatNumber">烟尘排放强度(kg/万元)</th>
+                                </tr>
+                            </thead>
+                        </table> 
+                    </div>
+                    <div id="efficitiveRanking" style="float: right; width: 49%;height:46%;margin:0 0.5%;border-bottom:1px solid #e1e1e1;">
+                        <table class="easyui-datagrid" id="emissionPerformance" title="排放绩效" style="width:100%; height:100%;" 
+                        	data-options="singleSelect:true,striped:true" rownumbers="true" pagination="false">
+                            <thead>
+                                <tr>
+                                	<th data-options="field:'cityId'" width="50%" align="center" hidden="true">盟市编码</th>
+                                    <th data-options="field:'cityName'" width="22%" align="center">盟市</th>
+                                    <th data-options="field:'so2Effective'" width="25%" align="center" formatter="formatNumber">SO2排放绩效(g/kWh)</th>
+                                    <th data-options="field:'noxEffective'" width="25%" align="center" formatter="formatNumber">NOx排放绩效(g/kWh)</th>
+                                    <th data-options="field:'dustEffective'" width="24%" align="center" formatter="formatNumber">烟尘排放绩效(g/kWh)</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div> 
+            </div>
+            <div title="区域内明细" style="overflow:hidden;">
+                <div id="areaDetail" style="padding-top:10px;padding-left:20px;">
+                  	  年份：
+                    <select id="queryAreaDetailYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                    </select>
+                  	  盟市：
+                    <select id="queryAreaDetailCity" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;" editable="false">
+                    </select>
+                  	  分析类型：
+                    <select id="queryAreaDetailType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;" editable='false'>
+                     </select>
+                 	   污染物：
+                    <select id="pollutionKind" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;" editable="false">
+                        <option value="select">请选择</option>
+                        <option value="SO2">SO2</option>
+                        <option value="NOx">NOx</option>
+                        <option value="粉尘">烟尘</option>
+                    </select>
+                    <a href="#" class="s_btns" onclick="getDetail()">查询</a>
+                </div>
+                <div id="mainArea" class="mainArea" style="margin-top:20px;"></div>
+            </div>
+        </div>
+    </div>
+</body>

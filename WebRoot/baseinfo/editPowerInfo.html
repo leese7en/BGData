@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑电网信息</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="js/areaResInfo.js">
+</script>
+<script src="js/countryPower.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div id="countryPowerDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;"title="添加信息">
+			<table cellpadding="5" style="font-size: 15px; color: MidnightBlue;margin-top:10px;margin-left:20px;">
+				<tr>
+					<td align="right">
+						年份:
+					</td>
+					<td>
+						<select id="countryPowerYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+						</select>
+					</td>
+					<td align="right">
+						年份:
+					</td>
+					<td>
+						<select id="countryPowerType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="0">全国</option>
+							<option value="1">全区</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						发电量:
+					</td>
+					<td>
+						<input id="powerAmount" class="easyui-textbox" style="width: 150px;height:28px;" />
+
+					</td>
+					<td align="right">
+						发电量增长率:
+					</td>
+					<td>
+						<input id="powerAmountIncrementRate" class="easyui-textbox" style="width: 150px;height:28px;" />
+
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						装机容量:
+					</td>
+					<td>
+						<input id="installedAmount" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+					<td align="right">
+						装机容量增长率:
+					</td>
+					<td>
+						<input id="installedAmountIncrementRate" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						有效利用小时:
+					</td>
+					<td>
+						<input id="effectiveHour" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+					<td align="right">
+						有效利用小时增长率:
+					</td>
+					<td>
+						<input id="effectiveHourIncrementRate" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述:
+					</td>
+					<td colspan="3">
+						<textarea id="description" data-options="multiline:true" style="width:470px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="areaResInfoDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;" title="添加信息">
+			<table cellpadding="5" style="font-size: 15px; color: MidnightBlue;margin-top:10px;margin-left:20px;">
+				<tr>
+					<td align="right">
+						年度:
+					</td>
+					<td>
+						<select id="year" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						火电装机容量:
+					</td>
+					<td>
+						<input id="fireInstalled" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						风电装机容量:
+					</td>
+					<td>
+						<input id="windInstalled" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						其它装机容量:
+					</td>
+					<td>
+						<input id="otherInstalled" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						火电发电量:
+					</td>
+					<td>
+						<input id="firePower" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						风电发电量:
+					</td>
+					<td>
+						<input id="windPower" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						其它发电量:
+					</td>
+					<td>
+						<input id="otherPower" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						GDP:
+					</td>
+					<td>
+						<input id="GDP" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span>g/kWh</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="areaResInfoCondition" style="padding-left:20px;;padding-top:10px;">
+			<span>年度：</span>
+			<select id="queryYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+						</select>
+			<a href="#" class="s_btns"  onclick="query()">查询</a>
+			<a href="#" class="s_btna" onclick="add()">添加</a>
+		</div>
+		<div id="powerNetworkCon" style="padding-left:20px;padding-top:10px;">
+			<span>年份：</span>
+			<select id="queryCountryPowerYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+							</select>
+			<a href="#" class="s_btns" onclick="getCountryPower()">查询</a>
+			<a href="#" class="s_btna" onclick="addCountryPower()">添加</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<div id="powerNetworkTab" class="easyui-tabs" data-options="fit:true">
+				<div title="区年度信息">
+			<table id="areaResInfoTable" class="easyui-datagrid" style="width: auto;" toolbar="#areaResInfoCondition"
+				data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+				<thead>
+					<tr>
+						<th field="id" width="6%" align="center">
+							编码
+						</th>
+						<th field="year" width="10%" align="center">
+							年度
+						</th>
+						<th field="fireInstalled" width="12%" align="center">
+							火电装机容量
+						</th>
+						<th field="windInstalled" width="12%" align="center">
+							风电装机容量
+						</th>
+						<th field="otherInstalled" width="12%" align="center">
+							其它装机容量
+						</th>
+						<th field="firePower" width="12%" align="center">
+							火电发电量
+						</th>
+						<th field="windPower" width="12%" align="center">
+							风电发电量
+						</th>
+						<th field="otherPower" width="12%" align="center">
+							其它发电量
+						</th>
+						<th field="gDP" width="12%" align="center">
+							GDP
+						</th>
+					</tr>
+				</thead>
+			</table>
+				</div>
+				<div title="国家年度信息">
+					<table id="countryPowerTable" class="easyui-datagrid" style="width: auto;" toolbar="#powerNetworkCon"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="id" width="5%" align="center">
+									编码
+								</th>
+								<th field="year" width="10%" align="center">
+									年份
+								</th>
+								<th field="type" width="10%" align="center">
+									类型
+								</th>
+								<th field="powerAmount" width="10%" align="center">
+									发电量
+								</th>
+								<th field="powerAmountIncrementRate" width="10%" align="center">
+									发电量增长率
+								</th>
+								<th field="installedAmount" width="10%" align="center">
+									装机容量
+								</th>
+								<th field="installedAmountIncrementRate" width="10%" align="center">
+									装机容量增长率
+								</th>
+								<th field="effectiveHour" width="13%" align="center">
+									有效利用小时
+								</th>
+								<th field="effectiveHourIncrementRate" width="13%" align="center">
+									有效利用小时增长率
+								</th>
+								<th field="description" width="8%" align="center">
+									描述
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	</html>

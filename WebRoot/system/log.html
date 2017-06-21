@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+    <title>日志管理</title>
+    <Meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
+    <link rel='stylesheet' href='/css/jquery/themes/default/easyui.css'/>
+    <link rel='stylesheet' href='/css/jquery/themes/icon.css'/>
+</head>
+<body class="easyui-layout">
+<div id="editRes" class="easyui-menu" style="width:100px;background-color:lightgrey;display:none">
+    <div iconCls="icon-add" name="basic">基本信息</div>
+    <div iconCls="icon-remove" name="delete">删除资源</div>
+</div>
+<div id="logsCondition" style="padding:3px">
+    <span>操作用户:</span>
+    <input id="name" class="easyui-textbox" style="width:100px"/>
+    <span>操作:</span>
+    <input id="action" class="easyui-textbox" style="width:100px"/>
+    <span>开始日期：</span>
+    <input id="beginTime" class="easyui-datetimebox" required style="width:160px">
+    <span>结束日期：</span>
+    <input id="endTime" class="easyui-datetimebox" required style="width:160px">
+    <a href="#" class="easyui-linkbutton" onclick="logQuery()">&nbsp;查询&nbsp;</a>
+</div>
+<div data-options="region:'center'">
+    <table id="logs" class="easyui-datagrid" data-options="fit:true,rownumbers:true,pagination:true"
+           toolbar="#logsCondition" iconCls="icon-save">
+        <thead>
+        <tr>
+            <th data-options="field:'ck',checkbox:true" width="2%"></th>
+            <th field="UserName" width="5%" align="center">操作用户</th>
+            <th field="Action" width="30%" align="center">操作事件</th>
+            <th field="Flag" width="5%" align="center">Flag</th>
+            <th field="Message" width="40%" align="center">错误信息</th>
+            <th field="Time" width="20%" align="center">操作时间</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+<script src="/js/jquery/jquery-1.8.2.js"></script>
+<script src="/js/jquery/jquery.easyui.min.js"></script>
+<script src="/js/jquery/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/js/tools/utils.js"></script>
+<script src="/js/log/log.js"></script>
+</html>

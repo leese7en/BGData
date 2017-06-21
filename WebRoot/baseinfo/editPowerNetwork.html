@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑电网信息</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="js/powerNetwork.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div id="editPower" class="easyui-menu" style="width: 100px; display: none">
+			<div iconCls="icon-add" name="edit">
+				编辑
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除
+			</div>
+		</div>
+		<div id="powerDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;" title="添加变电站">
+			<table cellpadding="5" style="font-size: 15px; color: MidnightBlue; margin-top:10px;margin-left:20px;">
+				<tr>
+					<td align="right">
+						名称:
+					</td>
+					<td>
+						<input id="powerName" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						经度:
+					</td>
+					<td>
+						<input id="powerLongitude" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						纬度:
+					</td>
+					<td>
+						<input id="powerLatitude" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述:
+					</td>
+					<td>
+						<textarea id="powerDescription" data-options="multiline:true" style="width:300px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="powerNetworkDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;" title="添加电网">
+			<table cellpadding="5" style="font-size: 15px; color: MidnightBlue;margin-top:10px;margin-left:20px;">
+				<tr>
+					<td>
+						年份:
+					</td>
+					<td>
+						<select id="networkYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						开始变电站:
+					</td>
+					<td>
+						<select id="networkBeginPower" class="easyui-combobox"  style="width: 150px;height:28px;">
+
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						结束变电站:
+					</td>
+					<td>
+						<select id="networkEndPower" class="easyui-combobox"  style="width: 150px;height:28px;">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						描述:
+					</td>
+					<td>
+						<textarea id="networkDescription" data-options="multiline:true" style="width:300px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="powerCon" style="padding:3px;padding-top:10px;">
+		<span>站点名称：</span>
+			<input id="powerNameQuery" class="easyui-textbox" style="width: 150px;height:28px;" />
+			<a href="#" class="s_btns" onclick="queryPower()">查询</a>
+			<a href="#" class="s_btna" onclick="addPower()">添加变电站</a>
+		</div>
+		<div id="powerNetworkCon" style="padding:3px;padding-top:10px;">
+			<span>开始站点：</span>
+			<input id="powerNetworkBeginNameQuery" class="easyui-textbox" style="width: 150px;height:28px;" />
+			<span>结束站点：</span>
+			<input id="powerNetworkEndNameQuery" class="easyui-textbox" style="width: 150px;height:28px;" />
+			<a href="#" class="s_btns"  onclick="queryPowerNetwork()">查询</a>
+			<a href="#" class="s_btna"  onclick="addPowerNetwork()">添加电网</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<div id="powerNetworkTab" class="easyui-tabs" data-options="fit:true">
+				<div title="变电站信息">
+					<table id="powerTable" class="easyui-datagrid" style="width: auto;" toolbar="#powerCon"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="id" width="10%" align="center">
+									编码
+								</th>
+								<th field="bname" width="20%" align="center">
+									变电站名称
+								</th>
+								<th field="blongitude" width="10%" align="center">
+									经度
+								</th>
+
+								<th field="blatitude" width="10%" align="center">
+									纬度
+								</th>
+								<th field="description" width="45%" align="center">
+									描述
+								</th>
+								<th field="usable" width="5%" align="center" formatter="formatOperater">
+									是否可用
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="电网信息">
+					<table id="powerNetworkTable" class="easyui-datagrid" style="width: auto;" toolbar="#powerNetworkCon"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="id" width="10%" align="center">
+									编码
+								</th>
+								<th field="year" width="10%" align="center">
+									年份
+								</th>
+								<th field="bname" width="20%" align="center">
+									开始变电站
+								</th>
+								<th field="ename" width="20%" align="center">
+									结束变电站
+								</th>
+								<th field="description" width="35%" align="center">
+									描述
+								</th>
+								<th field="usable" width="5%" align="center">
+									是否可用
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	</html>

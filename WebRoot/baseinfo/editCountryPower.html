@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑电网信息</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+	</head>
+	<body class="easyui-layout">
+		<div id="editPower" class="easyui-menu" style="width: 100px; display: none">
+			<div iconCls="icon-add" name="edit">
+				编辑
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除
+			</div>
+		</div>
+		<div id="countryPowerDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;">
+			<table cellpadding="5" style="font-size: 15px; color: MidnightBlue; width: 100%">
+				<tr>
+					<td>
+						年份:
+					</td>
+					<td>
+						<select id="countryPowerYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;">
+							<option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+						</select>
+					</td>
+					<td>
+						年份:
+					</td>
+					<td>
+						<select id="countryPowerType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;">
+							<option value="select">请选择</option>
+							<option value="0">全国</option>
+							<option value="1">全区</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						发电量:
+					</td>
+					<td>
+						<input id="powerAmount" class="easyui-textbox" style="width: 150px;" />
+
+					</td>
+					<td>
+						发电量增长率:
+					</td>
+					<td>
+						<input id="powerAmountIncrementRate" class="easyui-textbox" style="width: 150px;" />
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						装机容量:
+					</td>
+					<td>
+						<input id="installedAmount" class="easyui-textbox" style="width: 150px;" />
+					</td>
+					<td>
+						装机容量增长率:
+					</td>
+					<td>
+						<input id="installedAmountIncrementRate" class="easyui-textbox" style="width: 150px;" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						有效利用小时:
+					</td>
+					<td>
+						<input id="effectiveHour" class="easyui-textbox" style="width: 150px;" />
+					</td>
+					<td>
+						有效利用小时增长率:
+					</td>
+					<td>
+						<input id="effectiveHourIncrementRate" class="easyui-textbox" style="width: 150px;" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						描述:
+					</td>
+					<td>
+						<textarea id="description" data-options="multiline:true"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="powerNetworkCon">
+			<span>开始站点:</span>
+			<input id="powerNetworkBeginNameQuery" class="easyui-textbox" style="width: 150px;" />
+			<span>结束站点:</span>
+			<input id="powerNetworkEndNameQuery" class="easyui-textbox" style="width: 150px;" />
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryCountryPower()">查询</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="addCountryPower()">添加电网</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<div id="powerNetworkTab" class="easyui-tabs" data-options="fit:true">
+
+				<div title="电网信息">
+					<table id="countryPowerTable" class="easyui-datagrid" style="width: auto;" toolbar="#powerNetworkCon"
+						data-options="rownumbers:true,singleSelect:true,fit:true">
+						<thead>
+							<tr>
+								<th field="id" width="10%">
+									编码
+								</th>
+								<th field="year" width="10%" align="center">
+									年份
+								</th>
+								<th field="type" width="10%" align="center">
+									类型
+								</th>
+								<th field="powerAmount" width="20%" align="left">
+									发电量
+								</th>
+								<th field="powerAmountIncrementRate" width="20%" align="left">
+									发电量增长率
+								</th>
+								<th field="installedAmount" width="20%" align="left">
+									装机容量
+								</th>
+								<th field="installedAmountIncrementRate" width="20%" align="left">
+									装机容量增长率
+								</th>
+								<th field="effectiveHour" width="30%" align="center">
+									有效利用小时
+								</th>
+								<th field="ieffectiveHourIncrementRate" width="5%" align="center">
+									增长率
+								</th>
+								<th field="description" width="5%" align="center">
+									描述
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+	<script src="js/countryPower.js">
+</script>
+</html>

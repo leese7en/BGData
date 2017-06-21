@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.FullScreenDao">
+	<select id="getIndustryPowerAmountMonth" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			YEAR as year,
+			right(MONTH,2) as month,
+			sum(genCapacity) AS powerAmount
+		FROM
+			t_industry_data
+		WHERE
+			YEAR BETWEEN '2015' AND '2016'
+		GROUP BY
+			YEAR,
+			month
+		ORDER BY year,month
+	</select>	
+	<select id="getBoilerTypeCountByYear" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			year as year,
+			count(ID) as count,
+			boilerType as boilerType
+		FROM
+			res_environment_year env
+		WHERE
+			unit != '99'
+			AND (unable = 0 OR unable = 1)
+			AND boilerType IS NOT NULL
+		group by YEAR,boilerType
+		ORDER BY year,boilerType
+	</select>	
+	<select id="getInstallAmountByYear" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			YEAR AS YEAR,
+			Installed_amount AS installedAmount
+		FROM
+			res_environment_year
+		WHERE
+			unit != '99'
+		AND (unable = 0 OR unable = 1)
+		AND boilerType IS NOT NULL
+		ORDER BY year,Installed_amount
+	</select>	
+	<select id="getDataQualityTotal" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			a.algorithm_code AS algorithmCode,
+			a.algorithm_name AS algorithmName,
+			t.count AS count
+		FROM
+			(
+				SELECT
+					algorithm_Code,
+					sum(count) AS count
+				FROM
+					bi_result
+				WHERE
+					abnormal = 1
+				GROUP BY
+					algorithm_Code
+				ORDER BY
+					algorithm_Code
+		) t
+		LEFT JOIN bi_algorithm a ON t.algorithm_code = a.algorithm_Code
+		ORDER BY
+			a.algorithm_Code
+	</select>	
+	<select id="getDataQualityCity" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			a.algorithm_code AS algorithmCode,
+			a.algorithm_name AS algorithmName,
+			c.city_id AS cityId,
+			c.city_name AS cityName,
+			t.count AS count
+		FROM
+			(
+				SELECT
+					algorithm_Code,
+					LEFT (PSCode, 4) AS cityId,
+					sum(count) AS count
+				FROM
+					bi_result
+				WHERE
+					abnormal = 1
+				GROUP BY
+					algorithm_Code,
+					LEFT (PSCode, 4)
+				ORDER BY
+					algorithm_Code
+			) t
+		LEFT JOIN bi_algorithm a ON t.algorithm_code = a.algorithm_Code
+		LEFT JOIN sys_city c ON t.cityId = c.city_id
+		ORDER BY
+			a.algorithm_Code,c.orderCode
+		
+	</select>	
+	<select id="getHotWordAll" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			t.preId AS id,
+			type. NAME AS NAME,
+			t.count AS count
+		FROM
+			(
+				SELECT
+					count(enter.ID) AS count,
+					type.pre_id AS preId
+				FROM
+					res_enterprise_hotword enter
+				LEFT JOIN res_hot_relationship re ON enter.relation_id = re.id
+				LEFT JOIN res_hotword_type type ON re.hot_type = type.id
+				GROUP BY
+					type.pre_id
+			) t
+		LEFT JOIN res_hotword_type type ON t.preId = type.id
+		
+		ORDER BY t.count desc
+		
+	</select>	
+	<select id="getHotWordEnterprise" resultType="com.magus.bd.entity.FullScreen"
+		parameterType="com.magus.bd.entity.FullScreen">
+		SELECT
+			t.psCode AS psCode,
+			base.psName AS psName,
+			word.id AS hotWordId,
+			word. NAME AS NAME,
+			t.count AS count,
+			tt.count AS allCount
+		FROM
+			(
+				SELECT
+					count(ID) AS count,
+					PSCode AS psCode,
+					relation_id AS relationId
+				FROM
+					res_enterprise_hotword
+				WHERE
+					PSCode IN (
+						SELECT
+							pscode
+						FROM
+							(
+								SELECT
+									PSCode,
+									count(id) AS count
+								FROM
+									res_enterprise_hotword
+								GROUP BY
+									PSCode
+								ORDER BY
+									count DESC
+								LIMIT 0,
+								6
+							) t
+					)
+				GROUP BY
+					PSCode,
+					relation_id
+			) t
+		LEFT JOIN res_hot_relationship re ON t.relationId = re.id
+		LEFT JOIN res_hotword word ON re.hotword_id = word.id
+		LEFT JOIN res_baseinfo base ON t.psCode = base.pscode
+		LEFT JOIN (
+			SELECT
+				PSCode,
+				count(id) AS count
+			FROM
+				res_enterprise_hotword
+			GROUP BY
+				PSCode
+			ORDER BY
+				count DESC
+			LIMIT 0,
+			10
+		) tt ON t.psCode = tt.PSCode
+		ORDER BY
+			tt.count desc, t.count DESC
+	</select>
+	
+	<select id="queryAnalysisFullScreen" resultType="com.magus.bd.entity.FullScreen"
+			parameterType="com.magus.bd.entity.FullScreen">
+       SELECT
+			PSName AS psName,
+			city_name as cityName,
+			tagName as tagName,
+			YEAR AS year,
+			Installed_amount AS installedAmount,
+			coal_consume_amount AS coalConsumeAmount,
+			products AS products,
+			SO2_amount * power_Accounting / generate_electricity_amount * 100 AS so2Effective,
+			SO2_amount / gdp * 1000000 AS so2Concentration,
+			generate_electricity_amount AS generateElectricityAmount
+		FROM
+			res_environment_year p
+		LEFT JOIN sys_city city on p.city_id = city.city_id
+		WHERE
+			unable != 4
+		AND unit = '99'
+		ORDER BY
+			YEAR
+	</select>
+	<select id="getOnlineEmission" resultType="com.magus.bd.entity.FullScreen"
+			parameterType="java.lang.String">
+       SELECT
+			DataMonth as month,
+			Code_Pollute polluteCode,
+			Pollute_Name as polluteName,
+			sum(CumEmission) / 1000 as cumEmission
+		FROM
+			res_monthdata_gas gas
+		left join sys_city city on  gas.city_id = city.city_id
+		WHERE
+			DataYear = 2016
+		and city.city_name = '${_parameter}'
+		AND Code_Pollute IN ('A21026', 'A34013', 'A21002')
+		GROUP BY
+			DataMonth,
+			Code_Pollute,
+			Pollute_Name
+		ORDER BY
+			DataMonth,
+			Code_Pollute,
+			Pollute_Name
+	</select>
+</mapper>

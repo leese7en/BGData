@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResIndustryConDao">
+	<select id="getIndustryPollByCity" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			z.ZONE_NAME AS cityName,
+			z.ZONE_TAG as tagName,
+			t.*
+		FROM
+			(
+				SELECT
+					p.ZONE_ID AS cityId,
+					ifnull(sum(so2Amount),0) AS so2Amount,
+					ifnull(sum(so2GenCapatity),0) AS so2GenCapacity,
+					ifnull(sum(noxAmount),0) AS noxAmount,
+					ifnull(sum(noxGenCapatity),0) AS noxGenCapacity,
+					ifnull(sum(dustAmount),0) AS dustAmount,
+					ifnull(sum(dustGenCapacity),0) AS dustGenCapacity,
+					ifnull(sum(genCapacity),0) AS genCapacity
+				FROM
+					t_industry_data i
+				LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+				WHERE
+					i. MONTH BETWEEN #{beginTime}
+				AND #{endTime} and IFNULL(i.psCode, NULL)
+				GROUP BY
+					p.ZONE_ID
+			) t
+		LEFT JOIN t_code_zone z ON t.cityId = z.ZONE_ID
+		order by z.zone_order
+	</select>
+	<!-- 按盟市查有批注的图表坐标 -->
+	<select id="getAnotationPositionByCity" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+				z.ZONE_NAME AS cityName,
+				a.groupIdOrCityId,
+				t.so2GenCapacity,
+				t.so2Amount,
+				t.noxGenCapacity,
+				t.noxAmount,
+				t.dustGenCapacity,
+				t.dustAmount
+			FROM
+				(
+					SELECT
+						p.ZONE_ID AS cityId,
+						i. MONTH,
+						ifnull(sum(so2Amount), 0) AS so2Amount,
+						ifnull(sum(so2GenCapatity), 0) AS so2GenCapacity,
+						ifnull(sum(noxAmount),0) AS noxAmount,
+						ifnull(sum(noxGenCapatity),0) AS noxGenCapacity,
+						ifnull(sum(dustAmount),0) AS dustAmount,
+						ifnull(sum(dustGenCapacity),0) AS dustGenCapacity
+					FROM
+						t_industry_data i
+					LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+					WHERE
+						i. MONTH BETWEEN #{beginTime}
+					AND #{endTime}
+					AND IFNULL(i.psCode, NULL)
+					GROUP BY
+						p.ZONE_ID
+				) t
+			LEFT JOIN t_code_zone z ON t.cityId = z.ZONE_ID
+			LEFT JOIN sys_annotation a ON a.groupIdOrCityId = t.cityId
+			WHERE
+				a.groupOrCity = 2
+			AND a. MONTH BETWEEN #{beginTime}
+			AND #{endTime}
+			AND a.pollutant=#{pollType}
+			GROUP BY
+				cityName
+			order by z.zone_order
+	</select>
+	<!-- 按集团查有批注的图表坐标 -->
+	<select id="getAnotationPositionByGroup" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			g. NAME AS groupName,
+			a.groupIdOrCityId,
+			t.so2GenCapacity,
+			t.so2Amount,
+			t.noxGenCapacity,
+			t.noxAmount,
+			t.dustGenCapacity,
+			t.dustAmount
+		FROM
+			(
+				SELECT
+					p.BELONG_GROUP AS groupId,
+					ifnull(sum(so2Amount), 0) AS so2Amount,
+					ifnull(sum(so2GenCapatity), 0) AS so2GenCapacity,
+					ifnull(sum(noxAmount),0) AS noxAmount,
+					ifnull(sum(noxGenCapatity),0) AS noxGenCapacity,
+					ifnull(sum(dustAmount),0) AS dustAmount,
+					ifnull(sum(dustGenCapacity),0) AS dustGenCapacity
+				FROM
+					t_industry_data i
+				LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+				WHERE
+					i. MONTH BETWEEN #{beginTime}
+				AND #{endTime}
+				AND IFNULL(i.psCode, NULL)
+				AND p.POLL_SOURCE_TYPE_ID = 1
+				GROUP BY
+					p.BELONG_GROUP
+			) t
+		LEFT JOIN t_base_group g ON t.groupId = g.id
+		LEFT JOIN sys_annotation a ON a.groupIdOrCityId = t.groupId
+		WHERE
+			a.groupOrCity = 1
+		AND a. MONTH BETWEEN #{beginTime}
+		AND #{endTime}
+		AND a.pollutant=#{pollType}
+		GROUP BY
+			groupName
+		order by g.orderCode
+	</select>
+	<select id="getIndustryPollByGroup" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			g.name AS groupName,
+			t.*
+		FROM
+			(
+				SELECT
+					p.BELONG_GROUP AS groupId,
+					ifnull(sum(so2Amount),0) AS so2Amount,
+					ifnull(sum(so2GenCapatity),0) AS so2GenCapacity,
+					ifnull(sum(noxAmount),0) AS noxAmount,
+					ifnull(sum(noxGenCapatity),0) AS noxGenCapacity,
+					ifnull(sum(dustAmount),0) AS dustAmount,
+					ifnull(sum(dustGenCapacity),0) AS dustGenCapacity,
+					ifnull(sum(genCapacity),0) AS genCapacity
+				FROM
+					t_industry_data i
+				LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+				WHERE
+					i. MONTH BETWEEN #{beginTime}
+				AND #{endTime} and IFNULL(i.psCode, NULL)
+					and p.POLL_SOURCE_TYPE_ID = 1
+				GROUP BY
+					p.BELONG_GROUP
+			) t
+		LEFT JOIN t_base_group g ON t.groupId = g.id
+		where IFNULL(t.groupId, NULL) 
+		order by g.orderCode
+	</select>
+	<select id="getIndustrySulfurYear" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			i. YEAR as year,
+			right(i.MONTH,2) as month,
+			ifnull(sum(so2Produce),0) AS so2Produce,
+			ifnull(sum(so2Amount),0) AS so2Amount,
+			ifnull(sum(noxAmount),0) AS noxAmount,
+			ifnull(sum(dustAmount),0) AS dustAmount,
+			ifnull(sum(coalAmount),0) AS coalAmount,
+			ifnull(sum(genCapacity),0) AS genCapacity
+		FROM
+			t_industry_data i
+		WHERE
+			IFNULL(i.psCode, NULL)
+		AND YEAR BETWEEN #{beginTime} AND #{endTime}
+		GROUP BY i. YEAR,i. MONTH ORDER BY i.year,i.month
+	</select>
+	<!-- 按年份查有批注的图表坐标 -->
+	<select id="getIndustryPositionSulfurYear" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			a.id as annotationId,
+			i. YEAR as year,
+			right(i.MONTH,2) as month,
+			ifnull(sum(so2Produce),0) AS so2Produce,
+			ifnull(sum(so2Amount),0) AS so2Amount,
+			ifnull(sum(noxAmount),0) AS noxAmount,
+			ifnull(sum(dustAmount),0) AS dustAmount,
+			ifnull(sum(coalAmount),0) AS coalAmount,
+			ifnull(sum(genCapacity),0) AS genCapacity
+		FROM
+			sys_annotation a
+		LEFT JOIN t_industry_data i ON a.`year` = i.`year`
+		AND a.`month` = i.`month`
+		WHERE
+			i. YEAR BETWEEN #{beginTime}
+		AND #{endTime}
+		AND a.pollutant = 'liufen'
+		GROUP BY
+			a. YEAR,
+			a. MONTH
+	</select>
+	
+	<select id="getIndustrySulfurByCity" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			z.ZONE_NAME AS cityName,
+			t.*
+		FROM
+			(
+				SELECT
+					p.ZONE_ID AS cityId,
+					right(i.month,2) AS month,
+					ifnull(sum(so2Produce),0) AS so2Produce,
+					ifnull(sum(so2Amount),0) AS so2Amount,
+					ifnull(sum(noxAmount),0) AS noxAmount,
+					ifnull(sum(dustAmount),0) AS dustAmount,
+					ifnull(sum(coalAmount),0) AS coalAmount,
+					ifnull(sum(genCapacity),0) AS genCapacity
+				FROM
+					t_industry_data i
+				LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+				WHERE
+					i.year = #{year}
+				AND IFNULL(i.psCode, NULL)
+				GROUP BY
+					p.ZONE_ID,i.month
+			) t
+		LEFT JOIN t_code_zone z ON t.cityId = z.ZONE_ID
+		ORDER BY z.zone_order,right(t.month,2)
+	</select>
+	<select id="getIndustrySulfurByGroup" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			g. NAME AS groupName,
+			t.*
+		FROM
+			(
+				SELECT
+					p.BELONG_GROUP AS groupId,
+					RIGHT (i. MONTH, 2) AS MONTH,
+					ifnull(sum(so2Produce), 0) AS so2Produce,
+					ifnull(sum(so2Amount), 0) AS so2Amount,
+					ifnull(sum(noxAmount), 0) AS noxAmount,
+					ifnull(sum(dustAmount), 0) AS dustAmount,
+					ifnull(sum(coalAmount), 0) AS coalAmount,
+					ifnull(sum(genCapacity), 0) AS genCapacity
+				FROM
+					t_industry_data i
+				LEFT JOIN t_base_pollsource p ON i.psCode = p.POLL_SOURCE_ID
+				WHERE i.year = #{year}
+				AND IFNULL(i.psCode, NULL)
+				GROUP BY
+					p.BELONG_GROUP,
+					i. MONTH
+			) t
+		LEFT JOIN t_base_group g ON t.groupId = g.id
+		where IFNULL(t.groupId, NULL) 
+		ORDER BY
+			g.orderCode,
+			RIGHT (t. MONTH, 2)
+	</select>
+	<select id="getIndurutyConByEnterprise" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			p.poll_source_name AS psName,
+			g. NAME AS groupName,
+			t.*
+		FROM
+			(
+				SELECT
+					i.pscode AS psCode,
+					ifnull(sum(so2Produce), 0) AS so2Produce,
+					ifnull(sum(so2Amount), 0) AS so2Amount,
+					ifnull(sum(so2GenCapatity), 0) AS so2GenCapacity,
+					ifnull(sum(noxAmount), 0) AS noxAmount,
+					ifnull(sum(noxGenCapatity), 0) AS noxGenCapacity,
+					ifnull(sum(dustAmount), 0) AS dustAmount,
+					ifnull(sum(dustGenCapacity), 0) AS dustGenCapacity,
+					ifnull(sum(coalAmount), 0) AS coalAmount,
+					ifnull(sum(genCapacity), 0) AS genCapacity
+				FROM
+					t_industry_data i
+				WHERE
+					i. MONTH BETWEEN #{beginTime}
+				AND #{endTime}
+				AND IFNULL(i.psCode, NULL)
+				GROUP BY
+					i.pscode
+			) t
+		LEFT JOIN t_base_pollsource p ON t.psCode = p.POLL_SOURCE_ID
+		LEFT JOIN t_base_group g ON p.BELONG_GROUP = g.id
+		where p.ZONE_ID = #{cityId}
+	</select>
+	
+	<select id="getIndurutyConByEnterpriseByCityName" parameterType="com.magus.bd.entity.ResIndustryCon"
+		resultType="com.magus.bd.entity.ResIndustryCon">
+		SELECT
+			p.poll_source_name AS psName,
+			g. NAME AS groupName,
+			t.*
+		FROM
+			(
+				SELECT
+					i.pscode AS psCode,
+					ifnull(sum(so2Produce), 0) AS so2Produce,
+					ifnull(sum(so2Amount), 0) AS so2Amount,
+					ifnull(sum(so2GenCapatity), 0) AS so2GenCapacity,
+					ifnull(sum(noxAmount), 0) AS noxAmount,
+					ifnull(sum(noxGenCapatity), 0) AS noxGenCapacity,
+					ifnull(sum(dustAmount), 0) AS dustAmount,
+					ifnull(sum(dustGenCapacity), 0) AS dustGenCapacity,
+					ifnull(sum(coalAmount), 0) AS coalAmount,
+					ifnull(sum(genCapacity), 0) AS genCapacity
+				FROM
+					t_industry_data i
+				WHERE
+					i. MONTH BETWEEN #{beginTime}
+				AND #{endTime}
+				AND IFNULL(i.psCode, NULL)
+				GROUP BY
+					i.pscode
+			) t
+		LEFT JOIN t_base_pollsource p ON t.psCode = p.POLL_SOURCE_ID
+		LEFT JOIN t_base_group g ON p.BELONG_GROUP = g.id
+		left join t_code_zone zone on p.ZONE_ID = zone.ZONE_ID
+<!--		where zone.ZONE_NAME = #{cityName}-->
+	</select>
+	
+	<select id="getGroupOrCityAnnotationById" parameterType="com.magus.bd.entity.SysAnotation" resultType="com.magus.bd.entity.SysAnotation">
+		select a.* from sys_annotation a where groupIdOrCityId=#{groupIdOrCityId} 
+		and groupOrCity=#{groupOrCity}
+	    and a. MONTH BETWEEN #{beginTime} and #{endTime}
+	    and a.pollutant=#{pollutant};
+	</select>
+	<!-- 根据月份和年份查询批注信息 -->
+	<select id="getAnnotationByYearAndMonth" parameterType="com.magus.bd.entity.SysAnotation" resultType="com.magus.bd.entity.SysAnotation">
+			SELECT
+				a.*
+			FROM
+				sys_annotation a
+			WHERE
+				a.pollutant = 'liufen'
+			AND RIGHT (a. MONTH, 2) = #{month}
+			AND a.`year` BETWEEN #{beginTime}
+			AND #{endTime}
+			ORDER BY
+				a. YEAR,
+				a. MONTH
+	</select>
+</mapper>

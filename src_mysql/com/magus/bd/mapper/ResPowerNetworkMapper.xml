@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResPowerNetworkDao">
+	<select id="getPowerInfo" resultType="com.magus.bd.entity.ResPowerNetwork"> 
+	SELECT
+		id as id, 
+		NAME as bname,
+		longitude as blongitude,
+		latitude as blatitude 
+	FROM
+		res_power_transfrom_substation
+	WHERE
+		usable = 0
+	</select>
+	
+	<select id="blurryPowerInfo" resultType="com.magus.bd.entity.ResPowerNetwork" parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	SELECT
+		id AS id,
+		NAME AS bname,
+		longitude AS blongitude,
+		latitude AS blatitude,
+		description AS description,
+		usable AS usable
+	FROM
+		res_power_transfrom_substation
+	WHERE
+		usable = 0
+		and name like '%${bname}%'
+	</select>
+	<select id="blurryPowerNetworkInfo" resultType="com.magus.bd.entity.ResPowerNetwork"
+	 parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	SELECT
+		p.id as id,
+		p.YEAR as year,
+		rb.NAME as bname,
+		re.NAME as ename,
+		p.description as description,
+		p.usable as usable
+	FROM
+		res_power_network p
+	LEFT JOIN res_power_transfrom_substation rb ON p.begin_id = rb.id
+	LEFT JOIN res_power_transfrom_substation re ON p.end_id = re.id
+	WHERE
+		rb.NAME LIKE '%${bname}%'
+	AND re.NAME LIKE '%${ename}%'
+	</select>
+	<select id="getPowerNetWorkHigh" resultType="com.magus.bd.entity.ResPowerNetwork"
+	 parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	SELECT
+		p.YEAR as year,
+		rb.NAME as bname,
+		re.NAME as ename
+	FROM
+		res_power_network p
+	LEFT JOIN res_power_transfrom_substation rb ON p.begin_id = rb.id
+	LEFT JOIN res_power_transfrom_substation re ON p.end_id = re.id
+	WHERE p.usable = 0 and isHigh =1
+	</select>
+	<select id="getPowerNetWorkLow" resultType="com.magus.bd.entity.ResPowerNetwork"
+	 parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	SELECT
+		p.YEAR as year,
+		rb.NAME as bname,
+		re.NAME as ename
+	FROM
+		res_power_network p
+	LEFT JOIN res_power_transfrom_substation rb ON p.begin_id = rb.id
+	LEFT JOIN res_power_transfrom_substation re ON p.end_id = re.id
+	WHERE p.usable = 0 and isHigh =0
+	</select>
+	
+	<insert id="addPowerInfo" parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	
+	 insert into res_power_transfrom_substation 
+	 		(name,longitude,latitude,description)
+	 values
+	 		(#{bname},#{blongitude},#{blatitude},#{description})
+	  
+	</insert>
+	<insert id="addPowerNetwork" parameterType="com.magus.bd.entity.ResPowerNetwork"> 
+	
+	 insert into res_power_network 
+	 		(year,begin_id,end_id,description)
+	 values
+	 		(#{year},#{bId},#{eId},#{description})
+	</insert>
+	
+	<insert id="addRole" parameterType="com.magus.bd.entity.ResPowerNetwork">
+	  insert into sys_role
+	        (role_name,description,IS_DELETED,IS_SYSTEM)
+	  values
+	        (#{roleName},#{description},#{isDeleted},#{isSystem})
+	</insert>
+	<insert id="addRolePage" parameterType="com.magus.bd.entity.ResPowerNetwork">
+	  insert into sys_role_page
+	        (role_ID,page_id)
+	  values
+	        (#{roleId},#{pageId})
+	</insert>
+</mapper>

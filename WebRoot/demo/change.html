@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>模拟历史变迁数据 · Example</title>
+
+    <link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css'/>
+    <link rel='stylesheet' href='../css/jqueryUI/themes/icon.css'/>
+    <script src="../js/jquery-1.7.2.js">
+    </script>
+    <script src="../js/jquery.easyui.min.js">
+    </script>
+    <script src="../js/echarts-all.js">
+    </script>
+
+
+
+    <style type="text/css">
+        #installedBar {
+            position: absolute;
+            left: 5%;
+            top: 50px;
+        }
+
+        #powerBar {
+            position: absolute;
+            left: 25%;
+            top: 50px;
+        }
+
+        #county {
+            position: absolute;
+            top: 50px;
+            left: 80%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="child" style="display: none">
+    <div id="childMap"></div>
+</div>
+<div id="main" class="main"></div>
+<div id="installedBar" class="main" style="width: 300px; height: 300px;"></div>
+<div id="powerBar" class="main" style="width: 400px; height: 300px;"></div>
+<div id="county">
+    <div id="powerCom" style="width: 240px; height: 180px;"></div>
+    <div id="installedCom" style="width: 240px; height: 180px;"></div>
+    <div id="hourCom" style="width: 240px; height: 180px;"></div>
+</div>
+<script src="js/changedata.js">
+</script>
+<script src="js/change.js">
+</script>
+</body>
+</html>

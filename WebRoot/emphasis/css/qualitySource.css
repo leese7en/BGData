@@ -1,0 +1,195 @@
+body,html {
+	font-size: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+}
+
+.main {
+	width: 97%;
+	max-width: 69em;
+}
+
+/* COMPONENT.CSS */ /* Made with http://icomoon.io/ */
+.cbp_tmtimeline {
+	margin: 10px 0 0 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+}
+
+/* The line */
+.cbp_tmtimeline:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 5px;
+	background: #afdcf8;
+	left: 11px;
+	margin-left: 5px;
+}
+
+.cbp_tmtimeline>li {
+	position: relative;
+}
+
+/* The date/time */
+.cbp_tmtimeline>li .cbp_tmtime {
+	display: block;
+	width: 20%;
+	position: absolute;
+	top: - 10px;
+	left: -10px;
+}
+
+/* Right content */
+.cbp_tmtimeline>li .cbp_tmlabel {
+	margin: 0 0 10px 48px;
+	background: #3594cb;
+	color: #fff;
+	padding: 5px;
+	font-size: 1.2em;
+	font-weight: 300;
+	position: relative;
+	border-radius: 5px;
+}
+
+/* Right content */
+.cbp_tmtimeline>li .cbp_tmlabel::before {
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 100%;
+	height: 0;
+	width: 0;
+	border: 7px solid transparent;
+	border-right: 7px solid #3594cb;
+}
+
+/* Right content */
+.cbp_tmtimeline>li .cbp_tmlabel span {
+	font-size: 1.0em;
+}
+
+.cbp_tmtimeline>li:nth-child(odd) .cbp_tmlabel {
+	background: #6cbfee;
+}
+
+.cbp_tmtimeline>li .cbp_tmlabel h5 {
+	margin-top: 0px;
+	padding: 0 0 5px 0;
+}
+
+/* The icons */
+.cbp_tmtimeline>li .cbp_tmicon {
+	width: 30px;
+	height: 30px;
+	font-family: 'ecoico';
+	font-size: 1.4em;
+	-webkit-font-smoothing: antialiased;
+	position: absolute;
+	color: #fff;
+	background: #46a4da;
+	border-radius: 50%;
+	box-shadow: 0 0 0 8px #afdcf8;
+	text-align: center;
+	left: 1%;
+	top: 0;
+}
+
+.cbp_tmicon-phone:before {
+	content: "\e000";
+}
+
+.cbp_tmicon-screen:before {
+	content: "\e001";
+}
+
+.cbp_tmicon-mail:before {
+	content: "\e002";
+}
+
+.cbp_tmicon-earth:before {
+	content: "\e003";
+}
+
+.dragProduction {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #449D44;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragReform {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #286090;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragPlan {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #31B0D5;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragPlanning {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #F5C787;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragChange {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #BADB96;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragClose {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #737373;
+	padding: 3px 6px;
+	border-radius: 3px;
+}
+
+.dragNew {
+	width: 50px;
+	height: 30px;
+	margin: 2px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	background: #6CE26C;
+	padding: 3px 6px;
+	border-radius: 3px;
+}

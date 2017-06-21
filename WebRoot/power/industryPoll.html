@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="ECharts">
+		<meta name="author" content="kener.linfeng@gmail.com">
+		<title>火电厂</title>
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<script src="../js/echarts-all.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script src="../js/jquery.easyui.min.js"></script>
+		<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+		<script type="text/javascript" src="../js/checkInput.js"></script>
+		<script src="js/industryPoll.js"></script>
+		<script src="../js/easyui-lang-zh_CN.js"></script>
+		<style>
+.pagination-info {
+	margin-right: 20px;
+}
+.panel-body{
+padding:0px;
+}
+.panel{
+margin-bottom:0px;
+}
+.s_btns{
+border:none;
+}
+</style>
+	</head>
+	<body class="easyui-layout">
+	<div class="help-tip" style="position: fixed;top: 50px;right: 20px;">
+		<p></p>
+	</div>
+		<div id="annotationDialog" title="批注信息" style="display: none; overflow: hidden;">
+			<div data-options="region:'center'">
+				<div id="annotation" style="width: 100%;">
+					<table id="annotationTable" class="easyui-datagrid" style="width: 100%; height: 750px"
+						data-options="singleSelect:true,striped:true">
+						<thead>
+							<tr>
+								<th field="year" width="30%" align="center">
+									年份
+								</th>
+								<th field="month" width="30%" formatter="formatMonth" align="center">
+									月份
+								</th>
+								<th field="content" width="auto" align="center">
+									批注内容
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<div class="easyui-tabs" data-options="fit:true">
+				<div title="盟市/行业" style="padding-top: 10px; padding-left: 20px; overflow: hidden;">
+					<div style="width: 230px;float: left">
+						<span style="display:inline-block;width:60px;margin-top:8px;float: left;">开始时间:</span>
+						<div id="beginTime" class="input-group date form_datetime" style="width: 150px">
+							<input class="form-control" type="text"  style="font-size: 12px">					
+							<span class="input-group-addon" style="height: 31px">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+					<div style="float:left;height: 31px;">
+						<span style="display:inline-block;margin-top: 8px">结束时间:</span>
+					</div>
+					<div style="width: 160px;float: left">
+						<div id="endTime" class="input-group date form_datetime" style="width: 150px">
+							<input class="form-control" type="text" style="font-size: 12px">					
+							<span class="input-group-addon" style="height: 31px">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+
+					<span>&nbsp;维度:</span>
+					<select id="viewPoint" class="easyui-combobox" data-options="panelHeight:'auto'"
+						style="width: 100px; height: 28px;" editable="false">
+						<option value="city">盟市</option>
+						<option value="industry">电力集团</option>
+					</select>
+					<span>污染物类型:</span>
+					<select id="pollutionKind" class="easyui-combobox" data-options="panelHeight:'auto'"
+						style="width: 100px; height: 28px;" editable="false">
+						<option value="SO2">SO2</option>
+						<option value="NOx">NOx</option>
+						<option value="dust">烟尘</option>
+					</select>
+					<button  class="s_btns" onclick="queryData()">查询</button>
+					<div id="cityChart" class="main" style='margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0;'></div>
+				</div>
+				<div title="企业" style="overflow: hidden;">
+					<div data-options="region:'center'" style="height: 100%;">
+						<div style="padding-top: 10px; padding-left: 20px;">
+						<div style="float: left">
+							<span>盟市</span>
+							<select id="cityEnterprise" class="easyui-combobox" data-options="panelHeight:'auto'"
+								style="width: 100px; height: 28px;" editable="false"></select>	
+						</div>
+						<div style="width: 200px;float: left">
+							<span style="display:inline-block;width:60px;margin-top:8px;float: left;">开始时间:</span>
+							<div id="beginEnterpriseTime" class="input-group date form_datetime" style="width: 130px">
+								<input class="form-control" type="text" value="2016-02" style="font-size: 12px">						
+								<span class="input-group-addon" style="height: 31px">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+						<div style="float:left;height: 31px;">
+							<span style="display:inline-block;margin-top: 8px">结束时间:</span>
+						</div>
+						<div style="width: 135px;float: left">
+							<div id="endEnterpriseTime" class="input-group date form_datetime" style="width: 130px">
+								<input class="form-control" type="text" value="2016-01" style="font-size: 12px">						
+								<span class="input-group-addon" style="height: 31px">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+						<button class="s_btns" onclick="queryEnterpriseData()" style="display:inline-block;">查询</button>
+						</div>
+						<div id="strengthRanking" style="width: 100%; margin-top: 10px; height: 90%; border: 1px solid #e1e1e1;">
+							<table id="enterprise" class="easyui-datagrid"
+								style="width: 100%; height: 100%; border-bottom: 1px solid #e1e1e1;"
+								data-options="singleSelect:true,striped:true,rownumbers:true,pagination:true">
+								<thead>
+									<tr>
+										<th field="psName" width="17%" align="center">
+											企业名称
+										</th>
+										<th field="groupName" width="9%" align="center">
+											所属集团
+										</th>
+										<th field="genCapacity" width="9%" align="center" formatter="formatNumber">
+											发电量(百万kwh)
+										</th>
+										<th field="so2Amount" width="9%" align="center" formatter="formatNumber">
+											SO2排放量(t)
+										</th>
+										<th field="so2Performance" width="10%" align="center" formatter="formatNumber">
+											SO2排放绩效(g/kwh)
+										</th>
+										<th field="noxAmount" width="9%" align="center" formatter="formatNumber">
+											NOx排放量(t)
+										</th>
+										<th field="noxPerformance" width="10%" align="center" formatter="formatNumber">
+											NOx排放绩效(g/kwh)
+										</th>
+										<th field="dustAmount" width="8%" align="center" formatter="formatNumber">
+											烟尘排放量(t)
+										</th>
+										<th field="dustPerformance" width="10%" align="center" formatter="formatNumber">
+											烟尘排放绩效(g/kwh)
+										</th>
+										<th field="sulfur" width="7%" align="center" formatter="formatSulfur">
+											推算硫份
+										</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

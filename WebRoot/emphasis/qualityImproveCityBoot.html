@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>数据质量改善分析</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../css/calendar/SimpleCanleder.css" />
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap-datetimepicker.css">
+	</head>
+	<body class="easyui-layout">
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="#cityQuota" data-toggle="tab"> 盟市指标对比 </a>
+			</li>
+			<li>
+				<a href="#timeQuota" data-toggle="tab">时间/指标</a>
+			</li>
+		</ul>
+		<div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade in active" id="cityQuota">
+				<div id="qualityResCondition" data-options="region:'north',fit:false" style="padding: 3px">
+					<span>年度</span>
+					<select id="yearQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;">
+						<option value="2011">2011</option>
+						<option value="2012">2012</option>
+						<option value="2013">2013</option>
+						<option value="2014">2014</option>
+						<option value="2015">2015</option>
+						<option value="2016">2016</option>
+					</select>
+					<span>指标类型类型</span>
+					<select id="quotaQuotaQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;">
+					</select>
+					  <button type="button" class="btn btn-info btn-sm" onclick="imporveLineQuery()">查询</button>      
+				</div>
+				<div data-options="region:'center',fit:false">
+					<div id="lineChart"></div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="timeQuota">
+				<div id="qualityResCondition" data-options="region:'north',fit:false" style="padding: 3px">
+					<span>开始时间：</span>
+					<input type="text" id="beginTime" placeholder="结束时间">
+					<span>结束时间：</span>
+					<input type="text" id="endTime" placeholder="结束时间">
+					<span>盟市</span>
+					<select id="cityQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 80px;">
+					</select>
+					<button type="button" class="btn btn-info btn-sm" onclick="imporveCityQuery()">查询</button> 
+				</div>
+				<div data-options="region:'center',fit:false">
+					<div id="lineCityChart"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/jquery-1.9.1.min.js">
+</script>
+	<script src="../js/echarts.min.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/DatePicker/SimpleCanleder.js">
+</script>
+
+	<script src="../js/utils.js">
+</script>
+	<script src="../js/bootstrap.min.js">
+</script>
+	<script src="../js/moment-with-locales.js">
+</script>
+	<script src="../js/bootstrap-datetimepicker.js">
+</script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+	<script src="js/qualityImproveCityBoot.js">
+</script>
+</html>

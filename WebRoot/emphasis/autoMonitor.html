@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>自动监控检查结果分析</title>
+		<link rel="stylesheet" href="../css/calendar/SimpleCanleder.css" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/jquery.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+		<script src="js/autoMonitor.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div style="padding-top: 10px; padding-left: 100px; height: 35px; border: none;">
+			<div style="width: 200px; float: left">
+				<span style="display: inline-block; width: 60px; margin-top: 8px; float: left;">开始时间:</span>
+				<div id="beginTime" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<div style="float: left; height: 31px;">
+				<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+			</div>
+			<div style="width: 135px; float: left">
+				<div id="endTime" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<a href="#" class="s_btns" onclick="queryHotwordByType()" style="display: inline-block;">查询</a>
+			<div class="help-tip">
+				<p></p>
+			</div>
+		</div>
+		<div style="margin-top: 20px; border: solid 1px #F0F0F0">
+			<div id="pieType" class="main" style='margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0'></div>
+			<div id="pieCity" class="main" style='position: absolute; left: 50%; top: 55px;'></div>
+		</div>
+	</body>
+</html>

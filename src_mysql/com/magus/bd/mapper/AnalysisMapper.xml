@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.AnalysisDao">
+	<select id="getAnalysis" resultType="com.magus.bd.entity.Analysis">
+        select id,
+	        PSCode as pSCode,
+	        PSName as pSName,
+	        year,
+	        statistics_time as statisticsTime,
+	        Installed_amount as InstalledAmount,
+	        SO2_amount as SO2Amount,
+	        NOx_amount as NOxAmount,
+	        dust_amount as dustAmount,
+	        generate_electricity_amount as generateElectricityAmount,
+	        effective_hour as effectiveHour,
+	        coal_consume_amount as coalConsumeAmount,
+	        water_amount as waterAmount,
+	        qualtity_report as qualtityReport,
+	        plant_power_amunt as plantPowerAmunt,
+	        GDP
+        from res_power_year
+	</select>	
+	<select id="getAnalysisForAnalysis" resultType="com.magus.bd.entity.Analysis"
+	parameterType="com.magus.bd.entity.Analysis">
+       SELECT b.PSName as psName ,b.Longitude as longitude,b.Latitude as latitude, c.city_name as cityName ,t.* from (
+						SELECT
+							dat.psCode AS psCode,
+							Installed_amount AS installedAmount,
+							coal_consume_amount AS coalConsumeAmount,
+							water_amount AS waterAmount,
+							coalCon AS coalEffective,
+							SO2_amount * power_Accounting / generate_electricity_amount * 100 AS so2Effective,
+							SO2_amount / tt.gdp * 1000000 AS so2Concentration,
+							NOx_amount * power_Accounting / generate_electricity_amount * 100 AS noxEffective,
+							NOx_amount / tt.gdp * 1000000 AS noxConcentration,
+							dust_amount * power_Accounting / generate_electricity_amount * 100 AS dustEffective,
+							dust_amount / tt.gdp * 1000000 AS dustConcentration,
+							water_amount / generate_electricity_amount / 10 AS waterEffective,
+							generate_electricity_amount AS generateElectricityAmount
+						FROM
+							res_environment_year p
+						LEFT JOIN res_environment_datacenter dat ON p.enCode = dat.enCode
+						LEFT JOIN (
+							SELECT
+								LEFT (dat.psCode, 4) AS cityId,
+								sum(GDP) AS GDP
+							FROM
+								res_environment_year env
+							LEFT JOIN res_environment_datacenter dat ON env.enCode = dat.enCode
+							WHERE
+								ifnull(dat.psCode, NULL)
+							AND YEAR = #{year}
+							AND unit = '99'
+							GROUP BY
+								LEFT (dat.psCode, 4)
+						) tt ON LEFT (dat.PSCode, 4) = tt.cityId
+						WHERE
+							ifnull(dat.psCode,null) and 
+						 p. YEAR = #{year}
+						AND unit = '99'
+						ORDER BY
+							dat.psCode
+				) t 
+			left join res_baseinfo b on t.psCode =b.PSCode  
+			LEFT JOIN sys_city c on b.city_id = c.city_id
+				ORDER BY
+			<if test="emission!=null and emission ==1">
+				t.coalEffective desc
+			</if>
+			<if test="emission!=null and emission ==0">
+				t.waterEffective desc
+			</if>
+			<if test="emission!=null and emission ==2">
+				<choose>
+					<when test="pollType!=null and pollType == 'SO2'">
+						t.so2Effective desc
+					</when>
+					<when test="pollType!=null and pollType == 'NOx'">
+						t.noxEffective desc
+					</when>
+					<otherwise>
+						t.dustEffective desc
+					</otherwise>
+				</choose>
+			</if>
+			LIMIT 0,10
+	</select>
+	
+	<select id="getElectricitySum" resultType="java.lang.Double"
+			parameterType="java.lang.String">
+        SELECT
+			sum(
+				generate_electricity_amount
+			) AS sum
+		FROM
+			res_environment_year
+		WHERE
+		 	unit = '99'
+			and
+			YEAR = #{year}
+		GROUP BY
+		YEAR
+	</select>
+	<select id="getInduestryPower" resultType="com.magus.bd.entity.Analysis"
+			parameterType="com.magus.bd.entity.Analysis">
+       SELECT DISTINCT
+			psType AS psType
+		FROM
+			res_environment_year
+		WHERE
+		unable = 0 or unable = 1
+	</select>
+	<select id="getBoilerType" resultType="com.magus.bd.entity.Analysis"
+			parameterType="com.magus.bd.entity.Analysis">
+     SELECT DISTINCT
+		boilerType AS boilerType
+	FROM
+		res_environment_year
+	WHERE
+		unit != '99'
+		AND (unable = 0 OR unable = 1)
+		AND boilerType IS NOT NULL
+	</select>
+	<select id="queryAnalysis" resultType="com.magus.bd.entity.Analysis"
+			parameterType="com.magus.bd.entity.Analysis">
+      SELECT
+		PSName as psName,
+		Installed_amount AS installedAmount,
+		coal_consume_amount AS coalConsumeAmount,
+		products as products,
+		unit as unit,
+		units as units,
+		coalCon AS coalEffective,
+		SO2_amount * power_Accounting / generate_electricity_amount * 100 AS so2Effective,
+		SO2_amount / gdp * 1000000 AS so2Concentration,
+		NOx_amount * power_Accounting / generate_electricity_amount * 100 AS noxEffective,
+		NOx_amount / gdp * 1000000 AS noxConcentration,
+		dust_amount * power_Accounting / generate_electricity_amount * 100 AS dustEffective,
+		dust_amount / gdp * 1000000 AS dustConcentration,
+		generate_electricity_amount AS generateElectricityAmount
+	FROM
+		res_environment_year p
+	WHERE
+		unable != 4 and 
+		p. YEAR = #{year} and Installed_amount > 0
+		<if test='isStrength =="0"'>
+			AND unit != '99' 
+		</if>
+		<if test='isStrength =="1"'>
+			AND unit = '99'
+		</if>
+		<if test="psType!=null and psType !='' ">
+			and psType =#{psType}
+		</if>
+		<if test="boilerType!=null and boilerType !='' ">
+			and boilerType =#{boilerType}
+		</if>
+		<choose>
+			<when test="installed!=null and installed.size()>0">
+				and (
+				<foreach item="item" index="index" collection="installed"
+					open="(" separator=" or " close=")">
+					p.installed_amount between #{item.begin} and #{item.end} 
+			   </foreach>
+				<if test="installedMax!=null and installedMax!=0">
+					or p.installed_amount > #{installedMax}
+			   </if>
+				)
+			</when>
+			<when test="installedMax!=null and installedMax!=0">
+				and p.installed_amount > #{installedMax}
+			</when>
+			<otherwise>
+				and 1=1
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="../asset/ico/favicon.png">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/bootstrap/easyui.css">
+     <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+    <script src="../js/echarts.min.js">
+    </script>
+    <script src="../js/jquery-1.7.2.js">
+    </script>
+    <script src="../js/jquery.easyui.min.js">
+    </script>
+    <script src="js/ranking.js">
+    </script>
+<style>
+.textbox{
+border-radius:0;
+}
+ h1{
+        border:1px solid #c5d0dc;
+        height:38px;
+        line-height:38px;
+        color:#438eb9;
+        font-size:16px;
+        padding-left:36px;
+        background:#eff3f8 url(../images/list.png) no-repeat 10px center;
+        margin:0;
+        }
+        .panel-title {
+    color:#fff;
+    font-size:14px;
+    padding-left:30px;
+    line-height:36px;
+}
+.panel-body{
+border:none;
+}
+.datagrid-header td:hover{
+background:#5b9bd5;
+color:#fff;
+}
+.combo-panel{
+border:1px solid #ddd;
+}
+</style>
+</head>
+
+<body class="easyui-layout">
+
+<div data-options="region:'north'" id="condition"  style="height: 40px;color:#fff;padding-left:20px;padding-top:12px;margin-bottom:10px;">
+    <span style="color:#393939;">年份：</span>
+    <select id="pointRealTable" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;border-radius:0;height:28px;">
+                            <option value="select">请选择</option>
+							<option value="2011">2011</option>
+							<option value="2012">2012</option>
+							<option value="2013">2013</option>
+							<option value="2014">2014</option>
+							<option value="2015">2015</option>
+     </select>
+     <a href="#" class="s_btns">加载</a>
+</div>
+<div data-options="region:'center'">
+    <div id="strengthRanking" style="position: absolute;left: 0px;top: 0px;margin:0 0.5%;margin-top:5px;width:49%;">
+    <h1>强度</h1>
+        <table class="easyui-datagrid" style="width:100%; height: 260px；"
+               data-options="singleSelect:true">
+            <thead>
+            <tr>
+                <th data-options="field:'itemid'" width="22%" align="center">
+                    盟市
+                </th>
+                <th data-options="field:'productid'" width="26%" align="center">
+                    SO2排放强度(g/万元)
+                </th>
+                <th data-options="field:'listprice',align:'right'" width="26%" align="center">
+                    NOx排放强度(g/万元)
+                </th>
+                <th data-options="field:'unitcost',align:'right'" width="26%" align="center">
+                    粉尘排放强度(g/万元)
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="efficitiveRanking" style="position: absolute;left: 50%;top: 0px;margin:0 0.5%;margin-top:5px;width:49%;">
+    <h1>排放绩效</h1>
+        <table class="easyui-datagrid" style="width:100%; height: 250px"
+               data-options="singleSelect:true,striped:true">
+            <thead>
+            <tr>
+                <th data-options="field:'itemid'" width="22%" align="center"> 
+                    盟市
+                </th>
+                <th data-options="field:'productid'" width="26%" align="center">
+                    SO2排放绩效(g/kWh)
+                </th>
+                <th data-options="field:'listprice',align:'right'" width="26%" align="center">
+                    NOx排放绩效(g/kWh)
+                </th>
+                <th data-options="field:'unitcost',align:'right'" width="26%" align="center">
+                    粉尘排放绩效(g/kWh)
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="coalRanking" style="position: absolute;left:0px;top: 250px;margin:0 0.5%;margin-top:5px;width:49%;">
+    <h1>煤消耗</h1>
+        <table class="easyui-datagrid" style="width:100%; height: 250px"
+               data-options="singleSelect:true,striped:true">
+            <thead>
+            <tr>
+                <th data-options="field:'itemid'" width="50%" align="center">
+                    盟市
+                </th>
+                <th data-options="field:'productid'" width="50%" align="center">
+                    煤炭消耗绩效(g/kWh)
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="waterRanking" style="position: absolute;left:50%;top: 250px;margin:0 0.5%;margin-top:5px;width:49%;">
+    <h1>水消耗</h1>
+        <table class="easyui-datagrid" style="width:100%; height: 250px;"
+               data-options="singleSelect:true">
+            <thead>
+            <tr>
+                <th data-options="field:'itemid'" width="50%" align="center">
+                    盟市
+                </th>
+                <th data-options="field:'productid'" width="50%" align="center">
+                    水消耗绩效(kg/kWh)
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+</body>
+</html>

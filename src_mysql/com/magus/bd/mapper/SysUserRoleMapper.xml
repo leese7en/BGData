@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysUserRoleDao">
+	<select id="getUserRole" resultType="com.magus.bd.entity.SysUserRole"
+	 parameterType="java.lang.Integer"> 
+	SELECT
+		USER.user_id AS userId,
+		USER.user_name AS userName,
+		role.role_ID AS roleId,
+		role.role_NAME AS roleName,
+		role.description AS descritpion
+	FROM
+		sys_user_role userRole
+	LEFT JOIN sys_user user ON USER.user_id = userRole.user_id
+	LEFT JOIN sys_role role ON role.role_id = userRole.role_id
+	WHERE
+		userRole.user_id = #{userId}
+	</select>
+	<insert id="addUserRole" parameterType="com.magus.bd.entity.SysUserRole">
+	  insert into sys_user_role
+	        (user_id,role_id)
+	  values
+	        (#{userId},#{roleId})
+	</insert>
+	<delete id="deleteUserRole" parameterType="com.magus.bd.entity.SysUserRole">
+	  delete from sys_user_role
+         where 
+           user_id = #{userId} 
+         and role_id =#{roleId}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>自动监控管理热词搜索</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<script src="../js/jquery.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="../js/checkInput.js">
+</script>
+		<script src="js/hotwordManager.js">
+</script>
+		<style>
+.panel-body {
+	padding: 0;
+}
+
+.datagrid-header-inner {
+	border-top: 1px solid #e1e1e1;
+}
+
+.pagination-info {
+	margin-right: 20px;
+}
+
+.s_btns {
+	border: none;
+}
+
+.s_btns:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+.panel {
+	margin-bottom: 0;
+}
+</style>
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'center',fit:false" style="overflow-y: hidden;">
+			<div id="condition" style="padding-left: 20px; padding-top: 10px; height: 40px;">
+				<div style="float: left;">
+					<span>盟市:</span>
+					<select id="city" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 120px; height: 28px;"></select>
+					<span>企业名称:</span>
+					<input id="enterprise" class="easyui-textbox" style="width: 120px; height: 28px;" />
+					<span>热词类型:</span>
+					<select id="hotwordType" class="easyui-combotree" data-options="panelHeight:'auto'"
+						style="width: 120px; height: 28px;"></select>
+					<span>热词:</span>
+					<input id="hotword" class="easyui-textbox" style="width: 110px; height: 28px;" />
+				</div>
+				<div style="width: 200px; float: left">
+					<span style="display: inline-block; width: 60px; margin-top: 8px; float: left;">开始时间:</span>
+					<div id="beginTime" class="input-group date form_datetime" style="width: 130px">
+						<input class="form-control" type="text" value="2015-01" style="font-size: 12px; height: 32px;">
+						<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+					</div>
+				</div>
+				<div style="float: left; height: 31px;">
+					<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+				</div>
+				<div style="width: 135px; float: left">
+					<div id="endTime" class="input-group date form_datetime" style="width: 130px">
+						<input class="form-control" type="text" value="2016-01" style="font-size: 12px; height: 32px;">
+						<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span>
+					</div>
+				</div>
+				<button class="s_btns" onclick="queryHotword()" style="display: inline-block; padding: 6px 16px;">
+					查询
+				</button>
+				<div class="help-tip">
+					<p></p>
+				</div>
+			</div>
+			<div id="userMessage" style="width: 80%; height: 80%; font-size: 13px; display: none;">
+				<div id="condition"
+					style="height: 35px; padding-top: 6px; background: border :         #4789c4; padding-left: 20px;">
+					<div style="float: left;">
+						<span>盟市:</span>
+						<select id="city1" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px; height: 28px;">
+						</select>
+						<span>企业名称:</span>
+						<input id="enterprise1" class="easyui-textbox" style="width: 120px; height: 28px;" />
+						<span>开始结束时间:</span>
+					</div>
+					<!-- <input id="beginTime1" class="easyui-datetimebox" required style="width: 120px; height: 28px;"> -->
+
+					<div style="width: 135px; float: left">
+						<div id="beginTime1" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2015-01" style="font-size: 12px; height: 32px;">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<div style="float: left; width: 15px">
+						<span>-</span>
+					</div>
+					<!-- <input id="endTime1" class="easyui-datetimebox" required style="width: 120px; height: 28px;"> -->
+					<div style="width: 135px; float: left">
+						<div id="endTime1" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2016-01" style="font-size: 12px; height: 32px;">
+							<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<!-- <a href="#" class="s_btns" onclick="queryIndustry()">查询</a> -->
+					<a href="#" class="s_btns" onclick="queryIndustry()" style="display: inline-block; padding: 6px 16px;">查询</a>
+				</div>
+				<div id="strengthRanking" style="width: 100%; margin-top: 10px; height: 90%; border-bottom: 1px solid #e1e1e1;">
+					<table class="easyui-datagrid" id="industrygrid"
+						data-options="fit:true,rownumbers: true,collapsible: true,fitColumns: true,pagination:true,singleSelect:true,state:closed,striped:true">
+						<thead>
+							<tr>
+								<th data-options="field:'cityName'" width="6%" align="center">
+									盟市
+								</th>
+								<th data-options="field:'psName'" width="15%" align="center">
+									企业名称
+								</th>
+								<th data-options="field:'beginTime',align:'left'" width="10%" align="center">
+									异常开始时间
+								</th>
+								<th data-options="field:'endTime',align:'right'" width="10%" align="center">
+									异常结束时间
+								</th>
+								<th data-options="field:'hourLong',align:'left'" width="5%" align="center">
+									时长
+								</th>
+								<th data-options="field:'alarmCause',align:'left'" width="15%" align="center">
+									告警原因
+								</th>
+								<th data-options="field:'alarmExplain',align:'left'" width="35%" align="center">
+									告警解释
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+			<div style="width: 100%; height: 90%; margin-top: 10px;">
+				<table class="easyui-datagrid" id="hotwordInfo"
+					data-options="fit:true,rownumbers: true,collapsible: true,pagination:true,singleSelect:true,state:closed">
+					<thead>
+						<tr>
+							<th data-options="field:'cityName'" width="6%" align="center">
+								盟市
+							</th>
+							<th data-options="field:'psName'" width="17%" align="center">
+								企业名称
+							</th>
+							<th data-options="field:'name',align:'left'" width="10%" align="center">
+								热词
+							</th>
+							<th data-options="field:'hotName',align:'left'" width="5%" align="center">
+								热词类型
+							</th>
+							<th data-options="field:'hotCount',align:'left'" width="5%" align="center">
+								热词频次
+							</th>
+							<th data-options="field:'date',align:'right'" width="8%" align="center">
+								时间
+							</th>
+							<th data-options="field:'description',align:'left'" width="20%" align="center">
+								描述
+							</th>
+							<th data-options="field:'url',align:'left',formatter:detail" width="28%" align="center">
+								查看详情
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

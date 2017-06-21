@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResSuperlowFullViewDao">
+	<select id="getPowerUnit" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			id AS id,
+			psCode AS psCode,
+			psName AS psName,
+			base.city_id AS cityId,
+			city.city_name AS cityName,
+			unit AS unit,
+			installed AS installed,
+			rectificationDate AS rectificationDate,
+			productionDate AS productionDate,
+			flag AS flag
+		FROM
+			res_superlow_baseinfo base
+		LEFT JOIN sys_city city ON base.city_id = city.city_id
+		where is_delete = 0
+	</select>
+	<select id="getProgramFullViewInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			id AS programId,
+			programName AS programName,
+			programUser AS programUser,
+			programDesc AS programDesc,
+			pollutantCode AS polluteCode,
+			pollutantName AS polluteName
+		FROM
+			res_superlowfullview
+		WHERE
+			id = #{parentId}
+	</select>
+	<select id="getProgramPowerUnit" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			id AS id,
+			psCode AS psCode,
+			psName AS psName,
+			base.city_id AS cityId,
+			city.city_name AS cityName,
+			unit AS unit,
+			installed AS installed,
+			rectificationDate AS rectificationDate,
+			productionDate AS productionDate,
+			flag AS flag
+		FROM
+			res_superlowfullview_detail base
+		LEFT JOIN sys_city city ON base.city_id = city.city_id
+		where parent_id =#{parentId}
+	</select>
+	<select id="getFullViewInfo" parameterType="com.magus.bd.entity.ResSuperlowFullViewInfo"
+		resultType="com.magus.bd.entity.ResSuperlowFullViewInfo">
+		SELECT
+			id AS id,
+			date AS date,
+			time AS time,
+			content AS content
+		FROM
+			res_superlow_info
+		WHERE
+			is_delete = 0
+	</select>
+	<select id="queryProgramInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			id AS programId,
+			programName AS programName,
+			programUser AS programUser,
+			programDesc AS programDesc,
+			create_date AS createDate
+	 	FROM
+			res_superlowfullview
+		WHERE
+			programName LIKE '%${programName}%'
+			AND programUser LIKE '%${programUser}%'
+			AND programDesc LIKE '%${programDesc}%'
+			<if test="beginTime!=null and beginTime!='' and endTime!=null and endTime!=''">
+				AND create_date BETWEEN #{beginTime} AND #{endTime}
+			</if>
+			and is_delete = 0
+	</select>
+	<select id="queryPowerUnitInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			base.id AS programId,
+			psName AS psName,
+			unit AS unit,
+			city.city_name AS cityName,
+			g. NAME AS groupName,
+			installed AS installed,
+			rectificationDate AS rectificationDate,
+			productionDate AS productionDate,
+			flag AS flag
+		FROM
+			res_superlow_baseinfo base
+			LEFT JOIN sys_city city ON base.city_id = city.city_id
+			LEFT JOIN t_base_group g ON base.group_id = g.id
+		WHERE
+			psname LIKE '%${psName}%'
+			<if test="beginTime!=null and beginTime!='' and endTime!=null and endTime!=''">
+				AND productionDate BETWEEN #{beginTime} AND #{endTime}
+			</if>
+			<if test="cityId!=null and cityId!='' and cityId!='-1'">
+				AND base.city_id = #{cityId}
+			</if>
+			<if test="groupId!=null and groupId!='' and groupId!='-1'">
+				AND base.group_id = #{groupId}
+			</if>
+			and is_delete = 0
+	</select>
+	<select id="queryPowerUnitInfoById" parameterType="com.magus.bd.entity.ResSuperlowFullView"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+		SELECT
+			base.id AS programId,
+			psName AS psName,
+			unit AS unit,
+			city.city_id AS cityId,
+			city.city_name AS cityName,
+			g.id AS groupId,
+			g.NAME AS groupName,
+			installed AS installed,
+			rectificationDate AS rectificationDate,
+			productionDate AS productionDate,
+			flag AS flag
+		FROM
+			res_superlow_baseinfo base
+			LEFT JOIN sys_city city ON base.city_id = city.city_id
+			LEFT JOIN t_base_group g ON base.group_id = g.id
+		WHERE
+			base.id = #{programId}
+			and is_delete = 0
+	</select>
+	<update id="deletePowerUnitInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+			update res_superlow_baseinfo set is_delete = 1 where id=#{programId}
+	</update>
+	<update id="updatePowerUnitInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+		update res_superlow_baseinfo
+		set 
+			psName = #{psName},
+			unit = #{unit},
+			city_id = #{cityId},
+			group_id = #{groupId},
+			installed = #{installed},
+			rectificationDate = #{rectificationDate},
+			productionDate = #{productionDate},
+			flag = #{flag},
+			update_date =#{updateDate}
+		WHERE
+			id =#{programId}
+			and is_delete = 0
+	</update>
+	<select id="getPowerUnitEmissionInfo" parameterType="java.lang.String"
+		resultType="com.magus.bd.entity.ResSuperlowFullView">
+<!--		SELECT-->
+<!--			base.psCode AS psCode,-->
+<!--			base.psName AS psName,-->
+<!--			base.unit AS unit,-->
+<!--			base.city_id AS cityId,-->
+<!--			base.rectificationDate AS rectificationDate,-->
+<!--			base.productionDate AS productionDate,-->
+<!--			gas.PointCode,-->
+<!--			gas.DataYear AS year,-->
+<!--			gas.DataMonth AS month,-->
+<!--			gas.Code_Pollute AS polluteCode,-->
+<!--			gas.Pollute_Name AS polluteName,-->
+<!--			gas.AvgConcent AS avgConcent,-->
+<!--			gas.CumEmission / 1000 AS cumEmission-->
+<!--		FROM-->
+<!--			res_superlow_baseinfo base-->
+<!--		LEFT JOIN (-->
+<!--			SELECT-->
+<!--				*-->
+<!--			FROM-->
+<!--				res_monthdata_gas gas-->
+<!--			WHERE-->
+<!--				gas.Code_Pollute = #{value}-->
+<!--			AND gas.DataYear >= '2015'-->
+<!--		) gas ON base.psCode = gas.PSCode-->
+<!--		AND base.unit = gas.pointCode-->
+<!--		ORDER BY-->
+<!--			base.pscode,-->
+<!--			base.unit,-->
+<!--			gas.DataYear,-->
+<!--			gas.DataMonth-->
+
+
+
+			SELECT
+				base.psCode AS psCode,
+				base.psName AS psName,
+				base.unit AS unit,
+				base.city_id AS cityId,
+				city.city_name AS cityName,
+				g.id as groupId,
+				g.name as groupName,
+				base.rectificationDate AS rectificationDate,
+				base.productionDate AS productionDate,
+				gas.PointCode,
+				gas.DataYear AS YEAR,
+				gas.DataMonth AS MONTH,
+				gas.Code_Pollute AS polluteCode,
+				gas.Pollute_Name AS polluteName,
+				gas.AvgConcent AS avgConcent,
+				gas.CumEmission / 1000 AS cumEmission
+			FROM
+				res_superlow_baseinfo base
+			LEFT JOIN res_monthdata_gas gas ON base.psCode = gas.PSCode
+			AND base.unit = gas.pointCode
+			LEFT JOIN sys_city city ON base.city_id = city.city_id
+			LEFT JOIN t_base_group g on base.group_id = g.id
+			WHERE
+				gas.Code_Pollute = #{value}
+			AND gas.DataYear >= '2015'
+			and base.is_delete = 0
+			ORDER BY
+				base.pscode,
+				base.unit,
+				gas.DataYear,
+				gas.DataMonth
+	</select>
+	<select id="getCountByName" parameterType="com.magus.bd.entity.ResSuperlowFullView" resultType="java.lang.Integer">
+		SELECT
+			count(*) AS count
+		FROM
+			res_superlowfullview
+		WHERE
+			programName = #{programName}
+			<if test="programId!=null and programId > 0">
+				AND id !=#{programId}
+			</if>
+		AND is_delete = 0
+	</select>
+	<select id="getCountPowerInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView" resultType="java.lang.Integer">
+		SELECT
+			count(*) AS count
+		FROM
+			res_superlow_baseinfo
+		WHERE
+			psCode = #{psCode}
+			AND unit = #{unit}
+			AND is_delete = 0
+	</select>
+	<insert id="insertResSuperlowFullView" parameterType="com.magus.bd.entity.ResSuperlowFullView" useGeneratedKeys="true" keyProperty="programId">
+      INSERT INTO res_superlowfullview (
+			programName,
+			programUser,
+			programDesc,
+			pollutantCode,
+			pollutantName,
+			create_date,
+			update_date
+		)
+		VALUES
+	        (
+	        #{programName},
+	        #{programUser},
+	        #{programDesc},
+	        #{polluteCode},
+	        #{polluteName},
+	        #{createDate},
+	        #{updateDate}
+	        )  
+    </insert>
+    <insert id="insertPowerInfo" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+      INSERT INTO res_superlow_baseinfo (
+			psCode,
+			psName,
+			city_id,
+			group_id,
+			unit,
+			installed,
+			rectificationDate,
+			productionDate,
+			create_date,
+			update_date,
+			flag
+		)
+		VALUES
+	        (
+	        #{psCode},
+	        #{psName},
+	        #{cityId},
+	        #{groupId},
+	        #{unit},
+	        #{installed},
+	        #{rectificationDate},
+	        #{productionDate},
+	        #{createDate},
+	        #{updateDate},
+	        #{flag}
+	        )  
+    </insert>
+    
+    <insert id="insertResSuperlowFullViewDetail" parameterType="java.util.List">
+     INSERT INTO res_superlowfullview_detail (
+			parent_id,
+			psCode,
+			psName,
+			city_id,
+			unit,
+			installed,
+			rectificationDate,
+			productionDate,
+			create_date,
+			flag
+		)
+		VALUES
+		 <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	        #{item.parentId},
+	        #{item.psCode},
+	        #{item.psName},
+	        #{item.cityId},
+	        #{item.unit},
+	        #{item.installed},
+	        #{item.rectificationDate},
+	        #{item.productionDate},
+	        #{item.createDate},
+	        #{item.flag}
+	        )  
+    	</foreach>  
+     </insert>
+    <update id="deleteProgramFullView" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+    	update res_superlowfullview set is_delete = 1 where id=#{programId}
+    </update>
+    <delete id="deleteProgramFullViewDetail" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+    	delete from  res_superlowfullview_delete
+    	where parent_id = #{programId} 
+    </delete>
+    <update id="updateProgramFullView" parameterType="com.magus.bd.entity.ResSuperlowFullView">
+    	update res_superlowfullview 
+    	set 
+    		progrmName = #{programName},
+    		programUser = #{programUser},
+    		programDesc = #{programDesc},
+    		pollutantCode =#{polluteCode},
+    		pollutantName =#{polluteName},
+    		update_date = #{updateDate} 
+    	where id=#{programId} and is_delete=0
+    </update>
+</mapper>

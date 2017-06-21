@@ -1,0 +1,228 @@
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 12px/ 1.5 tahoma, arial, "Hiragino Sans GB", "Microsoft YaHei",
+    \5b8b\4f53, sans-serif;
+}
+
+article, aside, dialog, footer, header, D, footer, nav, figure, menu {
+    display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-family: 'Hiragino Sans GB', 'Microsoft Yahei';
+    font-weight: 600;
+}
+
+input, button, dt {
+    font-family: \5FAE\8F6F\96C5\9ED1;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+button, input, select, textarea {
+    font-size: 100%;
+    outline: none;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background: #fff;
+}
+
+img {
+    border: 0;
+    -webkit-transition: 0.2s ease;
+    vertical-align: middle;
+}
+
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.form .r_con .btn {
+    margin-top: -10px;
+}
+
+.form .r_con .j_mes {
+    position: absolute;
+    width: 90px;
+    right: -95px;
+    top: 0;
+    color: #c00;
+}
+
+.form .text:focus {
+    border: 1px solid #f12e50;
+}
+
+.form .r_con label {
+    cursor: pointer;
+    color: #1F1F1F;
+}
+
+.form label input {
+    vertical-align: middle;
+    margin: -3px 4px 0 0;
+}
+
+.btn_box .btn {
+    border: 0 none;
+    text-align: center;
+    height: 46px;
+    line-height: 40px;
+    font-size: 16px;
+    padding: 0 50px;
+    cursor: pointer;
+    border-radius: 2px;
+    color: #fff;
+    background: #0070bc;
+    margin-top: 10px;
+}
+
+.tip p {
+    font-size: 14px;
+}
+
+.btn_box .btn:hover {
+    background: #0166aa;
+}
+
+.header {
+    padding: 30px 0px;
+    position: relative;
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 30px;
+}
+
+.header h2 {
+    font-size: 24px;
+    float: left;
+    color: #0070bc;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+.login_box {
+    border: 1px solid #f9f9f9;
+    margin: 0 auto;
+    background: #fff;
+    padding: 5px;
+    box-shadow: 5px 5px 5px #D3D3D3;
+}
+
+.login_box img {
+    width: 550px;
+    height: 355px;
+    overflow: hidden;
+}
+
+.login_box li {
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.login_box .form {
+    width: 380px;
+    float: right;
+    zoom: 1;
+    padding-right: 20px;
+}
+
+.hd {
+    padding: 35px 0 20px 0;
+}
+
+h1 {
+    font-size: 18px;
+    color: #0070bc;
+    margin-top: 20px;
+}
+
+.login_box .form, .login_box .form .j_mes {
+    height: 44px;
+    line-height: 44px;
+}
+
+.form .text {
+    width: 329px;
+    height: 20px;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding-left: 40px;
+    font-size: 14px;
+}
+
+.form .btn {
+    width: 100%;
+    padding: 0;
+}
+
+.login_box .btn_box, .login_box .mima {
+    margin-top: 5px;
+}
+
+.form .name, .form .password {
+    width: 326px;
+    padding-left: 45px;
+}
+
+.form .name {
+    background: no-repeat 3px 6px;
+}
+
+.form .password {
+    background: no-repeat 6px 6px;
+}
+
+.form .r_con {
+    position: relative;
+}
+
+.form .r_con i {
+    width: 30px;
+    height: 42px;
+    border-radius: 3px;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+}
+
+.form .type {
+    text-align: center;
+    height: 30px;
+    width: 40%;
+    font-size: 16px;
+    cursor: pointer;
+    display: block-inline;
+    float: left;
+    margin: -10px 0px;
+}
+
+.form input[type=radio] {
+    margin-right: 5px;
+}
+
+.form .l_text {
+    float: right;
+    font-size: 16px;
+    margin-top: -10px;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #0070bc;
+}

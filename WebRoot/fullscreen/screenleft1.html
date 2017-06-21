@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>重点污染源大数据分析|左</title>
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/jquery.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="js/screenleft1.js">
+</script>
+		<style type="text/css">
+body {
+	background: url(images/right-bg.jpg) no-repeat;
+	background-size: cover;
+	overflow:hidden;
+}
+
+.main {
+	margin: 0 auto;
+	width: 1024px;
+	height: 768px;
+	margin-top: -10px;
+}
+
+.backImg {
+	width: 935px;
+	height: 380px; 
+	background : url(images/big-bg.png) no-repeat;
+	background-size: 935px 380px;
+}
+
+.leftTitle {
+	width: 62px;
+	height: 768px;
+	color: #fff;
+	background: #10203e;
+	font-size: 28px;
+	text-align: center;
+	line-height: 34px;
+	padding-left: 5px;
+	padding-right: 5px;
+	box-sizing: border-box;
+	padding-top: 120px;
+	margin-right: 17px;
+	float: left;
+}
+
+.leftContent {
+	width: 935px;
+	height: 768px;
+	overflow: hidden;
+	float: left;
+}
+
+</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="leftTitle">
+				电力行业大数据分析 
+			</div>
+			<div class="leftContent">
+				<div class="backImg">
+					<div id="unitInstalledChart" style='top: 10px;'></div>
+					<div id="unitTypeChart" style='position: absolute; left: 52%; top: 10px;'></div>
+				</div>
+				<div class="backImg">
+					<div id="industryPollChart" style='top: 10px;'></div>
+					<div id="industrySulfurChart" style='position: absolute; left: 52%; top: 384px;'></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

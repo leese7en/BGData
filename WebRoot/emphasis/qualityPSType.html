@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>数据质量改善分析</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../css/calendar/SimpleCanleder.css" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<style>
+#psType .panel-header {
+	background: #2c81ba;
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2c81ba', endColorstr='#2c81ba',GradientType=1);
+}
+.l-btn-text{
+color:#fff;
+}
+.l-btn{
+margin-bottom:10px;
+}
+.s_btns{
+padding:6px 16px;
+text-align:center;
+border:none;
+}
+.s_btns:hover{
+color:#fff;
+background:#569fe8;
+text-decoration:none;
+}
+#psType .panel-title {
+	color: #fff;
+	font-size: 15px;
+	padding-left: 36px;
+	background: url(../images/list.png) no-repeat 6px center;
+	height: 30px;
+	line-height: 30px;
+}
+
+.datagrid-header-row td:first-child,.datagrid-body td:first-child {
+	border-left: 1px solid #e1e1e1;
+}
+.panel-body{
+padding:0;
+}
+.easyui-fluid{
+border-bottom:1px solid #e1e1e1;
+}
+</style>
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'center'" style="overflow: hidden;">
+			<div id="condition" style="padding-left: 20px; padding-top: 10px;">
+				<!-- <span>盟市</span>
+			<select id="cityQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 120px; height: 28px;"></select>
+			<span>开始日期：</span>
+			<input type="text" id="timeQuery" placeholder="时间"
+					style="height: 24px; padding-left: 4px; border: 1px solid #95B8E7; margin-right: 12px;">			
+			<a href="#" class="s_btns" onclick="queryInfo()">查询</a>
+			-->
+			<div style="float: left">
+				<span>盟市</span>
+				<select id="cityQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 120px; height: 28px;"></select>
+			</div>
+			<div style="width: 200px;float: left">
+				<span style="display:inline-block;width:60px;margin-top:8px;float: left;">开始时间:</span>
+				<div id="timeQuery" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2016-02" style="font-size: 12px">			
+					<span class="input-group-addon" style="height: 31px">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+			<button class="s_btns" onclick="queryInfo()" style="display:inline-block;">查询</button>
+			<div class="help-tip">
+						<p></p>
+					</div>
+			</div>
+
+			<div id="psTypeChart" class="chart" style=" width: 46%; margin-left: 0.5%;clear:both;float:left;"></div>
+			<div style="float: right; width: 48%; margin: 0 0.5%; height:90%; margin-top: 20px; margin-right: 0;">
+				<div id="message" class="message" style="height: 10%; line-height: 24px; color: green; margin-top: 16px;"></div>
+				<div id="psType" style="height: 89%;">
+					<table id="psTypeRank" class="easyui-datagrid" title="行业倒排名" style="width: 100%; height: 92%;"
+						data-options="rownumbers:false,singleSelect:true">
+						<thead>
+							<tr>
+								<th data-options="field:'ranking'" align="center" width="10%">
+									排名
+								</th>
+								<th data-options="field:'psType'" align="center" width="58%">
+									行业
+								</th>
+								<th data-options="field:'total'" align="center" width="30%" formatter="formatNumber">
+									得分
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/echarts.min.js">
+</script>
+	<script src="../js/DatePicker/SimpleCanleder.js">
+</script>
+<script src="../js/utils.js"></script>
+<script src="../js/checkInput.js"></script>
+	<script src="js/qualityPSType.js">
+</script>
+</html>

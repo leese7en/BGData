@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysRoleDao">
+	<select id="blurryRole" resultType="com.magus.bd.entity.SysRole"
+	 parameterType="com.magus.bd.entity.SysRole"> 
+	SELECT
+		role_id AS roleId,
+		role_name AS roleName,
+		description AS description,
+		IS_DELETED AS isDeleted,
+		IS_SYSTEM AS isSystem
+	FROM
+		sys_role
+	  where 
+	   is_deleted = 0 and 
+	   role_name like '%${roleName}%'
+	   and  description like '%${description}%'
+	   limit #{pageNumber},#{pageSize}
+	</select>
+	
+	<select id="getBlurryCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysRole"> 
+	SELECT
+		count(*) as count 
+	FROM
+		sys_role
+	  where 
+	   is_deleted = 0 and 
+	   role_name like '%${roleName}%'
+	   and  description like '%${description}%'
+	</select>
+	<select id="getRolesPage" resultType="com.magus.bd.entity.SysRole"> 
+	SELECT
+		role_id AS roleId,
+		page_id as pageId
+	FROM
+		sys_role_page
+	  where role_id  in 
+	   <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  	#{item}  
+	   </foreach>   
+	  
+	</select>
+	<select id="getAllRole" resultType="com.magus.bd.entity.SysRole"> 
+	SELECT
+		role_id AS roleId,
+		role_name AS roleName,
+		description AS description,
+		IS_DELETED AS isDeleted,
+		IS_SYSTEM AS isSystem
+	FROM
+		sys_role
+	  where is_deleted = 0 
+	</select>
+	<insert id="addRole" parameterType="com.magus.bd.entity.SysRole">
+	  insert into sys_role
+	        (role_name,description,IS_DELETED,IS_SYSTEM)
+	  values
+	        (#{roleName},#{description},#{isDeleted},#{isSystem})
+	</insert>
+	<select id="getRoleInfoById" parameterType="java.lang.Integer" resultType="com.magus.bd.entity.SysRole">
+	  SELECT
+		ROLE_ID AS roleId,
+		ROLE_NAME AS roleName,
+		description AS description
+	  FROM
+		sys_role
+	  WHERE
+		IS_DELETED = 0
+		AND ROLE_ID = #{roleId}
+	</select>
+	<select id="getRoleInfoByName" parameterType="java.lang.String" resultType="com.magus.bd.entity.SysRole">
+	  SELECT
+		ROLE_ID AS roleId,
+		ROLE_NAME AS roleName,
+		description AS description
+	  FROM
+		sys_role
+	  WHERE
+		IS_DELETED = 0
+		AND ROLE_NAME = #{roleName}
+	</select>
+	
+	<update id="updateRoleInfo" parameterType="com.magus.bd.entity.SysRole">
+	  UPDATE sys_role
+		SET ROLE_NAME = #{roleName},
+ 		DESCRIPTION = #{description}
+	  WHERE
+		IS_DELETED = 0
+		AND ROLE_ID = #{roleId}
+	</update>
+	
+	<insert id="addRolePage" parameterType="com.magus.bd.entity.SysRole">
+	  insert into sys_role_page
+	        (role_ID,page_id)
+	  values
+	        (#{roleId},#{pageId})
+	</insert>
+	<select id="getPagesById" resultType="com.magus.bd.entity.SysRole" parameterType="com.magus.bd.entity.SysRole"> 
+		SELECT
+			role_page_id AS rolePageId,
+			role_id AS roleId,
+			PAGE_ID AS pageId
+		FROM
+			sys_role_page
+		WHERE
+			role_id = #{roleId}
+	</select>
+	
+	<update id="deleteRole" parameterType="java.lang.Integer">
+		 update sys_role
+		    set
+		      IS_DELETED = 1 
+		 where 
+		    role_id = #{roleId}
+	</update>
+	
+	<delete id="deleteRolePage" parameterType="com.magus.bd.entity.SysRole">
+		 delete from sys_role_page 
+		 where 
+		    role_id = #{roleId}
+		   and 
+		    page_id =#{pageId}
+	</delete>
+	<select id="getRolePage" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysRole" >
+		 SELECT
+			count(*) AS count
+		FROM
+			sys_role_page
+		WHERE
+			PAGE_ID = #{pageId}
+		GROUP BY
+			PAGE_ID
+	</select>
+</mapper>

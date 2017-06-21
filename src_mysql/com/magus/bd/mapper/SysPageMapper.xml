@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysPageDao">
+	<select id="blurryPage" resultType="com.magus.bd.entity.SysPage"
+	 parameterType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		PRE_PAGE_ID AS prePageId,
+		LEVEL_CODE AS levelCode,
+		page_name AS pageName,
+		URL AS url,
+		DESCRIPTION AS description,
+		IS_DELETED AS isDeleted,
+		IMG_SRC AS imgSrc,
+		icon as icon,
+		PAGE_TYPE_ID AS pageTypeId,
+		IS_ENABLE AS isEnable
+	FROM
+		sys_page
+	  where IS_DELETED = 0
+	  <if test="pageName !=null and pageName != ''">
+	  	and page_name like '%${pageName}%'
+	  </if>
+	  <if test="description !=null and description != ''">	
+	  	and  description like '%${description}%'
+	  </if>
+	  <if test="prePageId !=null and prePageId != '' and prePageId != 0">
+	  	and  pre_page_id = #{prePageId}
+	  </if>
+	  <if test="pageTypeId !=null and pageTypeId != '' and pageTypeId != 0">
+	 	and  page_type_id = #{pageTypeId}
+	  </if>
+	ORDER BY
+		page_id,
+		PRE_PAGE_ID
+	</select>
+	
+	<select id="blurryPageCount" resultType="java.lang.Integer"
+	 parameterType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		count(PAGE_ID) as count
+	FROM
+		sys_page
+	  where 1=1
+	  <if test="pageName !=null and pageName != ''">
+	  and page_name like '%${pageName}%'
+	  </if>
+	  <if test="description !=null and description != ''">
+	  and  description like '%${description}%'
+	  </if>
+	  <if test="prePageId !=null and prePageId != '' and prePageId != 0">
+	  and  pre_page_id = #{prePageId}
+	  </if>
+	  <if test="pageTypeId !=null and pageTypeId != '' and pageTypeId != 0">
+	  and  page_type_id = #{pageTypeId}
+	  </if>
+	and IS_DELETED = 0
+	 order by orderCode
+	</select>
+	<select id="getAllPrePage" resultType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		PRE_PAGE_ID AS prePageId,
+		page_name AS pageName,
+		icon as icon
+	FROM
+		sys_page
+	 where is_deleted =0 
+	   and is_enable = 0
+	   and (url = ''
+	   or url is null) 
+	   order by orderCode
+	</select>
+	<select id="getAllPage" resultType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		PRE_PAGE_ID AS prePageId,
+		page_name AS pageName,
+		icon as icon,
+		URL AS url,
+		description
+	FROM
+		sys_page
+	 where is_deleted =0 
+	   and is_enable = 0
+	   order by orderCode
+	</select>
+	<select id="getPageById" resultType="com.magus.bd.entity.SysPage" parameterType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		PRE_PAGE_ID AS prePageId,
+		page_name AS pageName,
+		URL AS url,
+		icon as icon,
+		orderCode as orderCode,
+		page_type_id as pageTypeId,
+		description as description
+	FROM
+		sys_page
+	 where 
+      PAGE_ID = #{pageId}
+	</select>
+	
+	<select id="getPageByName" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		count(1) as count
+	FROM
+		sys_page
+	 where 
+      PRE_PAGE_ID = #{prePageId}
+      and page_name =#{pageName}
+      and is_deleted =0 
+	</select>
+	
+	
+	<select id="getUserPage" resultType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		page_name AS pageName,
+		description AS description,
+		URL AS url,
+		icon as icon
+	FROM
+		sys_page
+	 where is_deleted =0 
+	   and is_enable = 0
+	   and url != ''
+	   order by orderCode
+	</select>
+	
+	<select id="getUserPageByIds" resultType="com.magus.bd.entity.SysPage"> 
+	SELECT
+		PAGE_ID AS pageId,
+		PRE_PAGE_ID AS prePageId,
+		page_name AS pageName,
+		URL AS url,
+		icon as icon
+	FROM
+		sys_page
+	 where is_deleted =0 
+	   and is_enable = 0
+	   and page_Id  in 
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  	#{item}  
+	 </foreach>  
+	 order by orderCode, PRE_PAGE_ID,PAGE_ID
+	</select>
+	
+	<insert id="addPage" parameterType="com.magus.bd.entity.SysPage">
+	  insert into sys_page
+	        (PRE_PAGE_ID,LEVEL_CODE,page_name,URL,icon,orderCode,DESCRIPTION,IS_DELETED,IMG_SRC,PAGE_TYPE_ID,IS_ENABLE)
+	  values
+	        (#{prePageId},#{levelCode},#{pageName},#{url},#{icon},#{orderCode},#{description},#{isDeleted},#{imgSrc},#{pageTypeId},#{isEnable})
+	</insert>
+	<update id="editPage" parameterType="com.magus.bd.entity.SysPage">
+	  update sys_page 
+      set
+      	PAGE_NAME = #{pageName},
+      	pre_page_id = #{prePageId},
+      	url = #{url},
+      	icon = #{icon},
+      	orderCode =#{orderCode},
+      	description = #{description},
+      	page_type_id = #{pageTypeId}
+      where 
+      	page_id = #{pageId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>超低排放预测</title>
+    <Meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
+    <link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css'/>
+    <link rel='stylesheet' href='../css/jqueryUI/themes/icon.css'/>
+    <style type="text/css">
+        .condition {
+            padding: 5px;
+        }
+
+        #source {
+            padding-left: 5px;
+            padding-top: 20px;
+        }
+
+        .drag {
+            width: 50px;
+            height: 20px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            background: #AACCFF;
+            padding:3px 6px;
+        }
+
+        .powerContainer {
+            padding-left: 5px;
+            padding-top: 15px;
+        }
+
+        .closePower {
+            position: absolute;
+            top: -2px;
+            right: 2px;
+        }
+        .panel-header{
+        background:#2c81ba;
+        border:1px solid #4789c4;
+        height:20px;
+        line-height:20px;
+        }
+        .panel-title {
+    background:url('../images/tt.png') no-repeat 10px center;
+    color:#fff;
+    font-size:14px;
+    padding-left:30px;
+    margin-top:2px;
+}
+#condition{
+text-align:center;
+}
+    </style>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'west',split:true,title:'条件'" style="width:50%;padding:2px;overflow-x:hidden;">
+    <div id="condition" style="width:100%;height:230px">
+        <div class="condition"><span>开始年份：</span>
+            <select id="beginYear" class="easyui-combobox" data-options="panelHeight:'auto'"
+                    style="width: 150px;">
+                <option value="select">请选择</option>
+                <option value="2011">2016</option>
+                <option value="2012">2017</option>
+                <option value="2013">2018</option>
+                <option value="2014">2019</option>
+                <option value="2015">2020</option>
+            </select>
+            <span>结束年份：</span>
+            <select id="endYear" class="easyui-combobox" data-options="panelHeight:'auto'"
+                    style="width: 150px;">
+                <option value="select">请选择</option>
+                <option value="2011">2016</option>
+                <option value="2012">2017</option>
+                <option value="2013">2018</option>
+                <option value="2014">2019</option>
+                <option value="2015">2020</option>
+            </select>
+        </div>
+        <div class="condition">
+            <span>盟市选择：</span>
+            <select id="city" class="easyui-combobox" data-options="panelHeight:'auto',multiple:true"
+                    style="width: 150px;"></select>
+            <span>&nbsp;&nbsp;污 染 物:&nbsp;&nbsp;</span>
+            <select id="poll" class="easyui-combobox" data-options="panelHeight:'auto'"
+                    style="width: 150px;">
+                <option value="-1">请选择</option>
+                <option value="SO2">SO2</option>
+                <option value="NOx">NOx</option>
+                <option value="dust">烟尘</option>
+            </select>
+        </div>
+        <div class="condition">
+            <span>装机容量：</span>
+            <select id="powerInstall" class="easyui-combobox" data-options="panelHeight:'auto',multiple:true"
+                    style="width: 150px;"></select>
+            <span>排放绩效：</span>
+            <select id="powerPer" class="easyui-combobox" data-options="panelHeight:'auto',multiple:true"
+                    style="width: 150px;"></select>
+                    </div>
+                    <div style="text-align:center;margin:10px 0;background:#fcfcfc;border:1px solid #ddd;height:30px;line-height:30px;"><a href="#" class="s_btns" onclick="preview()" >查询</a><a href="#" class="s_btna" style="margin-left:8px;" onclick="clear()">清空</a></div>
+        <div class="condition">
+            <span>操作类型：</span>
+            <select id="operatorType" class="easyui-combobox" data-options="panelHeight:'auto',multiple:true"
+                    style="width: 150px;">
+                <option value="select">请选择</option>
+                <option value="change">整改</option>
+                <option value="stop">关停</option>
+            </select>
+            <span>快捷方案：</span>
+            <select id="myProgram" class="easyui-combobox" data-options="panelHeight:'auto'"
+                    style="width: 150px;"></select>
+                    </div>
+                <div id="source" style="border:1px solid #ccc;width:98%;height:100px;float:left;margin:5px;">
+            <span id="d1" class="drag">Drag 1<img calss="closePower" src="../images/close_h.png" style="width:10px;height:10px;margin-left:6px;"/></span>
+            <span id="d2" class="drag">Drag 2<img calss="closePower" src="../images/close_h.png" style="width:10px;height:10px;margin-left:6px;"/></span>
+            <span id="d3" class="drag">Drag 3<img calss="closePower" src="../images/close_h.png" style="width:10px;height:10px;margin-left:6px;"/></span>
+        </div>
+    </div>
+    <div id="power">
+        <div class="easyui-tabs" style="width:100%;height:180px">
+            <div title="2011" style="padding:2px">
+                <div id="power2011" class="powerContainer"
+                     style="width:98%;height:110px;float:left;margin:5px;">
+                </div>
+            </div>
+            <div title="2012"
+                 style="padding:2px">
+                <div id="power2012" class="powerContainer"
+                     style="width:98%;height:110px;float:left;margin:5px;">
+                </div>
+            </div>
+            <div title="2013"
+                 style="padding:2px">
+                <div id="power2013" class="powerContainer"
+                     style="width:98%;height:110px;float:left;margin:5px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="condition" style="width:100%;text-align:center;margin:10px 0;">
+        <a href="#" class="s_btns" onclick="exportProgram()">导出方案</a>
+        <a href="#" class="s_btns" onclick="saveProgram()">保存方案</a>
+        <a href="#" class="s_btns" onclick="preview()">预览</a>
+    </div>
+</div>
+<div data-options="region:'east',split:true,title:'结果预览'" style="width:50%;padding:2px;">
+    <div class="easyui-tabs" style="width:100%;height: 500px">
+        <div title="About"  style="padding:10px">
+            <div id="result2011">
+
+            </div>
+        </div>
+        <div title="My Documents"  style="padding:10px">
+            <div id="result2012"></div>
+        </div>
+        <div title="Help"  style="padding:10px">
+            <div id="result2013"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../js/jquery-1.7.2.js">
+</script>
+<script src="../js/jquery.easyui.min.js">
+</script>
+<script src="../js/echarts.min.3.js">
+</script>
+<script src="../js/utils.js">
+</script>
+<script src="js/superlow.js">
+</script>
+</html>

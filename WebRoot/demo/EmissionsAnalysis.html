@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+		<script src="../js/echarts-all.js">
+</script>
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="js/analysisdata.js">
+</script>
+		<script src="js/analysis.js">
+</script>
+		<style type="text/css">
+#dataRanking {
+	position: absolute;
+	top: 40px;
+	right: 2%;
+}
+</style>
+	</head>
+
+	<body class="easyui-layout">
+		<div id="editRes" class="easyui-menu" style="width: 100px; background-color: lightgrey; display: none">
+			<div iconCls="icon-add" name="basic">
+				基本信息
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除资源
+			</div>
+		</div>
+		<div id="resCondition" style="padding: 3px; position: relative; padding-left: 20px; padding-top: 10px;">
+
+			<div id="year">
+			</div>
+			<span>资源名称：</span>
+			<input id="name" class="easyui-textbox" style="width: 100px;height:28px;" />
+			<span>资源描述：</span>
+			<input id="desc" class="easyui-textbox" style="width: 100px;height:28px;" />
+			<span>上级资源： </span>
+			<input class="easyui-textbox" style="width: 100px;height:28px;" />
+			<div class="zTreeDemoBackground left" style="display: inline; margin-left: -20px;">
+				<span>资源类型：</span>
+				<select id="resType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+				</select>
+				<span>URL:</span>
+				<input id="url" class="easyui-textbox" style="width: 100px;height:28px;" />
+				<span>开始日期：</span>
+				<input id="beginTime" class="easyui-datetimebox" required style="width: 100px;height:28px;">
+				<span>结束日期：</span>
+				<input id="endTime" class="easyui-datetimebox" required style="width: 100px;height:28px;">
+				<a href="#" class="s_btns" onclick="resQuery()">&nbsp;查询&nbsp;</a>
+				<a href="#" class="s_btna" onclick="batchDeleteRes()">批量删除</a>
+				<div style="height: 10px;"></div>
+			</div>
+			<!--上级资源菜单-->
+			<div id="menuContent" class="menuContent" style="display: none; position: absolute; z-index: 1; width: 120px;">
+				<ul id="listRes" class="ztree" style="margin-top: 0; width: 120px;"></ul>
+			</div>
+		</div>
+		<div data-options="region:'center'">
+			<table id="resources" class="easyui-treegrid"
+				data-options="fit:true,rownumbers: true,animate: true,collapsible: true,fitColumns: true,pagination:true,
+				idField: 'ID',singleSelect:false,state:closed,treeField: 'Name',striped:true"
+				toolbar="#resCondition">
+				<thead>
+					<tr>
+						<th data-options="field:'ck',checkbox:true"></th>
+						<th field="Name" width="10%" align="center">
+							资源名称
+						</th>
+						<th field="ID" width="5%" align="center">
+							ID
+						</th>
+						<th field="PID" width="5%" align="center">
+							父级节点
+						</th>
+						<th field="Desc" width="40%" align="center">
+							描述
+						</th>
+						<th field="URL" width="20%" align="center">
+							URL
+						</th>
+						<th field="ResType" width="6%" align="center">
+							资源类型
+						</th>
+						<th field="CreateDate" width="10%" align="center">
+							创建时间
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+</html>

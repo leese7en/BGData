@@ -1,0 +1,441 @@
+@charset "utf-8";
+
+/* CSS Document */
+body,html {
+	width: 100%;
+	height: 100%;
+	overflow-y: hidden;
+}
+
+.wrapBox {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+}
+
+.box {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.page1 {
+	background: url(../images/b1_bg.jpg);
+	background-size: 100% 100%;
+}
+
+.w960 {
+	width: 960px;
+	height: 100%;
+	margin: 0 auto;
+	position: relative;
+}
+
+.page1_01 {
+	position: absolute;
+	top: 100px;
+	left: -120px;
+	z-index: 10;
+	transition: all 1s linear 0s;
+}
+
+.page1_02 {
+	position: absolute;
+	top: 250px;
+	right: 30px;
+	z-index: 20;
+	transition: all 1s linear 0s;
+}
+
+.page1_02_btn {
+	margin-top: 15px;
+	animation: play 1s linear 0s infinite alternate;
+	-webkit-animation: play 1s linear 0s infinite alternate;
+}
+
+@
+keyframes play {from { opacity:0.3;
+	
+}
+
+to {
+	opacity: 1;
+}
+
+}
+@
+-webkit-keyframes play {from { opacity:0.3;
+	
+}
+
+to {
+	opacity: 1;
+}
+
+}
+.page1_03 {
+	position: absolute;
+	left: 50%;
+	margin-left: -720px;
+	bottom: -130px;
+}
+
+.page1_04 {
+	position: absolute;
+	right: -50px;
+	top: 460px;
+}
+
+.box.comeout .page1_01 {
+	left: -220px;
+	opacity: 0;
+}
+
+.box.comeout .page1_02 {
+	top: 350px;
+	opacity: 0;
+}
+
+.page2 {
+	background: url(../images/b2_bg.jpg);
+	background-size: 100% 100%;
+}
+
+.box.comeout .page2_01 {
+	opacity: 0;
+	left: -20%;
+	top: 10%;
+}
+
+.page2_01 {
+	width: 30%;
+	position: absolute;
+	left: -10%;
+	top: 5%;
+	transition: all 1s linear 0s;
+}
+
+.box.comeout .page2_02 {
+	opacity: 0;
+	left: 20%;
+	top: 10%;
+}
+
+.page2_02 {
+	width: 30%;
+	position: absolute;
+	left: 30%;
+	top: 5%;
+	transition: all 1s linear 1s;
+}
+
+.box.comeout .page2_03 {
+	opacity: 0;
+	left: 60%;
+	top: 10%;
+}
+
+.page2_03 {
+	width: 40%;
+	position: absolute;
+	left: 70%;
+	top: 5%;
+	transition: all 1s linear 2s;
+}
+
+.page2_02 .page202 {
+	padding-top: 10%;
+	border-radius: 10px;
+	background-color: #C1FFC1;
+	height: 80px;
+}
+
+.page2_02 .page2021 {
+	margin-top: 10%;
+	position: absolute;
+	width: 50%;
+	text-align: center;
+	width: 50%;
+	position: absolute;
+}
+
+.page2_02 .page2022 {
+	margin-top: 10%;
+	position: absolute;
+	left: 70%;
+	text-align: center;
+	width: 50%;
+}
+
+.page2_02 .page2023 {
+	margin-top: 10%;
+	position: absolute;
+	top: 160px;
+	width: 50%;
+	text-align: center;
+	width: 50%;
+}
+
+.page2_02 .page2024 {
+	margin-top: 10%;
+	position: absolute;
+	top: 160px;
+	left: 70%;
+	width: 50%;
+	text-align: center;
+}
+
+.page2_02 .page2025 {
+	position: absolute;
+	top: 330px;
+	width: 50%;
+	text-align: center;
+	width: 50%;
+}
+
+.page2_02 .page2026 {
+	position: absolute;
+	top: 330px;
+	left: 70%;
+	text-align: center;
+	width: 50%;
+}
+
+.page2_02 span {
+	font-size: 20px;
+}
+
+.page3 {
+	background: url(../images/b3_bg.jpg);
+	background-size: 100% 100%;
+}
+
+.box.comeout .characteristic1 {
+	left: -10%;
+	top: 20%;
+	opacity: 0;
+}
+
+.characteristic1 {
+	cursor: pointer;
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: -5%;
+	top: 25%;
+	text-align: center;
+	background-color: #BCEE68;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.box.comeout .characteristic2 {
+	top: 20%;
+	opacity: 0;
+}
+
+.characteristic2 {
+	cursor: pointer;
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: 30%;
+	top: 25%;
+	text-align: center;
+	background-color: #C0FF3E;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.box.comeout .characteristic3 {
+	top: 20%;
+	left: 70%;
+	opacity: 0;
+}
+
+.characteristic3 {
+	cursor: pointer;
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: 65%;
+	top: 25%;
+	text-align: center;
+	background-color: #B3EE3A;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.box.comeout .characteristic4 {
+	top: 55%;
+	left: -10%;
+	opacity: 0;
+}
+
+.characteristic4 {
+	cursor: pointer;
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: -5%;
+	top: 50%;
+	text-align: center;
+	background-color: #ADFF2F;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.box.comeout .characteristic5 {
+	top: 55%;
+	opacity: 0;
+}
+
+.characteristic5 {
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: 30%;
+	top: 50%;
+	transition: all 2s linear 0s;
+	text-align: center;
+	background-color: #A2CD5A;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.box.comeout .characteristic6 {
+	top: 55%;
+	left: 70%;
+	opacity: 0;
+}
+
+.characteristic6 {
+	width: 30%;
+	height: 15%;
+	padding-top: 6%;
+	position: absolute;
+	left: 65%;
+	top: 50%;
+	text-align: center;
+	background-color: #98FB98;
+	border-radius: 10px;
+	transition: all 0.5s linear 0s;
+}
+
+.info {
+	padding: 5px;
+	position: fixed;
+	top: 5%;
+	left: 30%;
+	font-size: 24px;
+	border-radius: 10px;
+	background-color: #9AFF9A;
+	width: 40%;
+	z-index: 10000;
+}
+
+.info:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic1:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic2:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic3:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic4:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic5:hover {
+	filter: alpha(opacity =                         70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+.characteristic6:hover {
+	filter: alpha(opacity =           70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+}
+.page4 {
+	background: orange;
+}
+
+.page5 {
+	background: purple;
+}
+
+.page6 {
+	background: gold;
+}
+
+.fixedNav {
+	height: 60px;
+	width: 100%;
+	background: url(../images/sprite.png) repeat-x;
+	position: fixed;
+	z-index: 10;
+}
+
+.nav {
+	width: 22px;
+	height: 105px;
+	padding-top: 14px;
+	background: rgba(255, 255, 255, 0.4);
+	position: fixed;
+	top: 50%;
+	margin-top: -82px;
+	right: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.6);
+	border-radius: 10px;
+}
+
+.nav li {
+	width: 16px;
+	height: 16px;
+	background: url(../images/sprite.png) no-repeat -40px -130px;
+	margin: 5px auto;
+	cursor: pointer;
+	position: relative;
+}
+
+.nav li.current {
+	background-position: -40px -110px;
+}
+
+.nav li span {
+	width: 76px;
+	height: 19px;
+	position: absolute;
+	background: url(../images/sprite.png) no-repeat 0 -80px;
+	left: -80px;
+	top: 0;
+	text-align: center;
+	line-height: 19px;
+	color: #fff;
+}

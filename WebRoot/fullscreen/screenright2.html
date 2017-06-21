@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>重点污染源大数据分析|右</title>
+		<link rel="shortcut icon" href="../asset/ico/favicon.png">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<script src="../js/echarts.min.js">
+</script>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet" />
+		<link href="../js/bootstrap-table/css/bootstrap-table.min.css" rel="stylesheet" />
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+	<script type="text/javascript" src="../js/bootstrap-table/js/bootstrap-table.min.js">
+</script>
+<script type="text/javascript" src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="js/screenright.js">
+</script>
+		<style type="text/css">
+body {
+	background: url(images/left-bg.jpg) no-repeat;
+	background-size: cover;
+	overflow:hidden;
+}
+
+.main {
+	margin: 0 auto;
+	width: 1024px;
+	height: 768px;
+	margin-top: -5px;
+}
+
+.backImg {
+	width: 935px;
+	height: 385px; 
+	background : url(images/big-bg.png) no-repeat;
+	background-size: 935px 385px;
+}
+
+.backImgSuper{
+	width: 935px;
+	height: 385px; 
+	background : url(images/big-bg.png) no-repeat;
+	background-size: 935px 365px;
+}
+.rightTitle {
+	width: 62px;
+	height: 768px;
+	color: #fff;
+	background: #10203e;
+	font-size: 28px;
+	text-align: center;
+	line-height: 34px;
+	padding-left: 5px;
+	padding-right: 5px;
+	box-sizing: border-box;
+	padding-top: 120px;
+	margin-left: 17px;
+	float: right;
+}
+.rightContent {
+	width: 935px;
+	height: 768px;
+	overflow: hidden;
+	float: right;
+}
+
+.table-hover > tbody > tr:hover {
+  	background-color: #22142E;
+}
+.table th, .table td { 
+	text-align: center;
+	vertical-align: middle!important;
+}
+</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="rightTitle">
+				电力行业大数据分析
+			</div>
+			<div class="rightContent"> 
+				<div class="backImg">
+					<div id="so2EffectiveLowChart" style="top: 20px;"></div>
+					<div id="so2EffectiveCityBoxChart" style='position: absolute; left: 32%; top: 20px;'></div>
+				</div>
+				<div class="backImgSuper">
+					<div id="superCityChart" style='position: absolute;top: 404px;'></div>
+				</div>
+			</div>
+		</div>
+		<div id="psHotwordInfo"
+			style="position: absolute; left: 1%; top: 20px; height: 60px; width: 80%; top: 750px; z-index: 1000; color: #ffff11; font-size: 12px;">
+			SO2排放绩效值以0.16g/kWh计算 有效利用小时以4000h计算 计算当年可新增发电装机(万千瓦)
+		</div>
+	</body>
+</html>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.BIResultDao">
+	<select id="blurryBIResult" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT 
+		r.dayinfo AS dayinfo,
+		r.sourceId AS sourceId,
+		r.pointGN as pointGN,
+		a.algorithm_Name AS algorithmName,
+		r.pscode AS pscode,
+		b.PSName AS psName,
+		sc.city_name as cityName,
+		o.IOName AS outputName,
+		r.flow as flow,
+		r.PollutantCode AS pollutantCode,
+		p.PollutantName AS pollutantName,
+		r.begindatetime AS beginDateTime,
+		r.enddatetime AS endDateTime,
+		r.abnormal AS abnormal,
+		r.count AS count,
+		r.distance as distance from 
+		(SELECT r.dayinfo AS dayinfo,
+			r.source_id AS sourceId,
+			r.pointGN as pointGN,
+			r.algorithm_Code AS algorithmCode,
+			r.pscode AS pscode,
+		    r.flow as flow,
+			r.PollutantCode AS pollutantCode,r.OutputCode,r.begindatetime AS beginDateTime,
+			r.enddatetime AS endDateTime,
+			r.abnormal AS abnormal,
+			r.count as count,
+			r.distance as distance from bi_result r 
+			LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	where abnormal = 1 and b.PSName like '%${psName}%' 
+		and r.dayinfo BETWEEN #{beginDateTime} and #{endDateTime} 
+	<if test="algorithmCode!=null and algorithmCode!=''">
+		and r.algorithm_Code = #{algorithmCode}
+	</if>
+	<if test="cityId!=null and cityId!=''">
+		and left(r.pscode,4) = #{cityId}
+	</if>
+	limit #{pageNumber},#{pageSize}) r
+	LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode AND r.OutputCode = o.IOCode
+	LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode and o.IOType = p.PollutantTypeCode
+	left join bi_algorithm a on r.algorithmCode = a.algorithm_Code
+	LEFT JOIN sys_city sc ON sc.city_id = left(r.PSCode,4)
+	</select>
+	
+	<select id="blurryCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		count(result_id) as count
+	FROM
+		bi_result r
+	LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	where  abnormal = 1 and r.dayinfo BETWEEN #{beginDateTime} and #{endDateTime}
+	and b.PSName like '%${psName}%'
+	<if test="algorithmCode!=null and algorithmCode!=''">
+		and r.algorithm_Code = #{algorithmCode}
+	</if>
+	<if test="cityId!=null and cityId!=''">
+		and left(r.pscode,4) = #{cityId}
+	</if>
+	</select>
+	<select id="getDetail" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		dayinfo AS dayinfo,
+		beginDateTime AS detailBeginDateTime,
+		endDateTime AS detailEndDateTime,
+		distance as distance
+	FROM
+		bi_resultdetail
+	WHERE
+		result_id = #{resultId}
+		and dayinfo = #{dayinfo}
+	</select>	
+	<select id="getAlgorithm" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		algorithm_Code AS algorithmCode,
+		algorithm_name AS algorithmName
+	FROM
+		bi_algorithm
+	</select>	
+	
+	
+	
+	
+	
+	
+	<select id="blurryBIWaterResult" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT 
+		r.dayinfo AS dayinfo,
+		r.sourceId AS sourceId,
+		r.pointGN as pointGN,
+		a.algorithm_Name AS algorithmName,
+		r.pscode AS pscode,
+		b.PSName AS psName,
+		sc.city_name as cityName,
+		o.IOName AS outputName,
+		r.flow as flow,
+		r.PollutantCode AS pollutantCode,
+		p.PollutantName AS pollutantName,
+		r.begindatetime AS beginDateTime,
+		r.enddatetime AS endDateTime,
+		r.abnormal AS abnormal,
+		r.count AS count,
+		r.distance as distance from 
+		(SELECT r.dayinfo AS dayinfo,
+			r.source_id AS sourceId,
+			r.pointGN as pointGN,
+			r.algorithm_Code AS algorithmCode,
+			r.pscode AS pscode,
+		    r.flow as flow,
+			r.PollutantCode AS pollutantCode,r.OutputCode,r.begindatetime AS beginDateTime,
+			r.enddatetime AS endDateTime,
+			r.abnormal AS abnormal,
+			r.count as count,
+			r.distance as distance from bi_water_result r 
+			LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	where abnormal = 1 and b.PSName like '%${psName}%' 
+		and r.dayinfo BETWEEN #{beginDateTime} and #{endDateTime} 
+	<if test="algorithmCode!=null and algorithmCode!=''">
+		and r.algorithm_Code = #{algorithmCode}
+	</if>
+	<if test="cityId!=null and cityId!=''">
+		and left(r.pscode,4) = #{cityId}
+	</if>
+	limit #{pageNumber},#{pageSize}) r
+	LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode AND r.OutputCode = o.IOCode
+	LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode and o.IOType = p.PollutantTypeCode
+	left join bi_water_algorithm a on r.algorithmCode = a.algorithm_Code
+	LEFT JOIN sys_city sc ON sc.city_id = left(r.PSCode,4)
+	</select>
+	
+	<select id="blurryWaterCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		count(result_id) as count
+	FROM
+		bi_water_result r
+	LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+	where  abnormal = 1 and r.dayinfo BETWEEN #{beginDateTime} and #{endDateTime}
+	and b.PSName like '%${psName}%'
+	<if test="algorithmCode!=null and algorithmCode!=''">
+		and r.algorithm_Code = #{algorithmCode}
+	</if>
+	<if test="cityId!=null and cityId!=''">
+		and left(r.pscode,4) = #{cityId}
+	</if>
+	</select>
+	<select id="getWaterDetail" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		dayinfo AS dayinfo,
+		beginDateTime AS detailBeginDateTime,
+		endDateTime AS detailEndDateTime,
+		distance as distance
+	FROM
+		bi_water_resultdetail
+	WHERE
+		result_id = #{resultId}
+		and dayinfo = #{dayinfo}
+	</select>	
+	<select id="getWaterAlgorithm" resultType="com.magus.bd.entity.BIResult" parameterType="com.magus.bd.entity.BIResult">
+	SELECT
+		algorithm_Code AS algorithmCode,
+		algorithm_name AS algorithmName
+	FROM
+		bi_water_algorithm
+	</select>	
+	
+</mapper>

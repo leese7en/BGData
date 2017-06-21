@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/bigdata.png">
+		<title>高耗能高排放分析</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet">
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/program.css" />
+		<style>
+#staChart {
+	position: absolute;
+}
+
+#detailChartHigh {
+	position: absolute;
+	top: 10px;
+	left: 50%
+}
+
+#detailChartLow {
+	position: absolute;
+	top: 10px;
+	left: 75%
+}
+</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">年份</span> <select
+						id="yearQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">装机容量(万千瓦)</span>
+					<select id="installedQuery" class="selectpicker" multiple>
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">锅炉类型</span> <select
+						id="boilerTypeQuery" class="selectpicker" onchange="boilerChange()">
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">行业</span> <select
+						id="industryQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">分析类型</span> <select
+						id="analysisTypeQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-left">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="queryAnalysis()">
+						<span class="glyphicon glyphicon-ok"></span> 查询
+					</button>
+					<a class="btn btn-info btn-sm" style="" href="analysis.html"> <span class="glyphicon glyphicon-eye-open"></span>明细分析
+					</a>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:60px;">
+		<div id="staChart"></div>
+		<div id="detailChartHigh"></div>
+		<div id="detailChartLow"></div>
+		</nav>
+
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/highAnalysis.js">
+</script>
+	</body>
+</html>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResFacHourDataDao">
+	
+	<select id="getWaterFacHourDataInfoTable" resultType="com.magus.bd.entity.ResFacHourData" parameterType="com.magus.bd.entity.ResFacHourData">
+		SELECT
+			r.pscode AS psCode,
+			b.PSName AS psName,
+			r.OutputCode AS outPutCode,
+			o.IOName AS outPutName,
+			r.PollutantCode AS pollutantCode,
+			p.PollutantName AS pollutantName,
+			r.MonitorTime AS monitorTime,
+			r.DataType AS dataType,
+			r.minFlow AS minFlow,
+			r.avgFlow AS avgFlow,
+			r.maxFLow AS maxFlow,
+			r.RevisedFlow AS revisedFlow,
+			r.MinStrength AS minStrength,
+			r.AvgStrength AS avgStrength,
+			r.MaxStrength AS maxStrength,
+			r.RevisedStrength AS revisedStrength,
+			r.CouFlow AS couFLow,
+			r.IsException AS isException,
+			r.DataSource AS dataSource,
+			r.TyperUnit AS typerUnit,
+			r.TyperName AS typerName,
+			r.AvailableStatus AS availableStatus,
+			r.RevisedAvgFlow AS revisedAvgFlow,
+			r.UpdateTime AS updateTime
+		FROM
+			(
+				SELECT
+					pscode AS psCode,
+					OutputCode AS outPutCode,
+					PollutantCode AS pollutantCode,
+					MonitorTime AS monitorTime,
+					DataType AS dataType,
+					minFlow AS minFlow,
+					avgFlow AS avgFlow,
+					maxFLow AS maxFlow,
+					RevisedFlow AS revisedFlow,
+					MinStrength AS minStrength,
+					AvgStrength AS avgStrength,
+					MaxStrength AS maxStrength,
+					RevisedStrength AS revisedStrength,
+					CouFlow AS couFLow,
+					IsException AS isException,
+					DataSource AS dataSource,
+					TyperUnit AS typerUnit,
+					TyperName AS typerName,
+					AvailableStatus AS availableStatus,
+					RevisedAvgFlow AS revisedAvgFlow,
+					UpdateTime AS updateTime
+				FROM
+					wateroutputfachourdata water
+					WHERE
+						pscode = #{psCode}
+					and OutputCode = #{outPutCode}
+					<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+						and water.PollutantCode in
+						<foreach item="item" index="index" collection="pollutantCodes" open="("
+							separator="," close=")">
+							#{item}  
+					   </foreach>
+					</if>
+					AND MonitorTime BETWEEN #{beginTime}  AND #{endTime}
+					order by MonitorTime
+					limit #{pageNumber},#{pageSize}
+				) r
+			LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+			LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode
+			AND r.OutputCode = o.IOCode
+			LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode AND o.IOType = p.PollutantTypeCode
+	</select>
+	<select id="getWaterFacHourDataInfoTableCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.ResFacHourData">
+	SELECT
+		count(1)
+	FROM
+		wateroutputfachourdata water
+		where 
+		pscode = #{psCode}
+		and OutputCode = #{outPutCode}
+		<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+			and water.PollutantCode in
+			<foreach item="item" index="index" collection="pollutantCodes" open="("
+				separator="," close=")">
+				#{item}  
+		   </foreach>
+		</if>
+		AND MonitorTime BETWEEN #{beginTime}
+		AND #{endTime}
+	</select>
+	
+	<select id="getWaterFacHourDataInfoChart" resultType="com.magus.bd.entity.ResFacHourData" parameterType="com.magus.bd.entity.ResFacHourData">
+		
+		SELECT
+			r.pscode AS psCode,
+			b.PSName AS psName,
+			r.OutputCode AS outPutCode,
+			o.IOName AS outPutName,
+			r.PollutantCode AS pollutantCode,
+			p.PollutantName AS pollutantName,
+			r.MonitorTime AS monitorTime,
+			r.DataType AS dataType,
+			r.minFlow AS minFlow,
+			r.avgFlow AS avgFlow,
+			r.maxFLow AS maxFlow,
+			r.RevisedFlow AS revisedFlow,
+			r.MinStrength AS minStrength,
+			r.AvgStrength AS avgStrength,
+			r.MaxStrength AS maxStrength,
+			r.RevisedStrength AS revisedStrength,
+			r.CouFlow AS couFLow,
+			r.IsException AS isException,
+			r.DataSource AS dataSource,
+			r.TyperUnit AS typerUnit,
+			r.TyperName AS typerName,
+			r.AvailableStatus AS availableStatus,
+			r.RevisedAvgFlow AS revisedAvgFlow,
+			r.UpdateTime AS updateTime
+		FROM
+			(
+				SELECT
+					pscode AS psCode,
+					OutputCode AS outPutCode,
+					PollutantCode AS pollutantCode,
+					MonitorTime AS monitorTime,
+					DataType AS dataType,
+					minFlow AS minFlow,
+					avgFlow AS avgFlow,
+					maxFLow AS maxFlow,
+					RevisedFlow AS revisedFlow,
+					MinStrength AS minStrength,
+					AvgStrength AS avgStrength,
+					MaxStrength AS maxStrength,
+					RevisedStrength AS revisedStrength,
+					CouFlow AS couFLow,
+					IsException AS isException,
+					DataSource AS dataSource,
+					TyperUnit AS typerUnit,
+					TyperName AS typerName,
+					AvailableStatus AS availableStatus,
+					RevisedAvgFlow AS revisedAvgFlow,
+					UpdateTime AS updateTime
+				FROM
+					wateroutputfachourdata water
+					WHERE
+						pscode = #{psCode}
+					and OutputCode = #{outPutCode}
+					<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+						and water.PollutantCode in
+						<foreach item="item" index="index" collection="pollutantCodes" open="("
+							separator="," close=")">
+							#{item}  
+					   </foreach>
+					</if>
+					AND MonitorTime BETWEEN #{beginTime}
+					AND #{endTime}
+					order by MonitorTime
+				) r
+			LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+			LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode
+			AND r.OutputCode = o.IOCode
+			LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode AND o.IOType = p.PollutantTypeCode
+	</select>
+	
+	<select id="getGasFacHourDataInfoTable" resultType="com.magus.bd.entity.ResFacHourData" parameterType="com.magus.bd.entity.ResFacHourData">
+		SELECT
+			r.pscode AS psCode,
+			b.PSName AS psName,
+			r.OutputCode AS outPutCode,
+			o.IOName AS outPutName,
+			r.PollutantCode AS pollutantCode,
+			p.PollutantName AS pollutantName,
+			r.MonitorTime AS monitorTime,
+			r.DataType AS dataType,
+			r.minFlow AS minFlow,
+			r.avgFlow AS avgFlow,
+			r.maxFLow AS maxFlow,
+			r.RevisedFlow AS revisedFlow,
+			r.MinStrength AS minStrength,
+			r.AvgStrength AS avgStrength,
+			r.MaxStrength AS maxStrength,
+			r.RevisedStrength AS revisedStrength,
+			r.CouFlow AS couFLow,
+			r.IsException AS isException,
+			r.DataSource AS dataSource,
+			r.TyperUnit AS typerUnit,
+			r.TyperName AS typerName,
+			r.AvailableStatus AS availableStatus,
+			r.RevisedAvgFlow AS revisedAvgFlow,
+			r.UpdateTime AS updateTime
+		FROM
+			(
+				SELECT
+					pscode AS psCode,
+					OutputCode AS outPutCode,
+					PollutantCode as pollutantCode,
+					MonitorTime AS monitorTime,
+					DataType AS dataType,
+					minFlow AS minFlow,
+					avgFlow AS avgFlow,
+					maxFLow AS maxFlow,
+					RevisedFlow AS revisedFlow,
+					MinStrength AS minStrength,
+					AvgStrength AS avgStrength,
+					MaxStrength AS maxStrength,
+					RevisedStrength as revisedStrength,
+					CouFlow AS couFLow,
+					IsException AS isException,
+					DataSource AS dataSource,
+					TyperUnit AS typerUnit,
+					TyperName AS typerName,
+					AvailableStatus AS availableStatus,
+					RevisedAvgFlow AS revisedAvgFlow,
+					UpdateTime AS updateTime
+				FROM
+					gasoutputfachourdata gas
+				WHERE
+					(datatype = '废气监测点小时数据' or DataType ='废气污染物小时折算数据')
+					and 
+					pscode = #{psCode}
+				and OutputCode = #{outPutCode}
+				<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+					and gas.PollutantCode in
+					<foreach item="item" index="index" collection="pollutantCodes" open="("
+						separator="," close=")">
+						#{item}  
+				   </foreach>
+				</if>
+				AND MonitorTime BETWEEN #{beginTime}  AND #{endTime}
+				order by MonitorTime
+				limit #{pageNumber},#{pageSize}
+			) r
+		LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+		LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode
+		AND r.OutputCode = o.IOCode
+		LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode
+		AND o.IOType = p.PollutantTypeCode
+		
+	</select>
+	<select id="getGasFacHourDataInfoTableCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.ResFacHourData">
+	SELECT
+		count(1)
+	FROM
+		gasoutputfachourdata gas
+		where 
+		(datatype = '废气监测点小时数据' or DataType ='废气污染物小时折算数据')
+		and 
+		pscode = #{psCode}
+		and OutputCode = #{outPutCode}
+		<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+			and gas.PollutantCode in
+			<foreach item="item" index="index" collection="pollutantCodes" open="("
+				separator="," close=")">
+				#{item}  
+		   </foreach>
+		</if>
+		AND MonitorTime BETWEEN #{beginTime}
+		AND #{endTime}
+	</select>
+	
+	<select id="getGasFacHourDataInfoChart" resultType="com.magus.bd.entity.ResFacHourData" parameterType="com.magus.bd.entity.ResFacHourData">
+		SELECT
+			r.pscode AS psCode,
+			b.PSName AS psName,
+			r.OutputCode AS outPutCode,
+			o.IOName AS outPutName,
+			r.PollutantCode AS pollutantCode,
+			p.PollutantName AS pollutantName,
+			r.MonitorTime AS monitorTime,
+			r.DataType AS dataType,
+			r.minFlow AS minFlow,
+			r.avgFlow AS avgFlow,
+			r.maxFLow AS maxFlow,
+			r.RevisedFlow AS revisedFlow,
+			r.MinStrength AS minStrength,
+			r.AvgStrength AS avgStrength,
+			r.MaxStrength AS maxStrength,
+			r.RevisedStrength AS revisedStrength,
+			r.CouFlow AS couFLow,
+			r.IsException AS isException,
+			r.DataSource AS dataSource,
+			r.TyperUnit AS typerUnit,
+			r.TyperName AS typerName,
+			r.AvailableStatus AS availableStatus,
+			r.RevisedAvgFlow AS revisedAvgFlow,
+			r.UpdateTime AS updateTime
+		FROM
+			(
+				SELECT
+					pscode AS psCode,
+					OutputCode AS outPutCode,
+					PollutantCode as pollutantCode,
+					MonitorTime AS monitorTime,
+					DataType AS dataType,
+					minFlow AS minFlow,
+					avgFlow AS avgFlow,
+					maxFLow AS maxFlow,
+					RevisedFlow AS revisedFlow,
+					MinStrength AS minStrength,
+					AvgStrength AS avgStrength,
+					MaxStrength AS maxStrength,
+					RevisedStrength as revisedStrength,
+					CouFlow AS couFLow,
+					IsException AS isException,
+					DataSource AS dataSource,
+					TyperUnit AS typerUnit,
+					TyperName AS typerName,
+					AvailableStatus AS availableStatus,
+					RevisedAvgFlow AS revisedAvgFlow,
+					UpdateTime AS updateTime
+				FROM
+					gasoutputfachourdata gas
+					WHERE 
+					(datatype = '废气监测点小时数据' or DataType ='废气污染物小时折算数据')
+					and 
+					pscode = #{psCode}
+				and OutputCode = #{outPutCode}
+				<if test="pollutantCodes!=null and pollutantCodes.size()>0">
+					and gas.PollutantCode in
+					<foreach item="item" index="index" collection="pollutantCodes" open="("
+						separator="," close=")">
+						#{item}  
+				   </foreach>
+				</if>
+				AND MonitorTime BETWEEN #{beginTime}
+				AND #{endTime}
+				order by MonitorTime
+			) r 
+		LEFT JOIN res_baseinfo b ON r.PSCode = b.PSCode
+		LEFT JOIN sys_res_output o ON r.PSCode = o.PSCode
+		AND r.OutputCode = o.IOCode
+		LEFT JOIN sys_pollutant p ON r.PollutantCode = p.PollutantCode
+		AND o.IOType = p.PollutantTypeCode
+	</select>
+	
+</mapper>

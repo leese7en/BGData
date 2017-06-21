@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysUserDao">
+	<select id="getUser" resultType="com.magus.bd.entity.SysUser"
+	 parameterType="java.lang.String"> 
+	  select 
+ 		 user_id as userId,
+		 user_name as userName,
+		 job_no as jobNo,
+		 password as password,
+	           is_Deleted as isDeleted,
+		 is_System as isSystem,
+		 email as email,
+		 emergency_phone as emergencyPhone,
+		 phone as phone,
+		 create_date as createDate,
+		 unvileable_date as unvileableDate,
+		 IS_UNVILIABLE as isUnvileable
+	   from sys_user user 
+	      where 
+	       is_deleted = 0
+	      and 
+	       IS_UNVILIABLE = 0 
+	      and
+	 	   job_No =#{jobNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getUserById" resultType="com.magus.bd.entity.SysUser" parameterType="com.magus.bd.entity.SysUser">
+	  select 
+	    user_id AS userId,
+		user_name AS userName,
+		job_no AS jobNo,
+		password as password,
+		DEPT_ID AS deptId,
+		USER.description AS description,
+		USER.is_Deleted AS isDeleted,
+		is_System AS isSystem,
+		email AS email,
+		emergency_phone AS emergencyPhone,
+		phone AS phone,
+		create_date AS createDate,
+		unvileable_date AS unvileableDate,
+		IS_UNVILIABLE AS isUnvileable
+	  from sys_user user
+	   where
+	   user_id = #{id}
+	</select>
+	
+	<select id="blurryUser" resultType="com.magus.bd.entity.SysUser" parameterType="com.magus.bd.entity.SysUser">
+	  SELECT
+		user_id AS userId,
+		user_name AS userName,
+		job_no AS jobNo,
+		USER.description AS description,
+		USER.is_Deleted AS isDeleted,
+		is_System AS isSystem,
+		email AS email,
+		emergency_phone AS emergencyPhone,
+		phone AS phone,
+		create_date AS createDate,
+		unvileable_date AS unvileableDate,
+		IS_UNVILIABLE AS isUnvileable,
+		dept.dept_name AS deptName
+	FROM
+		sys_user USER 
+	LEFT JOIN sys_dept dept ON USER .dept_id = dept.dept_id
+	where 
+		 user_name like '%${userName}%'
+	 	 and user.description like '%${description}%'
+	 	 <if test = "deptId!=null and deptId != 0 ">
+	 	 	and user.dept_id = #{deptId}
+	 	 </if>
+	 	 limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="blurryUserCount" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysUser">
+	  SELECT
+		count(1) as count
+	FROM
+		sys_user USER 
+	where 
+		 user_name like '%${userName}%'
+	 	 and user.description like '%${description}%'
+	 	 <if test = "deptId!=null and deptId != 0 ">
+	 	 	and user.dept_id = #{deptId}
+	 	 </if>
+	</select>
+	<insert id="addUser" parameterType="com.magus.bd.entity.SysUser">
+	  insert into sys_user
+	  (
+		  user_name,
+		  job_no,
+		  password,
+		  description,
+		  email,
+		  phone,
+		  create_date,
+		  dept_id
+	   )
+	  values
+	  (
+		  #{userName},
+		  #{jobNo},
+		  #{password},
+		  #{description},
+		  #{email},
+		  #{phone},
+		  #{createDate},
+		  #{deptId}
+	  )
+	</insert>
+	
+	<update id="updateUser" parameterType="com.magus.bd.entity.SysUser">
+      update sys_user 
+      set
+      	user_name = #{userName},
+      	job_no = #{jobNo},
+      	dept_id = #{deptId},
+      	email=#{email},
+      	phone  =#{phone},
+      	description = #{description}
+      where 
+      	user_id = #{userId}
+	</update>
+	<update id="resetUserPassword" parameterType="com.magus.bd.entity.SysUser">
+      update sys_user 
+      set
+      	password = #{password}
+      where 
+      	user_id = #{userId}
+	</update>
+	
+	<delete id="deleteUser" parameterType="java.lang.Integer">
+		 delete  
+		 from sys_user 
+		 where 
+		 user_id = #{userId}
+	</delete>
+	<select id="getUserByNameOrJobNo" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysUser">
+		SELECT
+			count(1) AS count
+		FROM
+			sys_user
+		WHERE
+			USER_NAME = #{userName}
+			AND JOB_NO = #{jobNo}
+	</select>
+	
+	
+</mapper>

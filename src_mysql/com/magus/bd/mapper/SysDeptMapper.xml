@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysDeptDao">
+	<select id="blurryDept" resultType="com.magus.bd.entity.SysDept"
+	 parameterType="com.magus.bd.entity.SysDept"> 
+	 SELECT dept_Id as deptId,
+			pre_dept_id as preDeptId,
+       		dept_name as deptName,
+		    description as description,
+			is_deleted as isDeleted
+	from sys_dept
+		where
+			dept_name like '%${deptName}%'
+		and 
+			description like '%${description}%'
+	</select>
+	<select id="getAllDept" resultType="com.magus.bd.entity.SysDept"> 
+	SELECT dept_Id as deptId,
+			pre_dept_id as preDeptId,
+       		dept_name as deptName
+	from sys_dept
+	   where is_deleted = 0
+	</select>
+	
+	<select id="getDeptById" resultType="com.magus.bd.entity.SysDept" parameterType="com.magus.bd.entity.SysDept">
+	  select 
+	     dept_Id as deptId,
+		 pre_dept_id as preDeptId,
+       	 dept_name as deptName,
+		 description as description
+	  from 
+	  	sys_dept
+	  where
+	  	dept_Id = #{deptId}
+	</select>
+	
+	<select id="getDeptByName" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysDept">
+	  select 
+	     count(1) as count
+	  from 
+	  	sys_dept
+	  where
+	  	is_deleted = 0 
+	  and
+	  	dept_name = #{deptName}
+	  and 
+	  	pre_dept_id = #{preDeptId}
+	</select>
+	<select id="getDeptChild" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysDept">
+	  select 
+	     count(1) as count
+	  from 
+	  	sys_dept
+	  where
+	  	is_deleted = 0 
+	  and
+	  	pre_dept_id = #{deptId}
+	</select>
+	<select id="getDeptInUse" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysDept">
+	  SELECT
+		count(1) AS count
+	  FROM
+		sys_user
+	  WHERE
+	  	IS_DELETED = 0 
+	  and
+		DEPT_ID = #{deptId}
+	</select>
+
+	<update id="updateDept" parameterType="com.magus.bd.entity.SysDept">
+      update sys_dept 
+      set
+     	pre_dept_id =#{preDeptId},
+       	dept_name =  #{deptName},
+		description = #{description}
+      where 
+     	dept_Id =#{deptId}
+	</update>
+	<delete id="deleteDept" parameterType="com.magus.bd.entity.SysDept">
+		 delete  
+		 	from sys_dept 
+		 where 
+		 	dept_Id =#{deptId}
+	</delete>
+	
+	<insert id="addDept" parameterType="com.magus.bd.entity.SysDept">
+	  insert into sys_dept
+	  	(
+	  		pre_dept_id,
+	  		dept_name,
+	  		description
+	  	)
+	  values (
+	   		#{preDeptId},
+	   		#{deptName},
+	   		#{description}
+	   	)
+	</insert>
+</mapper>

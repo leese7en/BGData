@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>历史变迁</title>
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link rel="stylesheet" href="../js/fakeLoader/css/fakeLoader.css">
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/fakeLoader/js/fakeLoader.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/echarts/echarts.js">
+</script>
+		<style type="text/css">
+#installedBar {
+	position: absolute;
+	left: 5%;
+	top: 50px;
+}
+
+#powerBar {
+	position: absolute;
+	left: 25%;
+	top: 50px;
+}
+
+#county {
+	position: absolute;
+	top: 30px;
+	left: 80%;
+}
+
+#childBar {
+	position: absolute;
+	left: 5px;
+	top: 50px;
+	width: 260px;
+	height: 600px
+}
+
+#childMap {
+	position: absolute;
+	top: 80px;
+	left: 100px;
+	width: 400px;
+	height: 600px;
+}
+
+#city {
+	position: absolute;
+	right: 10px;
+	top: 50px;
+	width: 260px;
+	height: 600px
+}
+</style>
+	</head>
+	<body style="height: 100%; overflow-y: hidden;">
+		<!-- 对话框 -->
+		<div class="container">
+			<div class="fakeloader"></div>
+		</div>
+		<div id="child" style="display: none; width: 800px; height: 600px; overflow: hidden">
+			<div id="childBar">
+				<div id="installedChildBar" class="main" style="width: 260px; height: 280px;"></div>
+				<div id="powerChildBar" class="main" style="width: 260px; height: 280px;"></div>
+			</div>
+			<div id="childMap"></div>
+			<div id="city">
+				<div id="installedChildCom" style="width: 220px; height: 280px;"></div>
+				<div id="powerChildCom" style="width: 220px; height: 280px;"></div>
+			</div>
+		</div>
+		<div id="main" class="main" style="margin-left: 20px;z-index:10000;"></div>
+		<div class="help-tip">
+			<p>
+			</p>
+		</div>
+		<div id="installedBar" class="main" style="width: 280px; height: 300px;"></div>
+		<div id="powerBar" class="main" style="width: 280px; height: 300px;"></div>
+		<div id="county" >
+			<div id="powerCom" style="width: 240px; height: 160px;"></div>
+			<div id="installedCom" style="width: 240px; height: 160px;"></div>
+			<div id="hourCom" style="width: 240px; height: 160px;"></div>
+		</div>
+		<script src="js/changedata.js">
+</script>
+		<script src="js/change.js">
+</script>
+	</body>
+</html>

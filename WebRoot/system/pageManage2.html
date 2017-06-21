@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑资源</title>
+		<link rel="icon" href="../images/title.png">
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<script src="../js/jquery-1.7.2.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+		<script src="js/pageManage2.js">
+</script>
+		<style>
+#pageMessage tr td {
+	padding: 5px 0;
+}
+</style>
+	</head>
+	<body class="easyui-layout">
+
+
+
+		<div id="editPageMessage"
+			style="width: 520px; height: 270px; font-size: 13px; display: none; margin-top: 10px; margin-left: 10px;"
+			title="编辑菜单">
+			<table style="font-size: 13px; color: MidnightBlue; width: 100%;">
+				<tr>
+					<td align="right">
+						上级菜单：
+					</td>
+					<td>
+						<input id="editPrePage" class="easyui-combotree" data-options="panelHeight:'auto'"
+							style="width: 150px; height: 28px;" />
+					</td>
+					<td align="right">
+						名称：
+					</td>
+					<td>
+						<input id="editPageName" class="easyui-textbox" style="width: 150px; height: 28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						URL：
+					</td>
+					<td>
+						<input id="editUrl" class="easyui-textbox" style="width: 150px; height: 28px;" />
+					</td>
+					<td align="right">
+						菜单类型：
+					</td>
+					<td>
+						<input id="editPageType" class="easyui-combobox" data-options="panelHeight:'auto'"
+							style="width: 150px; height: 28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述：
+					</td>
+					<td colspan="3">
+						<textarea id="editDesc" data-options="multiline:true"
+							style="height: 100px; width: 390px; resize: none; border: 1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="pageMessage"
+			style="width: 520px; height: 270px; font-size: 13px; display: none; margin-top: 10px; margin-left: 10px;"
+			title="添加菜单">
+			<table style="font-size: 13px; color: MidnightBlue; width: 100%">
+				<tr>
+					<td align="right">
+						上级菜单：
+					</td>
+					<td>
+						<input id="prePage" class="easyui-combotree" data-options="panelHeight:'auto'" style="width: 150px; height: 28px;" />
+					</td>
+					<td align="right">
+						名称：
+					</td>
+					<td>
+						<input id="pageName" class="easyui-textbox" style="width: 150px; height: 28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						URL：
+					</td>
+					<td>
+						<input id="url" class="easyui-textbox" style="width: 150px; height: 28px;" />
+					</td>
+					<td align="right">
+						菜单类型：
+					</td>
+					<td>
+						<input id="pageType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px; height: 28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述：
+					</td>
+					<td colspan="3">
+						<textarea id="desc" data-options="multiline:true"
+							style="height: 100px; width: 390px; resize: none; border: 1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="editPage" class="easyui-menu" style="width: 100px; display: none">
+			<div iconCls="icon-add" name="basic">
+				基本信息
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除菜单
+			</div>
+		</div>
+		<div id="pageCondition" style="padding: 3px; padding-top: 10px; position: relative;">
+			<span>菜单名称：</span>
+			<input id="pageNameQuery" class="easyui-textbox" style="width: 150px; height: 28px;" />
+			<span>菜单描述：</span>
+			<input id="pageDescQuery" class="easyui-textbox" style="width: 150px; height: 28px;" />
+			<span>上级菜单：</span>
+			<select id="prePageQuery" class="easyui-combotree" data-options="panelHeight:'auto'"
+				style="width: 110px; height: 28px;">
+			</select>
+			<span>菜单类型：</span>
+			<select id="pageTypeQuery" class="easyui-combobox" data-options="panelHeight:'auto'"
+				style="width: 110px; height: 28px;">
+			</select>
+			<a href="#" class="s_btns" iconCls="icon-search" onclick="pageQuery()">查询</a>
+			<a href="#" class="s_btna" onclick="pageInsert()">增加</a>
+		</div>
+		<div data-options="region:'center'">
+			<table id="pageTable" class="easyui-treegrid"
+				data-options="rownumbers:true,singleSelect:true,fit:true,striped:true,
+			idField:'pageId',treeField:'pageName'"
+				pagination="true" toolbar="#pageCondition" style="width: auto;">
+				<thead>
+					<tr>
+						<th field="pageId" align="center" width="8%">
+							ID
+						</th>
+						<th field="prePageId" align="center" width="8%">
+							上级菜单
+						</th>
+						<th field="pageName" align="center" width="10%">
+							名称
+						</th>
+						<th field="url" align="center" width="16%">
+							URL
+						</th>
+						<th field="description" align="center" width="20%">
+							描述
+						</th>
+
+						<th field="isDeleted" align="center" width="8%" formatter="formatOperater">
+							是否删除
+						</th>
+						<th field=imgSrc align="center" width="12%">
+							图片目录
+						</th>
+						<th field="typeId" align="center" width="8%">
+							类别ID
+						</th>
+						<th field="isEnable" align="center" width="8%" formatter="formatOperater1">
+							是否可用
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+
+</html>

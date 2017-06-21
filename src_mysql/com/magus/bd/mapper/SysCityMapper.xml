@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysCityDao">
+	<select id="getCity" resultType="com.magus.bd.entity.SysCity"
+		parameterType="com.magus.bd.entity.SysCity">
+		SELECT
+			city_id AS id,
+			city_name AS cityName,
+			tagname as tagName,
+			distributed AS distributed,
+			description AS description
+		FROM
+			sys_city
+			order by orderCode
+	</select>
+	
+	<select id="getIndustryCity" resultType="com.magus.bd.entity.SysCity"
+			parameterType="com.magus.bd.entity.SysCity">
+			SELECT
+				zone_id AS id,
+				zone_name cityName
+			FROM
+				t_code_zone
+				order by zone_code
+	</select>
+	
+	<select id="getIndustryGroup" resultType="com.magus.bd.entity.IndustryGroup"
+			parameterType="com.magus.bd.entity.IndustryGroup">
+			SELECT
+				id,
+				name as groupName
+			FROM
+				t_base_group
+	</select>
+	
+	<select id="getZoneCity" resultType="com.magus.bd.entity.ZoneCity"
+			parameterType="com.magus.bd.entity.ZoneCity">
+			SELECT
+				zone_id as id,
+				zone_name as cityName
+			FROM
+				t_code_zone
+				order by zone_code
+	</select>
+
+	<insert id="addCity" parameterType="com.magus.bd.entity.SysCity">
+		insert into
+		sys_city
+		(city_name,distributed,description)
+		values
+		(#{cityName},#{distributed},#{description})
+	
+	</insert>
+	
+	<select id="getCityById" parameterType="java.lang.String" 
+	    resultType="com.magus.bd.entity.SysCity">
+	    SELECT
+			city_id AS id,
+			city_name AS cityName,
+			distributed AS distributed,
+			description AS description
+		FROM
+			sys_city
+	    where
+	        city_id = #{id}
+	</select>
+
+    <delete id="deleteCity" parameterType="java.lang.Integer">
+       delete FROM
+			sys_city
+	    where
+	        city_id = #{id}
+    </delete>
+    
+    <update id="editCity" parameterType="com.magus.bd.entity.SysCity">
+      update sys_city 
+      set
+		city_name = #{cityName},
+		distributed = #{distributed},
+		description = #{description}
+      where 
+      city_id = #{id}
+	</update>
+	<select id="queryCity" resultType="com.magus.bd.entity.SysCity"
+		parameterType="com.magus.bd.entity.SysCity">
+		SELECT
+			city_id AS id,
+			city_name AS cityName,
+			distributed AS distributed,
+			description AS description
+		FROM
+			sys_city
+		 where 1 = 1
+	 <if test="cityName != '' and cityName != null">
+      and city_name = #{cityName}
+      </if>
+      <if test="distributed != '' and distributed != null and distributed != 'select'">
+      and distributed = #{distributed}
+      </if>
+      order by orderCode
+	</select>
+	
+</mapper>

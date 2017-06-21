@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!-- 采用注释的方式配置bean -->
+	<context:annotation-config />
+	<!-- 配置要扫描的包 -->
+	<context:component-scan base-package="com.magus.bd"></context:component-scan>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://127.0.0.1:3306/nm?useUnicode=true&amp;characterEncoding=UTF8" />
+		<property name="user" value="root" />
+		<property name="password" value="123456" />
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialPoolSize" value="2" />
+		<!-- 连接池的最大值 -->
+		<property name="maxPoolSize" value="10" />
+		<!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+		<property name="minPoolSize" value="2" />
+		<!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+		<property name="maxIdleTime" value="10" />
+		<property name="idleConnectionTestPeriod" value="360" />
+		<property name="preferredTestQuery" value="select 1" />
+		<property name="acquireIncrement" value="5" />
+		<property name="acquireRetryAttempts" value="50" />
+		<property name="acquireRetryDelay" value="1000" />
+		<property name="breakAfterAcquireFailure" value="true" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="testConnectionOnCheckout" value="true" />
+		<property name="maxStatements" value="100" />
+		<property name="maxStatementsPerConnection" value="5" />
+	</bean>
+
+	<!-- 扫描 MyBatis SQL -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/magus/bd/mapper/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.magus.bd.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 配置事务管理 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<!-- 第一个 “*” 代表所有类，第二个“*” 代表所有方法，“。。”代表任意参数 -->
+		<aop:pointcut expression="execution(* com.magus.bd.service.*.*(..))"
+			id="pointcut" />
+		<!-- 把事务控制在 service 层 -->
+		<aop:advisor advice-ref="transactionAdvice" pointcut-ref="pointcut" />
+	</aop:config>
+</beans>

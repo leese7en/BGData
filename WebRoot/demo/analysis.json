@@ -1,0 +1,53 @@
+{
+  "total": 28,
+  "rows": [
+    {
+      "productid": "企业1",
+      "unitcost": 10.00,
+      "listprice": 36.50,
+      "itemid": "1"
+    },
+    {
+      "productid": "企业2",
+      "unitcost": 12,
+      "listprice": 18.50,
+      "itemid": "2"
+    },
+    {
+      "productid": "企业3",
+      "unitcost": 12.00,
+      "listprice": 38.50,
+      "itemid": "3"
+    },
+    {
+      "productid": "企业4",
+      "unitcost": 12.00,
+      "listprice": 26.50,
+      "itemid": "4"
+    },
+    {
+      "productid": "企业5",
+      "unitcost": 12.00,
+      "listprice": 35.50,
+      "itemid": "5"
+    },
+    {
+      "productid": "企业6",
+      "unitcost": 12.00,
+      "listprice": 158.50,
+      "itemid": "6"
+    },
+    {
+      "productid": "企业7",
+      "unitcost": 12.00,
+      "listprice": 83.50,
+      "itemid": "7"
+    },
+    {
+      "productid": "企业8 ",
+      "unitcost": 12.00,
+      "listprice": 23.50,
+      "itemid": "8"
+    }
+  ]
+}

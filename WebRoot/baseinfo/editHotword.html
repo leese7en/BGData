@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑热词信息</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+			<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+	<script src="js/hotword.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div id="editHotword" class="easyui-menu"
+			style="width: 100px; display: none; border-color: #ddd; background: #fcfcfc;">
+			<div iconCls="icon-add" name="enterprise">
+				企业信息
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除
+			</div>
+		</div>
+		<div id="hotwordDialog" style="width: 500px; height: 270px; font-size: 13px; display: none; overflow: hidden;">
+			<table cellpadding="5"
+				style="font-size: 13px; color: MidnightBlue; width: 100%; margin-left: 10px; margin-top: 10px;">
+				<tr>
+					<td align="right">
+						名称:
+					</td>
+					<td>
+						<input id="name" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						热词类型:
+					</td>
+					<td>
+						<select id="hotwordType" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述:
+					</td>
+					<td>
+						<textarea id="description"  style="width: 300px;height:100px;resize:none;border:1px solid #95B8E7;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="hotwordTypeDialog" style="width: 500px; height: 270px; font-size: 13px; display: none; overflow: hidden;">
+			<table cellpadding="5"
+				style="font-size: 13px; color: MidnightBlue;margin-left: 20px; margin-top: 10px;">
+				<tr>
+					<td align="right">
+						名称:
+					</td>
+					<td>
+						<input id="nameType" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						上级类型:
+					</td>
+					<td>
+						<select id="hotwordTypePre" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述:
+					</td>
+					<td>
+						<textarea id="descriptionType"  style="width:300px;height:100px;resize:none;border:1px solid #95B8E7;" ></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="hotPhraseDialog" style="width: 500px; height: 270px; font-size: 13px; display: none; overflow: hidden;">
+			<table cellpadding="5"
+				style="font-size: 13px; color: MidnightBlue; width: 100%; margin-left: 20px; margin-top: 10px;">
+				<tr>
+					<td align="right">
+						名称:
+					</td>
+					<td>
+						<input id="namePhrase" class="easyui-textbox" style="width: 150px;height:28px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						描述:
+					</td>
+					<td>
+						<textarea id="descriptionPhrase" style="width: 300px;height:100px;resize:none;border:1px solid #95B8E7;" ></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="hotwordTypeCon" style="padding: 3px; padding-top: 10px;">
+			<a href="#" class="s_btns" onclick="queryHotwordType()">查询</a>
+			<a href="#" class="s_btna" onclick="addHotwordType()">添加</a>
+		</div>
+		<div id="hotword" style="padding: 3px; padding-top: 10px;">
+			<span>名称：</span>
+			<input id="hotwordNameQuery" class="easyui-textbox" style="width:150px;height:28px;" />
+			<span>描述：</span>
+			<input id="descriptionQuery" class="easyui-textbox" style="width:150px;height:28px;" />
+			<span>热词类型：</span>
+			<select id="hotwordTypeQuery" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+			</select>
+			<a href="#" class="s_btns" onclick="queryHotword()">查询</a>
+			<a href="#" class="s_btna" onclick="addHotword()">添加</a>
+		</div>
+		<div id="hotword" style="padding: 3px; padding-top: 10px;">
+			<span>名称：</span>
+			<input id="hotwordPhraseNameQuery" class="easyui-textbox" style="width:150px;height:28px;" />
+			<span>描述：</span>
+			<input id="descriptionPhraseQuery" class="easyui-textbox" style="width:150px;height:28px;" />
+			<a href="#" class="s_btns" onclick="queryHotwordPhrase()">查询</a>
+			<a href="#" class="s_btna" onclick="addHotPhrase()">添加</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<div class="easyui-tabs" data-options="fit:true">
+				<div title="热词类型">
+					<table id="hotwordTypeTable" class="easyui-datagrid" style="width: auto;" toolbar="#hotwordTypeCon"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="typeId" width="10%" align="center">
+									编码
+								</th>
+								<th field="typeName" width="20%" align="center">
+									名称
+								</th>
+								<th field="preName" width="20%" align="center">
+									上级问题
+								</th>
+
+								<th field="description" width="35%" align="center">
+									描述
+								</th>
+								<th field="createDate" width="15%" align="center">
+									创建时间
+								</th>
+
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="热词">
+					<table id="hotwordTable" class="easyui-datagrid" style="width: auto;" toolbar="#hotword"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="id" width="10%" align="center">
+									编码
+								</th>
+								<th field="name" width="20%" align="center">
+									名称
+								</th>
+								<th field="description" width="50%" align="center">
+									描述
+								</th>
+								<th field="createDate" width="20%" align="center">
+									创建时间
+								</th>
+
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="热词组">
+					<table id="hotPhraseTable" class="easyui-datagrid" style="width: auto;" toolbar="#hotword"
+						data-options="rownumbers:true,singleSelect:true,fit:true,striped:true"pagination="true">
+						<thead>
+							<tr>
+								<th field="id" width="10%" align="center">
+									编码
+								</th>
+								<th field="name" width="20%" align="center">
+									名称
+								</th>
+								<th field="description" width="50%" align="center">
+									描述
+								</th>
+								<th field="createDate" width="20%" align="center">
+									创建时间
+								</th>
+
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

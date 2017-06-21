@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResSuperLowDao">
+	<select id="getPowerUnit" parameterType="com.magus.bd.entity.ResSuperLow"
+		resultType="com.magus.bd.entity.ResSuperLow">
+		SELECT * from (SELECT
+			id AS id,
+			enCode AS psCode,
+			s.PSName AS psName,
+			city_id as cityId,
+			s.unit AS unit,
+			Installed_amount AS installedMax,
+			SO2_amount AS so2Amount,
+			SO2_amount / generate_electricity_amount * 100 AS so2EffectiveMax,
+			NOx_amount AS noxAmount,
+			SO2_amount / generate_electricity_amount * 100 AS noxEffectiveMax,
+			dust_amount AS dustAmount,
+			dust_amount / generate_electricity_amount * 100 AS dustEffectiveMax,
+			gasFlow AS gasFlow,
+			generate_electricity_amount AS genElecAmount
+		FROM
+			res_environment_year s
+		WHERE
+			unit != '99'
+			and boilerType in('煤粉炉','燃煤')
+			AND YEAR = #{year}
+		)b
+		where 1=1 
+		<if test="cityIds!=null and cityIds.size()>0">
+			and b.cityId IN
+			<foreach item="item" index="index" collection="cityIds" open="("
+				separator="," close=")">
+				#{item}  
+		   </foreach>
+		</if>
+		<choose>
+			<when test="installed!=null and installed.size()>0">
+				and (
+				<foreach item="item" index="index" collection="installed"
+					open="(" separator=" or " close=")">
+					b.installedMax between #{item.begin} and #{item.end} 
+			   </foreach>
+				<if test="installedMax!=null and installedMax!=0">
+					or b.installedMax > #{installedMax}
+			   </if>
+				)
+			</when>
+			<when test="installedMax!=null and installedMax!=0">
+				and b.installedMax > #{installedMax}
+			</when>
+			<otherwise>
+				and 1=1
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="so2Effective!=null and so2Effective.size()>0">
+				and (
+				<foreach item="item" index="index" collection="so2Effective"
+					open="(" separator=" or " close=")">
+					b.so2EffectiveMax between #{item.begin} and #{item.end} 
+			   </foreach>
+				<if test="so2EffectiveMax!=null and so2EffectiveMax!=0">
+					or b.so2EffectiveMax > #{so2EffectiveMax}
+			   </if>
+				)
+			</when>
+			<when test="so2EffectiveMax!=null and so2EffectiveMax!=0">
+				and b.so2EffectiveMax > #{so2EffectiveMax}
+			</when>
+			<otherwise>
+				and 1=1
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="noxEffective!=null and noxEffective.size()>0">
+				and (
+				<foreach item="item" index="index" collection="noxEffective"
+					open="(" separator=" or " close=")">
+					b.noxEffectiveMax between #{item.begin} and #{item.end} 
+			   </foreach>
+				<if test="noxEffectiveMax!=null and noxEffectiveMax!=0">
+					or b.noxEffectiveMax > #{noxEffectiveMax}
+			   </if>
+				)
+			</when>
+			<when test="noxEffectiveMax!=null and noxEffectiveMax!=0">
+				and b.noxEffectiveMax > #{noxEffectiveMax}
+			</when>
+			<otherwise>
+				and 1=1
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="dustEffective!=null and dustEffective.size()>0">
+				and (
+				<foreach item="item" index="index" collection="dustEffective"
+					open="(" separator=" or " close=")">
+					b.dustEffective between #{item.begin} and #{item.end} 
+			   </foreach>
+				<if test="dustEffectiveMax!=null and dustEffectiveMax!=0">
+					or b.dustEffective > #{dustEffectiveMax}
+			   </if>
+				)
+			</when>
+			<when test="dustEffectiveMax!=null and dustEffectiveMax!=0">
+				and b.dustEffective > #{dustEffectiveMax}
+			</when>
+			<otherwise>
+				and 1=1
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getPowerUnitByIds" parameterType="com.magus.bd.entity.ResSuperLow"
+		resultType="com.magus.bd.entity.ResSuperLow">
+		SELECT
+			id AS id,
+			enCode AS psCode,
+			psName AS psName,
+			c.city_name AS cityName,
+			unit AS unit,
+			Installed_amount AS installedMax,
+			SO2_amount AS so2Amount,
+			SO2_amount / generate_electricity_amount * 100 AS so2EffectiveMax,
+			NOx_amount AS noxAmount,
+			SO2_amount / generate_electricity_amount * 100 AS noxEffectiveMax,
+			dust_amount AS dustAmount,
+			dust_amount / generate_electricity_amount * 100 AS dustEffectiveMax,
+			gasFlow AS gasFlow,
+			generate_electricity_amount AS genElecAmount
+		FROM
+			res_environment_year s
+			LEFT JOIN sys_city c ON s.city_id = c.city_id
+		WHERE
+			 YEAR = #{year} 
+			<if test="ids!=null and ids.size()>0">
+					and s.id in
+				<foreach item="item" index="index" collection="ids" open="("
+					separator="," close=")">
+					#{item}
+	   			</foreach>
+			</if>
+	</select>
+	<select id="getPowerYearInfo" parameterType="com.magus.bd.entity.ResSuperLow" resultType="com.magus.bd.entity.ResSuperLow">
+		SELECT
+			sum(SO2_amount) AS so2Amount,
+			sum(NOx_amount) AS noxAmount,
+			sum(dust_amount) AS dustAmount,
+			sum(installed_amount) AS installedMax
+		FROM
+			res_environment_year
+		WHERE
+			unit!='99'
+			and boilerType in('煤粉炉','燃煤')
+			and YEAR = #{year}
+		GROUP BY
+			(YEAR)
+	</select>
+	<select id="getProgramInfo" parameterType="com.magus.bd.entity.ResSuperLow" resultType="com.magus.bd.entity.ResSuperLow">
+		SELECT
+			id AS id,
+			encode AS psCode,
+			psName AS psName,
+			c.city_name AS cityName,
+			unit AS unit,
+			Installed_amount AS installedMax,
+			SO2_amount AS so2Amount,
+			SO2_amount / generate_electricity_amount * 100 AS so2EffectiveMax,
+			NOx_amount AS noxAmount,
+			SO2_amount / generate_electricity_amount * 100 AS noxEffectiveMax,
+			dust_amount AS dustAmount,
+			dust_amount / generate_electricity_amount * 100 AS dustEffectiveMax,
+			gasFlow AS gasFlow,
+			generate_electricity_amount AS genElecAmount
+		FROM
+			res_environment_year s
+		LEFT JOIN sys_city c ON s.city_id = c.city_id
+		WHERE unit !='99'
+		AND YEAR = #{year} and encode in
+		<foreach item="item" index="index" collection="psCodes" open="("
+			separator="," close=")">
+			#{item}
+	   </foreach>
+	</select>
+</mapper>

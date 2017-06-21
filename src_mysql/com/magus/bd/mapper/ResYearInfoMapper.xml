@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResYearInfoDao">
+	<select id="getAreaYearInfo" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			id AS id,
+			YEAR AS YEAR,
+			area.city_id as cityId,
+			city.city_name AS cityName,
+			fire_installed_amount AS fireInstalled,
+			wind_installed_amount AS windInstalled,
+			other_installed_amount AS otherInstalled,
+			fire_power_amount AS firePower,
+			wind_power_amount AS windPower,
+			other_power_amount AS otherPower,
+			GDP_amount AS GDP
+		FROM
+			res_areapower area
+		LEFT JOIN sys_city city ON area.city_id = city.city_id
+		WHERE
+			1 = 1
+			<if test="cityId !=null and cityId!=''">
+				and  area.city_id  = #{cityId}
+			</if>
+			<if test="year!=null and year!=''">
+				and  year = #{year}
+			</if>
+	</select>
+	<select id="getPowerCountByYear" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			year as year,
+			count(id) as powerCount
+		FROM
+			res_environment_year env
+		WHERE
+	 		unit = '99'
+			group by YEAR
+	</select>
+	
+	<select id="getCityYear" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			id AS id,
+			YEAR AS year,
+			fire_installed_amount AS fireInstalled,
+			wind_installed_amount AS windInstalled,
+			other_installed_amount AS otherInstalled,
+			fire_power_amount AS firePower,
+			wind_power_amount AS windPower,
+			other_power_amount AS otherPower,
+			GDP_amount AS GDP
+		FROM
+			res_areapower 
+		where city_id = #{cityId} and year =#{year}
+	</select>
+
+	<insert id="addAreaYearInfo" parameterType="com.magus.bd.entity.ResYearInfo">
+		insert into
+			res_areapower
+			(year,city_id,fire_installed_amount,wind_installed_amount,other_installed_amount,
+			fire_power_amount,wind_power_amount,other_power_amount,GDP_amount)
+		values
+			(#{year},#{cityId},#{fireInstalled},#{windInstalled},#{otherInstalled},
+			#{firePower},#{windPower},#{otherPower},#{GDP})
+	</insert>
+	
+	<insert id="addCountryPowerInfo" parameterType="com.magus.bd.entity.ResYearInfo">
+		insert into
+			res_countrypower
+			(year,type,power_amount,power_amount_incrementrate,installed_amount,
+			installed_amount_incrementrate,effective_hour,effective_hour_incrementrate,description)
+		values
+			(#{year},#{type},#{powerAmount},#{powerAmountIncrementRate},#{installedAmount},
+			#{installedAmountIncrementRate},#{effectiveHour},#{effectiveHourIncrementRate},#{description})
+	
+	</insert>
+
+	<select id="getCityYearInfo" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			id AS id,
+			c.city_name as cityName,
+			YEAR AS year,
+			fire_installed_amount AS fireInstalled,
+			wind_installed_amount AS windInstalled,
+			other_installed_amount AS otherInstalled,
+			fire_power_amount AS firePower,
+			wind_power_amount AS windPower,
+			other_power_amount AS otherPower,
+			GDP_amount AS GDP
+		from 
+			res_areapower a
+			left join sys_city c on a.city_id = c.city_id 
+			where a.city_id !=''
+	</select>
+	<select id="getCountryPower" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			id AS id,
+			YEAR AS year,
+			type AS type,
+			power_amount AS powerAmount,
+			power_amount_incrementrate AS powerAmountIncrementRate,
+			installed_amount AS installedAmount,
+			installed_amount_incrementrate AS installedAmountIncrementRate,
+			effective_hour AS effectiveHour,
+			effective_hour_incrementrate AS effectiveHourIncrementRate,
+			description AS description
+		FROM
+			res_countrypower 
+			where type = '0' or type ='1'
+			ORDER BY year,type desc
+	</select>
+	
+	<select id="getCountryContaminants" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			YEAR AS year,
+			so2_amount AS so2Amount,
+			nox_amount AS noxAmount,
+			dust_amount AS dustAmount
+		FROM
+			res_areacontaminants
+		ORDER BY year
+	</select>
+	<select id="getCountryPowerPoint" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			env. YEAR AS YEAR,
+			env.PSName AS psName,
+			products AS product,
+			env.Longitude AS longitude,
+			env.Latitude AS latitude,
+			env.psType AS industryTypeName,
+			env.Installed_amount AS installedAmount,
+			generate_electricity_amount AS powerAmount
+		FROM
+			res_environment_year env
+		WHERE
+		unable = 0 and 
+			unit = '99'
+	</select>
+	<select id="getCountryCoalPoint" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			psName AS psName,
+			psType AS psType,
+			YEAR AS YEAR,
+			products AS product,
+			annual AS annual,
+			unit AS unit,
+			longitude AS longitude,
+			latitude AS latitude
+		FROM
+			res_environment_coal_year
+		where unable = 0
+	</select>
+	<select id="getCityPower" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			id AS id,
+			YEAR AS year,
+			type AS type,
+			power_amount AS powerAmount,
+			power_amount_incrementrate AS powerAmountIncrementRate,
+			installed_amount AS installedAmount,
+			installed_amount_incrementrate AS installedAmountIncrementRate,
+			effective_hour AS effectiveHour,
+			effective_hour_incrementrate AS effectiveHourIncrementRate,
+			description AS description
+		FROM
+			res_countrypower 
+			where 
+				(type = '1' OR type = #{cityId}) and year =#{year}
+			ORDER BY year,type desc
+	</select>
+	<select id="getCityPowerPoint" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			env. YEAR AS YEAR,
+			env.PSName AS psName,
+			products AS product,
+			env.Longitude AS longitude,
+			env.Latitude AS latitude,
+			env.psType AS industryTypeName,
+			env.Installed_amount AS installedAmount,
+			generate_electricity_amount AS powerAmount
+		FROM
+			res_environment_year env
+		WHERE
+			unable = 0 and 
+			unit = '99' and env.city_id = #{cityId} and year = #{year}
+	</select>
+	<select id="getCityCoalPoint" resultType="com.magus.bd.entity.ResYearInfo"
+		parameterType="com.magus.bd.entity.ResYearInfo">
+		SELECT
+			psName AS psName,
+			psType AS psType,
+			YEAR AS YEAR,
+			products AS product,
+			annual AS annual, 
+			unit AS unit,
+			longitude AS longitude,
+			latitude AS latitude
+		FROM
+			res_environment_coal_year 
+			where unable = 0 and city_id =#{cityId} and year = #{year}
+	</select>
+	<insert id="addCityYearInfo" parameterType="com.magus.bd.entity.ResYearInfo">
+		insert into
+			res_areapower
+			(city_id,year,fire_installed_amount,wind_installed_amount,other_installed_amount,
+			fire_power_amount,wind_power_amount,other_power_amount,GDP_amount)
+		values
+			(#{cityId},#{year},#{fireInstalled},#{windInstalled},#{otherInstalled},
+			#{firePower},#{windPower},#{otherPower},#{GDP})
+	
+	</insert>
+
+</mapper>

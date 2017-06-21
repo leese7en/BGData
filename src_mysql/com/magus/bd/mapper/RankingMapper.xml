@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.RankingDao">
+	<select id="getRanking" resultType="com.magus.bd.entity.Ranking">
+        select id,
+	        PSCode as pSCode,
+	        PSName as pSName,
+	        unit,
+	        year,
+	        date,
+	        Installed_amount as installedAmount,
+	        SO2_amount as SO2Amount,
+	        SO2_effective as SO2Effective,
+	        SO2_concentration as SO2Concentration,
+	        NOx_amount as NOxAmount,
+	        NOx_effective as NOxEffective,
+	        NOx_concentration as NOxConcentration,
+	        dust_amount as dustAmount,
+	        dust_effective as dustEffective, 
+	        dust_concentration as dustConcentration,
+	        generate_electricity_amount as generateElectricityAmount,
+	        effective_hour as effectiveHour,
+	        coal_consume_amount as coalConsumeAmount,
+	        water_amount as waterAmount,
+	        GasFlow as gasFlow,
+	        qualtity_report as qualtityReport,
+	        plant_power_amunt as plantPowerAmunt,
+	        GDP
+        from res_power_superlow
+	</select>	
+	
+	
+	<select id="getRankingByYear" resultType="com.magus.bd.entity.Ranking"
+	parameterType="com.magus.bd.entity.Ranking">
+        SELECT
+			c.city_id AS cityId,
+			c.city_Name AS cityName,
+			t.so2Amount / t.generateElectricityAmount * 100 AS so2Effective,
+			t.so2Amount / t.GDP * 1000 AS so2Concentration,
+			t.noxAmount / t.generateElectricityAmount * 100 AS noxEffective,
+			t.noxAmount / t.GDP * 1000 AS noxConcentration,
+			t.dustAmount / t.generateElectricityAmount * 100 AS dustEffective,
+			t.dustAmount / t.GDP * 1000 AS dustConcentration,
+			t.coalConsumeAmount / t.generateElectricityAmount * 1000000 AS coalEffective,
+			t.waterAmount / t.generateElectricityAmount / 10 AS waterEffective
+		FROM
+			(
+				SELECT
+					city_id AS cityId,
+					sum(power_coal_consume_amount) AS coalConsumeAmount,
+					sum(
+						SO2_amount * env.power_Accounting
+					) AS so2Amount,
+					sum(
+						NOx_amount * env.power_Accounting
+					) AS noxAmount,
+					sum(
+						dust_amount * env.power_Accounting
+					) AS dustAmount,
+					sum(
+						generate_electricity_amount
+					) AS generateElectricityAmount,
+					sum(water_amount) AS waterAmount,
+					sum(plant_power_amunt) AS plantPowerAmunt,
+					sum(GDP) AS GDP
+				FROM
+					res_environment_year env
+				WHERE
+					env. YEAR = #{year}
+				AND env.unit = '99'
+				GROUP BY
+					city_id
+			) t
+		RIGHT JOIN sys_city c ON t.cityId = c.city_id
+	</select>
+	<select id="getRankingEnterpriseByYear" resultType="com.magus.bd.entity.Ranking"
+	parameterType="com.magus.bd.entity.Ranking">
+      SELECT
+		t.psName AS psName,
+		t.cityId AS cityId,
+		t.installedAmount AS installedAmount,
+		t.so2Amount AS so2Amount,
+		t.so2Amount * t.powerAccounting / t.generateElectricityAmount * 100 AS so2Effective,
+		t.so2Amount * t.powerAccounting / t.GDP * 1000 AS so2Concentration,
+		t.noxAmount AS noxAmount,
+		t.noxAmount * t.powerAccounting / t.generateElectricityAmount * 100 AS noxEffective,
+		t.noxAmount * t.powerAccounting / t.GDP * 1000 AS noxConcentration,
+		t.dustAmount AS dustAmount,
+		t.dustAmount * t.powerAccounting / t.generateElectricityAmount * 100 AS dustEffective,
+		t.dustAmount * t.powerAccounting / t.GDP * 1000 AS dustConcentration,
+		t.coalConsumeAmount / t.generateElectricityAmount * 1000000 AS coalEffective,
+		t.waterAmount / t.generateElectricityAmount / 10 AS waterEffective,
+		t.generateElectricityAmount AS generateElectricityAmount,
+		t.gdp AS GDP
+	FROM
+		(
+			SELECT
+				psName AS psName,
+				city_id AS cityId,
+				Installed_amount AS installedAmount,
+				power_coal_consume_amount AS coalConsumeAmount,
+				power_Accounting AS powerAccounting,
+				SO2_amount AS so2Amount,
+				NOx_amount AS noxAmount,
+				dust_amount AS dustAmount,
+				generate_electricity_amount AS generateElectricityAmount,
+				water_amount AS waterAmount,
+				gdp AS GDP
+			FROM
+				res_environment_year env
+			WHERE
+				YEAR = #{year}
+			AND env.city_id = #{cityId}
+			AND env.unit = '99'
+		) t 
+	</select>
+	<select id="getRankingCountByYear" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.Ranking">
+        select count(id)
+        from res_power_superlow
+         where year = #{year}
+	</select>
+	
+	<select id="getCityGDP" resultType="com.magus.bd.entity.Ranking" parameterType="com.magus.bd.entity.Ranking">
+       SELECT
+			LEFT (da.pscode, 4) AS cityId,
+			sum(env.gdp) AS GDP
+		FROM
+			res_environment_year env
+		LEFT JOIN res_environment_datacenter da ON env.enCode = da.enCode
+		WHERE
+			ifnull(da.pscode, NULL)
+		AND YEAR = #{year}
+		AND env.unit = '99'
+		GROUP BY
+			LEFT (da.pscode, 4)
+	</select>
+</mapper>

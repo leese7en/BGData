@@ -1,0 +1,22 @@
+/* 
+    Created on : 2015-8-11, 16:18:09
+    Author     : joe
+*/
+
+.close-tab {
+    font-size: 10px;
+    position:absolute;
+    right: 8px;
+    top: 14px;
+    padding-left:12px;
+    z-index: 100;
+    cursor: hand;
+    cursor: pointer;
+    color: #aaa;
+}
+.close-tab:hover{
+	color:#8a8a8a;
+	}
+.topbar-collapse {
+    float:right;
+}

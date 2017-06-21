@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>空气质量变化与污染物浓度</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">	
+		<script src="../js/echarts-all.js">
+</script>
+		<script src="../js/jquery.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+<script src="../js/utils.js"></script>
+
+
+		<script src="js/airPoll.js">
+</script>
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'center',fit:false" style="padding: 0;">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-md-1">
+						盟市：
+					</label>
+					<div class="col-md-1">
+						<select id="city" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 120px; height: 31px" editable="false"></select>
+					</div>
+					<label class="control-label col-md-1" style="margin-left: 15px">
+						开始日期:
+					</label>
+					<div class="col-md-2">
+						<div id="beginTime" class="input-group date form_datetime">
+							<input class="form-control" type="text" value="2016-01-01">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<label class="control-label col-md-1">
+						结束日期:
+					</label>
+					<div class="col-md-2">
+						<div id="endTime" class="input-group date form_datetime">
+							<input class="form-control" type="text" value="2016-03-01">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<label class="s_btns control-label" onclick="queryData()">
+						查询
+					</label>
+					<div class="help-tip">
+						<p></p>
+					</div>
+				</div>
+			</form>
+			<div style="float: left; width: 70%">
+				<div id="main" class="main" style='width: 100%; margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0;'></div>
+				<div id="main2" class="main" style='width: 100%; margin-bottom: 1px; padding: 1px; border-width: 0 1px;'></div>
+			</div>
+			<div style="float: right; margin-rigth: 20px; top: 40px;">
+				<div id="pie" class="main" style='width: 100%; margin-bottom: 1px; padding-bottom: 0; border-bottom-width: 0'></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>超低排放执行方案研究</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/program.css" />
+		<style>
+.con {
+	line-height: 100px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.color1 {
+	background: pink;
+}
+
+.color2 {
+	background: red;
+}
+
+.tableInfo td {
+	text-align: center; /*设置水平居中*/
+	vertical-align: middle; /*设置垂直居中*/
+}
+</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 10px;">
+			<div class="col-md-9">
+				<h2 style="margin-top: -2px;">
+					超低排放执行方案研究
+				</h2>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-right">
+					<button type="button" class="btn btn-success btn-sm" onclick="insertPowerUnitModel()">
+						<span class="glyphicon glyphicon-plus"></span> 新建
+					</button>
+					<button type="button" class="btn btn-info btn-sm" onclick="changeStandard()">
+						<span class="glyphicon glyphicon-edit"></span> 排放标准
+					</button>
+				</ul>
+			</div>
+
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:40px;">
+		<nav class="navbar navbar-right" style="width:21%; position: absolute; right: 80%; height: 100%;background:#fff;">
+		<div class="modal-header">
+			<h4 class="modal-title" id="point-title">
+				大事记
+			</h4>
+		</div>
+		<div class="modal-body">
+			<div id="mainevent" class="main" style="height: 350px; overflow: auto;">
+				<ul class="cbp_tmtimeline">
+				</ul>
+			</div>
+		</div>
+		</div>
+		</nav>
+		<nav class="navbar navbar-right" style=" width: 40%; position: absolute; right: 40%; height: 100%;background:#fff;">
+		<div>
+			<div class="modal-header">
+				<h4 class="modal-title" id="point-title">
+					实施计划
+				</h4>
+			</div>
+			<div class="modal-body">
+				<ul id="planTab" class="nav nav-tabs ">
+					<li class="active" value="region" style="height: 30px;">
+						<a href="#regionPlan" data-toggle="tab"> 自治区计划 </a>
+					</li>
+					<li value="other">
+						<a href="#otherPlan" data-toggle="tab"> 自定义计划 </a>
+					</li>
+				</ul>
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade in active" id="regionPlan">
+						<div class="panel-group" id="accordionRegion">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionProduction">已改造</a>
+									</h4>
+								</div>
+								<div id="regionProduction" class="panel-collapse collapse in">
+									<div class="panel-body" style="height: 350px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionReform">改造中</a>
+									</h4>
+								</div>
+								<div id="regionReform" class="panel-collapse collapse">
+									<div class="panel-body" style="height: 350px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionPlans">计划</a>
+									</h4>
+								</div>
+								<div id="regionPlans" class="panel-collapse collapse">
+									<div class="panel-body" style="height: 300px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionPlanning">规划</a>
+									</h4>
+								</div>
+								<div id="regionPlanning" class="panel-collapse collapse">
+									<div id="regionPlanningChild" class="panel-body" style="height: 350px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="otherPlan">
+						<div class="panel-group" id="accordionOther">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherProduction">已投产</a>
+									</h4>
+								</div>
+								<div id="otherProduction" class="panel-collapse collapse in">
+									<div class="panel-body" style="height: 300px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherReform">改造中</a>
+									</h4>
+								</div>
+								<div id="otherReform" class="panel-collapse collapse">
+									<div class="panel-body" style="height: 300px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherPlans">计划</a>
+									</h4>
+								</div>
+								<div id="otherPlans" class="panel-collapse collapse">
+									<div class="panel-body" style="height: 300px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherPlanning">规划</a>
+									</h4>
+								</div>
+								<div id="otherPlanning" class="panel-collapse collapse">
+									<div class="panel-body" style="height: 300px; overflow: auto;">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar navbar-right" style="background:#fff;width:40%;height:100%">
+		<div class="modal-header">
+			<h4 class="modal-title" id="point-title">
+				结果预测
+			</h4>
+		</div>
+		<div class="modal-body">
+			<select id="cityInfo" class="selectpicker" data-width="120px" data-style="btn-warning">
+			</select>
+			<select id="pollCode" class="selectpicker" data-width="120px" data-style="btn-primary">
+				<option value="A21026">
+					二氧化硫
+				</option>
+				<option value="A21002">
+					氮氧化物
+				</option>
+				<option value="A34013">
+					烟尘
+				</option>
+			</select>
+			<button type="button" class="btn btn-success btn-sm" onclick="previewSuperlowFullView()">
+				<span class="glyphicon glyphicon-eye-open"></span> 预览方案
+			</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="previewDetail()">
+				<span class="glyphicon glyphicon-list-alt"></span> 明细信息
+			</button>
+			<div id="preview"></div>
+		</div>
+		</nav>
+		</nav>
+		<nav class="navbar navbar-default" style=" position:fixed; bottom: -15px; right:12px;background:#fff;width:78%">
+		<ul class="navbar-right" style="position: relative; top: 10px; right: 50px">
+			<button type="button" class="btn btn-primary btn-sm" onclick="programOperator()">
+				<span class="glyphicon glyphicon-saved"></span> 保存方案
+			</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="programOperator('export')">
+				<span class="glyphicon glyphicon-export"></span> 导出方案
+			</button>
+		</ul>
+		</nav>
+		<div class="modal fade in" id="standardInfo" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeStandardInfoModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							超低排放标准
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">SO2</span>
+										<input type="text" class="form-control" placeholder="35" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">NOx</span>
+										<input type="text" class="form-control" placeholder="50" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">烟尘</span>
+										<input type="text" class="form-control" placeholder="10" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="closeStandardInfoModal()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeStandardInfoModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="powerUnitInfo" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 450px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closePowerUnitModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							电厂机组信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="powerId">
+						<div style="padding-left: -150px">
+							<form class="form-horizontal" role="form" action="#">
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="powerPsName">
+										电厂名称:
+									</label>
+									<div class="col-md-8" style="width: 310px; margin-left: -15px">
+										<input type="text" class="form-control" id="powerPsName" name="powerPsName" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="powerUnit">
+										机组:
+									</label>
+									<div class="col-md-8" style="width: 310px; margin-left: -15px">
+										<input type="text" class="form-control" id="powerUnit" name="powerUnit" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="rectificationDate">
+										整改时间:
+									</label>
+									<div id="rectificationDate" class="input-group date form_datetime" style="width: 280px">
+										<input class="form-control" type="text" value="2016-11">
+										<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="productionDate">
+										投产时间:
+									</label>
+									<div id="productionDate" class="input-group date form_datetime" style="width: 280px">
+										<input class="form-control" type="text" value="2016-12">
+										<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updatePowerUnitInfo()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closePowerUnitModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="programOperator" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 400px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeProgramOperatorModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							方案操作
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="userId">
+						<div>
+							<form class="form-horizontal" role="form" action="#" style="padding-top: 10px;">
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="programName">
+										名 称:
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="programName" name="programName" placeholder="请输入方案名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="programUser">
+										制作人:
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="programUser" name="programUser" placeholder="请输入方案制作人">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="programDesc">
+										描述:
+									</label>
+									<div class="col-md-9">
+										<textarea class="form-control" id="programDesc" name="programDesc" placeholder="请输入方案描述" rows="5"></textarea>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="exportOrSaveProgram()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeProgramOperatorModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="insertPowerUnitModel" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 440px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeInsertPowerUnitModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							新增机组
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="userId">
+						<div>
+							<form class="form-horizontal" role="form" action="#" style="padding-top: 10px;">
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerCode">
+										电厂编码:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerCode" name="powerCode" placeholder="请输入电厂编码">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerName">
+										电厂名称:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerName" name="powerName" placeholder="请输入电厂名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="cityId">
+										盟市名称:
+									</label>
+									<div class="col-md-9">
+										<select id="cityId" class="selectpicker">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="groupId">
+										电厂集团:
+									</label>
+									<div class="col-md-9">
+										<select id="groupId" class="selectpicker">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitCode">
+										机组编码:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerUnitCode" name="powerUnitCode" placeholder="请输入机组编码">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitInstalled">
+										装机容量:
+									</label>
+									<div class="col-md-8">
+										<div class="input-group">
+											<input type="text" class="form-control" id="powerUnitInstalled" name="powerUnitInstalled"
+												placeholder="请输入方装机容量" />
+											<span class="input-group-addon" style="color: black;">WM</span>
+										</div>
+									</div>
+
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitDate">
+										投产时间:
+									</label>
+									<div class="col-md-9">
+										<div id="powerUnitDate" class="input-group date form_datetime" style="width: 260px">
+											<input class="form-control" type="text" value="2016-12">
+											<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="insertPowerUnit()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeInsertPowerUnitModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade in" id="previewDetail" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 1200px; margin-top: 40px; height: 500px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closePreviewDetailModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							结果预览
+						</h4>
+					</div>
+					<div class="modal-body">
+						<ul id="myTab" class="nav nav-tabs">
+							<li class="active">
+								<a href="#result2016" data-toggle="tab"> 2016 </a>
+							</li>
+							<li>
+								<a href="#result2017" data-toggle="tab"> 2017 </a>
+							</li>
+							<li>
+								<a href="#result2018" data-toggle="tab"> 2018 </a>
+							</li>
+							<li>
+								<a href="#result2019" data-toggle="tab"> 2019 </a>
+							</li>
+							<li>
+								<a href="#result2020" data-toggle="tab"> 2020 </a>
+							</li>
+						</ul>
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade in active" id="result2016">
+								<div style="height: 440px">
+									<div class="title" style="width: 100%">
+										<center>
+											<span>火电厂污染物排放预计减排量明细表</span>
+										</center>
+										<div>
+											<span class="predictionYear" style="float: left">预测年份：2016年 </span>
+											<span class="preparedDate" style="float: right">编制日期：2016.7.29</span>
+											<center>
+												<span class="pollutants">预测污染物：二氧化硫</span>
+											</center>
+										</div>
+									</div>
+									<hr style="margin-top: 3px;" />
+									<div class="table"
+										style="width: 1220px; font-size: 14px; height: 350px; overflow-y: scroll; margin-top: -10px;">
+										<table class="tableInfo" style="width: 1110px;" border="1" align="center">
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="result2017">
+								<div style="height: 440px">
+									<div class="title" style="width: 100%">
+										<center>
+											<span>火电厂污染物排放预计减排量明细表</span>
+										</center>
+										<div>
+											<span class="predictionYear" style="float: left">预测年份：2016年 </span>
+											<span class="preparedDate" style="float: right">编制日期：2016.7.29</span>
+											<center>
+												<span class="pollutants">预测污染物：二氧化硫</span>
+											</center>
+
+										</div>
+									</div>
+									<hr style="margin-top: 3px;" />
+									<div class="table"
+										style="width: 1220px; font-size: 14px; height: 350px; overflow-y: scroll; margin-top: -10px;">
+										<table class="tableInfo" style="width: 1110px;" border="1" align="center">
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="result2018">
+								<div style="height: 440px">
+									<div class="title" style="width: 100%">
+										<center>
+											<span>火电厂污染物排放预计减排量明细表</span>
+										</center>
+										<div>
+											<span class="predictionYear" style="float: left">预测年份：2016年 </span>
+											<span class="preparedDate" style="float: right">编制日期：2016.7.29</span>
+											<center>
+												<span class="pollutants">预测污染物：二氧化硫</span>
+											</center>
+
+										</div>
+									</div>
+									<hr style="margin-top: 3px;" />
+									<div class="table"
+										style="width: 1220px; font-size: 14px; height: 350px; overflow-y: scroll; margin-top: -10px;">
+										<table class="tableInfo" style="width: 1110px;" border="1" align="center">
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="result2019">
+								<div style="height: 440px">
+									<div class="title" style="width: 100%">
+										<center>
+											<span>火电厂污染物排放预计减排量明细表</span>
+										</center>
+										<div>
+											<span class="predictionYear" style="float: left">预测年份：2016年 </span>
+											<span class="preparedDate" style="float: right">编制日期：2016.7.29</span>
+											<center>
+												<span class="pollutants">预测污染物：二氧化硫</span>
+											</center>
+										</div>
+									</div>
+									<hr style="margin-top: 3px;" />
+									<div class="table"
+										style="width: 1220px; font-size: 14px; height: 350px; overflow-y: scroll; margin-top: -10px;">
+										<table class="tableInfo" style="width: 1110px;" border="1" align="center">
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="result2020">
+								<div style="height: 440px">
+									<!--<img src="images/2016.png" style="height: 440px; width: 1120px;" />-->
+									<div class="title" style="width: 100%">
+										<center>
+											<span>火电厂污染物排放预计减排量明细表</span>
+										</center>
+										<div>
+											<span class="predictionYear" style="float: left">预测年份：2016年 </span>
+											<span class="preparedDate" style="float: right">编制日期：2016.7.29</span>
+											<center>
+												<span class="pollutants">预测污染物：二氧化硫</span>
+											</center>
+										</div>
+									</div>
+									<hr style="margin-top: 3px;" />
+									<div class="table"
+										style="width: 1220px; font-size: 14px; height: 350px; overflow-y: scroll; margin-top: -10px;">
+										<table class="tableInfo" style="width: 1110px;" border="1" align="center">
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/echarts.min.3.js">
+</script>
+		<script src="../js/json2.js">
+</script>
+		<script src="js/program.js">
+</script>
+	</body>
+</html>

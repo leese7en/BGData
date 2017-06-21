@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ResInstalledEmissionDao">
+	<select id="getResInstalled" resultType="com.magus.bd.entity.ResInstalledEmission"
+		parameterType="com.magus.bd.entity.ResInstalledEmission">
+		SELECT
+			id AS id,
+			content AS content,
+			min AS min,
+			max AS max
+		FROM
+			res_installed
+	</select>
+
+	<select id="getResEmission" resultType="com.magus.bd.entity.ResInstalledEmission"
+		parameterType="com.magus.bd.entity.ResInstalledEmission">
+		SELECT
+			id AS id,
+			pollutantCode AS pollutantCode,
+			content AS content,
+			min AS min,
+			max AS max
+		FROM
+			res_emission_per
+		WHERE
+			pollutantCode = #{pollutantCode}
+	</select>
+
+	<select id="getCountInstalled" resultType="java.lang.Integer">
+		SELECT count(1)
+		from
+		res_installed
+		
+	</select>
+
+	<select id="getCountEmission" resultType="java.lang.Integer">
+		SELECT count(1)
+		from
+		res_emission_per
+		where
+		pollutantCode = #{pollutantCode}
+	</select>
+	<update id="updateResInstalled" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		update
+		res_installed
+		set
+		content = #{content},
+		min = #{min},
+		max = #{max}
+		where
+		id
+		= #{id}
+	</update>
+	<update id="updateResEmission" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		update
+		res_emission_per
+		set
+		content = #{content},
+		min = #{min},
+		max = #{max}
+		where
+		id = #{id}
+	</update>
+
+	<delete id="deleteResInstalled" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		delete from
+		res_installed
+		where
+		id = #{id}
+	</delete>
+	<delete id="deleteResEmission" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		delete from
+		res_emission_per
+		where
+		id = #{id}
+	</delete>
+
+	<insert id="addResInstalled" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		insert into
+		res_installed
+		(content,min,max)
+		values
+		(#{content},#{min},#{max})
+	
+	</insert>
+	<insert id="addResEmission" parameterType="com.magus.bd.entity.ResInstalledEmission">
+		insert into
+			res_emission_per
+		(pollutantCode,content,min,max)
+			values
+		(#{pollutantCode},#{content},#{min},#{max})
+	</insert>
+</mapper>

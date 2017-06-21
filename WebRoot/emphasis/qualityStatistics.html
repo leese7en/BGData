@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>数据质量统计</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/qualitySource.css" />
+		<style>
+#chart {
+	position: relative;
+	top: 45px;
+}
+</style>
+	</head>
+	<body>
+		<ul class="nav navbar-left" style="margin-top: 10px; margin-right: 5px">
+			<form class="form-inline">
+				<div class="input-group">
+					<span class="input-group-addon">盟市</span>
+					<select id="queryCity" class="selectpicker" data-width="120px" onchange="changeInfo()">
+					</select>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon">企业名称</span>
+					<input id="psName" type="text" class="form-control" placeholder="辅助查询" onchange="changeInfo()">
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon">企业名称</span>
+					<select id="queryPsName" class="selectpicker" data-width="400px">
+					</select>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon">时间</span>
+					<div id="queryTime" class="input-group date form_datetime" style="width: 180px">
+						<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+						<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+					</div>
+				</div>
+				<button type="button" class="btn btn-success btn-sm" onclick="queryInfo()">
+					<span class="glyphicon glyphicon-search"></span> 查询
+				</button>
+			</form>
+		</ul>
+		<div id="chart"></div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/qualityStatistics.js">
+</script>
+	</body>
+</html>

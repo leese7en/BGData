@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>水数据质量预警</title>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen" />
+		<link rel="stylesheet" href="../js/bootstrap-table/css/bootstrap-table.min.css" />
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet" />
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script type="text/javascript" src="../js/bootstrap-table/js/bootstrap-table.min.js">
+</script>
+		<script type="text/javascript" src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js">
+</script>
+		<script type="text/javascript" src="../js/bootstrap-table/extensions/export/bootstrap-table-export.min.js">
+</script>
+		<script type="text/javascript" src="../js/bootstrap-table/js/tableExport.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+		<script type="text/javascript" src="../js/tool/jscolor.js">
+</script>
+		<script type="text/javascript" src="../js/DatePicker/WdatePicker.js">
+</script>
+		<script type="text/javascript" src="js/canvas/trend-v2-graph.js">
+</script>
+		<script type="text/javascript" src="js/canvas/trend-v2.js">
+</script>
+		<script type="text/javascript" src="js/canvas/trend_page-v2.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/biwaterresult.js">
+</script>
+		</style>
+	</head>
+	<body>
+		<div id="pointsTrend" style="padding-left: 5px; display: none"></div>
+		<div class="modal fade in" id="biWaterResultModel" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 840px; margin-top: 20px; height: 400px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeBiWaterModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							明細信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="height: 300px; overflow-y: auto;">
+							<table id="biResultDetailTable">
+							</table>
+						</div>
+						<div>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-default" type="button" onclick="closeBiWaterModal()">
+									关闭
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">盟市</span> <select
+						id="cityQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">企业名称</span> <input
+						type="text" id="psnameQuery" class="form-control" placeholder="请输入企业名称"> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">预警类型</span> <select
+						id="algorithmQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">开始时间</span>
+					<div id="beginTimeQuery" class="input-group date form_datetime" style="width: 130px">
+						<input class="form-control" type="text" value="2016-01-01" style="font-size: 12px; height: 32px;">
+						<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+					</div>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">结束时间</span>
+					<div id="endTimeQuery" class="input-group date form_datetime" style="width: 130px">
+						<input class="form-control" type="text" value="2016-01-01" style="font-size: 12px; height: 32px;">
+						<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+					</div>
+			</div>
+
+			<div class="col-md-1">
+				<ul class="nav navbar-left">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="biresultQuery()">
+						<span class="glyphicon glyphicon-ok"></span>查询
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:60px;">
+		<table id="biResultTable">
+		</table>
+		</nav>
+		</div>
+	</body>
+</html>
+

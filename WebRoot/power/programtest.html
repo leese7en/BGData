@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>超低排放执行方案研究</title>
+		<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="css/program.css" />
+
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="container">
+			<div class="navbar-header">
+				<h2 style="position: relative; top: -10px">
+					超低排放执行方案研究
+				</h2>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-right" style="margin-top: 10px; margin-right: 5px">
+					<button type="button" class="btn btn-info btn-sm" onclick="changeStandard()">
+						<span class="glyphicon glyphicon-edit"></span> 排放标准
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:40px;">
+		<nav class="navbar navbar-right" style="width:21%; position: absolute; right: 80%; height: 100%;background:#fff;">
+		<div class="modal-header">
+			<h4 class="modal-title" id="point-title">
+				大事记
+			</h4>
+		</div>
+		<div class="modal-body">
+			<div class="main">
+				<ul class="cbp_tmtimeline">
+					<li>
+						<div class="cbp_tmicon cbp_tmicon-phone">
+						</div>
+						<div class="cbp_tmlabel">
+							<span>2014年</span>
+							<br />
+							<h5>
+								煤电节能减排升级与改造行动计划
+								</h4>
+						</div>
+					</li>
+					<li>
+						<div class="cbp_tmicon cbp_tmicon-screen">
+						</div>
+						<div class="cbp_tmlabel">
+							<span>2015年</span>
+							<br />
+							<h5>
+
+								关于实行燃煤电厂超低排放电价支持政策的有关问题的通知
+							</h5>
+
+						</div>
+					</li>
+					<li>
+						<div class="cbp_tmicon cbp_tmicon-phone">
+						</div>
+						<div class="cbp_tmlabel">
+							<span>2016年1月</span>
+							<br />
+							<h5>
+								大唐托克托电厂3号、4号机组实行超低排放
+							</h5>
+
+						</div>
+					</li>
+					<li>
+						<div class="cbp_tmicon cbp_tmicon-mail">
+						</div>
+						<div class="cbp_tmlabel">
+							<span>2016年2月29</span>
+							<br />
+							<h5>
+
+								在乌海及周边地区环境综合整治工作会议上的讲话
+							</h5>
+
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		</div>
+		</nav>
+		<nav class="navbar navbar-right" style=" width: 40%; position: absolute; right: 40%; height: 100%;background:#fff;">
+		<div>
+			<div class="modal-header">
+				<h4 class="modal-title" id="point-title">
+					实施计划
+				</h4>
+			</div>
+			<div class="modal-body">
+				<ul id="myTab" class="nav nav-tabs ">
+					<li class="active" style="height: 30px;">
+						<a href="#regionPlan" data-toggle="tab"> 自治区计划 </a>
+					</li>
+					<li>
+						<a href="#groupPlan" data-toggle="tab"> 集团计划 </a>
+					</li>
+					<li>
+						<a href="#otherPlan" data-toggle="tab"> 其它计划 </a>
+					</li>
+				</ul>
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade in active" id="regionPlan">
+						<div class="panel-group" id="accordionRegion">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionProduction">已改造</a>
+									</h4>
+								</div>
+								<div id="regionProduction" class="panel-collapse collapse in">
+									<div class="panel-body">
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionReform">改造中</a>
+									</h4>
+								</div>
+								<div id="regionReform" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionPlans">计划</a>
+									</h4>
+								</div>
+								<div id="regionPlans" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionRegion" href="#regionPlanning">规划</a>
+									</h4>
+								</div>
+								<div id="regionPlanning" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="groupPlan">
+						<div class="panel-group" id="accordionGroup">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionGroup" href="#groupProduction">已投产</a>
+									</h4>
+								</div>
+								<div id="groupProduction" class="panel-collapse collapse in">
+									<div class="panel-body">
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionGroup" href="#groupReform">改造中</a>
+									</h4>
+								</div>
+								<div id="groupReform" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionGroup" href="#groupPlans">计划</a>
+									</h4>
+								</div>
+								<div id="groupPlans" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionGroup" href="#groupPlanning">规划</a>
+									</h4>
+								</div>
+								<div id="groupPlanning" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="otherPlan">
+						<div class="panel-group" id="accordionOther">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherProduction">已投产</a>
+									</h4>
+								</div>
+								<div id="otherProduction" class="panel-collapse collapse in">
+									<div class="panel-body">
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragProduction" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherReform">改造中</a>
+									</h4>
+								</div>
+								<div id="otherReform" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragReform" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherPlans">计划</a>
+									</h4>
+								</div>
+								<div id="otherPlans" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlan" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordionOther" href="#otherPlanning">规划</a>
+									</h4>
+								</div>
+								<div id="otherPlanning" class="panel-collapse collapse">
+									<div class="panel-body">
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+										<li class="dragPlanning" style="width: auto; list-style-type: none; cursor: pointer;">
+											大唐一号机组,大唐集团,300万kwh
+										</li>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar navbar-right" style="background:#fff;width:40%;height:100%">
+		<div class="modal-header">
+			<h4 class="modal-title" id="point-title">
+				结果预测
+			</h4>
+		</div>
+		<div class="modal-body">
+			<ul id="myTab" class="nav nav-tabs">
+				<li class="active">
+					<a href="#result2016" data-toggle="tab"> 2016 </a>
+				</li>
+				<li>
+					<a href="#result2017" data-toggle="tab"> 2017 </a>
+				</li>
+				<li>
+					<a href="#result2018" data-toggle="tab"> 2018 </a>
+				</li>
+				<li>
+					<a href="#result2019" data-toggle="tab"> 2019 </a>
+				</li>
+				<li>
+					<a href="#result2020" data-toggle="tab"> 2020 </a>
+				</li>
+			</ul>
+			<div id="myTabContent" class="tab-content">
+				<div class="tab-pane fade in active" id="result2016">
+					<li class="dragChange" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragClose" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragNew" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+				</div>
+				<div class="tab-pane fade" id="result2017">
+					<li class="dragChange" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragClose" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragNew" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+				</div>
+				<div class="tab-pane fade" id="result2018">
+					<li class="dragChange" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragClose" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragNew" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+				</div>
+				<div class="tab-pane fade" id="result2019">
+					<li class="dragChange" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragClose" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragNew" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+				</div>
+				<div class="tab-pane fade" id="result2020">
+					<li class="dragChange" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragClose" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+					<li class="dragNew" style="width: auto; list-style-type: none; cursor: pointer;">
+						大唐一号机组,大唐集团,300万kwh
+					</li>
+				</div>
+			</div>
+		</div>
+		</nav>
+		</nav>
+		<nav class="navbar navbar-default" style=" position:fixed; bottom: -15px; right:1px;background:#fff;width:100%">
+		<ul class="navbar-right" style="position: relative; top: 10px; right: 50px">
+			<button type="button" class="btn btn-primary btn-sm" onclick="programOperator()">
+				<span class="glyphicon glyphicon-saved"></span> 保存方案
+			</button>
+			<button type="button" class="btn btn-success btn-sm" onclick="previewProgram()">
+				<span class="glyphicon glyphicon-eye-open"></span> 预览方案
+			</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="programOperator()">
+				<span class="glyphicon glyphicon-export"></span> 导出方案
+			</button>
+		</ul>
+		</nav>
+		<div class="modal fade in" id="standardInfo" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeStandardInfoModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							超低排放标准
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">SO2</span>
+										<input type="text" class="form-control" placeholder="35">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">NOx</span>
+										<input type="text" class="form-control" placeholder="50">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">烟尘</span>
+										<input type="text" class="form-control" placeholder="10">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updateUserInfo()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeStandardInfoModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="powerUnitInfo" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 400px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closePowerUnitModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							电厂机组信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="userId">
+						<div>
+							<form class="form-horizontal" role="form" action="#" style="padding-top: 10px;">
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userName">
+										电厂名称:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="userName" name="userName" value="大唐托克托电厂">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userNickname">
+										机组:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="userNickname" name="userNickname" value="3号机组">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userDesc">
+										整改时间:
+									</label>
+									<div id="beginTime" class="input-group date form_datetime">
+										<input class="form-control" type="text" value="2015-11">
+										<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userDesc">
+										投产时间:
+									</label>
+									<div id="beginTime" class="input-group date form_datetime">
+										<input class="form-control" type="text" value="2016-01">
+										<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updateUserInfo()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closePowerUnitModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="programOperator" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 400px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeProgramOperatorModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							方案操作
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="userId">
+						<div>
+							<form class="form-horizontal" role="form" action="#" style="padding-top: 10px;">
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userName">
+										方案名称:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="userName" name="userName" value="大唐托克托电厂">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userNickname">
+										方案制作人:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="userNickname" name="userNickname" value="3号机组">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="userDesc">
+										制作时间:
+									</label>
+									<div id="beginTime" class="input-group date form_datetime">
+										<input class="form-control" type="text" value="2015-11">
+										<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updateUserInfo()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeProgramOperatorModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade in" id="previewProgram" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 650px; margin-top: 60px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeProgramPreviewModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							结果预览
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div id="preview"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/echarts.min.3.js">
+</script>
+		<script src="js/program.js">
+</script>
+	</body>
+</html>

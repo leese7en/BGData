@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑角色</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet'
+			href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+	</head>
+	<body class="easyui-layout">
+
+		<div id="editDept" class="easyui-menu"
+			style="width: 100px; display: none">
+			<div iconCls="icon-add" name="basic">
+				基本信息
+			</div>
+			<div iconCls="icon-edit" name="role">
+				角色信息
+			</div>
+			<div iconCls="icon-pencil" name="resources">
+				资源信息
+			</div>
+			<div iconCls="icon-undo" name="password">
+				重置密码
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除用户
+			</div>
+		</div>
+		<div id="deptCondition" style="padding: 3px;padding-top:10px;">
+			<span>部门名称：</span>
+			<input id="deptName" class="easyui-textbox"
+				style="width: 10%; height: 28px">
+			<span>部门描述：</span>
+			<input id="deptDesc" class="easyui-textbox"
+				style="width: 10%; height: 28px">
+			<span>上级部门：</span>
+			<input id="preDeptId" class="easyui-combobox"
+				style="width: 10%; height: 28px" />
+			<a href="#" class="s_btns"
+				onclick="deptQuery()">查询</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<table id="deptTable" class="easyui-datagrid" style="width: auto;" pagination="true"
+				toolbar="#deptCondition"
+				data-options="rownumbers:true,singleSelect:true,fit:true,striped:true">
+				<thead>
+					<tr>
+						<th field="deptId" width="8%" align="center">
+							ID
+						</th>
+						<th field="preDeptId" width="12%" align="center">
+							上级部门
+						</th>
+						<th field="deptName" width="10%" align="center">
+							名称
+						</th>
+						<th field="description" width="40%" align="center">
+							描述
+						</th>
+						<th field="isDeleted" width="12%" align="center" formatter="formatOperater">
+							是否删除
+						</th>
+						<th field="deptCode" width="8%" align="center">
+							部门编码
+						</th>
+						<th field="treeCode" width="10%" align="center">
+							树编码
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+	<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+	<script src="js/dept.js">
+</script>
+</html>

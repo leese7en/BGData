@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysAnnotationDao">
+	<!-- 按条件查询批注信息 -->
+	<select id="getAnnotation" parameterType="com.magus.bd.entity.SysAnotation"
+		resultType="com.magus.bd.entity.SysAnotation">
+			SELECT
+				a.*,
+				<if test="groupOrCity==1">
+				  g.id AS groupId,
+				  g.NAME AS groupName,
+				</if>
+				<if test="groupOrCity==2">
+				  z.ZONE_NAME as cityName,
+				</if>
+				us.USER_NAME AS userName
+			FROM
+				sys_annotation a
+			<if test="groupOrCity==1">
+				LEFT JOIN t_base_group g ON g.id = a.groupIdOrCityId
+				
+			</if>
+			<if test="groupOrCity==2">
+				LEFT JOIN t_code_zone z ON z.ZONE_ID = a.groupIdOrCityId
+			</if>
+			LEFT JOIN sys_user us ON us.USER_ID = a.annotation_user_id
+			WHERE
+				a.groupOrCity = #{groupOrCity}
+			AND a. MONTH BETWEEN #{beginTime}
+			AND #{endTime}
+			<if test="pollOrSulfur != null and pollOrSulfur != '-1'">
+			AND a.pollOrSulfur = #{pollOrSulfur}
+			</if>
+			
+	</select>
+	<select id="getAnnotationCount" parameterType="com.magus.bd.entity.SysAnotation"
+	resultType="java.lang.Integer">
+	SELECT
+				count(a.id)
+			FROM
+				sys_annotation a
+			<if test="groupOrCity==1">
+				LEFT JOIN t_base_group g ON g.id = a.groupIdOrCityId
+				
+			</if>
+			<if test="groupOrCity==2">
+				LEFT JOIN t_code_zone z ON z.ZONE_ID = a.groupIdOrCityId
+			</if>
+			LEFT JOIN sys_user us ON us.USER_ID = a.annotation_user_id
+			WHERE
+				a.groupOrCity = #{groupOrCity}
+			AND a. MONTH BETWEEN #{beginTime}
+			AND #{endTime}
+			<if test="pollOrSulfur != null and pollOrSulfur != '-1'">
+			AND a.pollOrSulfur = #{pollOrSulfur}
+			</if>
+	</select>
+	<!-- 通过id查批注信息 -->
+	<select id="getAnnotationById" parameterType="java.lang.Integer" 
+	    resultType="com.magus.bd.entity.SysAnotation">
+	    SELECT
+		    id,
+			pollOrSulfur,
+			groupOrCity,
+			groupIdOrCityId,
+			pollutant,
+			year,
+			month,
+			content,
+			create_date,
+			is_delete as isDelete,
+			annotation_user_id as annotationUserId
+		FROM
+			sys_annotation
+	    where
+	        id = #{id}
+	</select>
+	<!-- 更新批注信息 -->
+	<update id="editAnnotation" parameterType="com.magus.bd.entity.SysAnotation">
+      update sys_annotation 
+      set
+		pollOrSulfur = #{pollOrSulfur},
+		pollutant = #{pollutant},
+		groupOrCity = #{groupOrCity},
+		groupIdOrCityId = #{groupIdOrCityId},
+		year=#{year},
+		month=#{month},
+		content=#{content}
+      where 
+     	id = #{id}
+	</update>
+	<!-- 添加批注信息 -->
+	<insert id="addAnotation" parameterType="com.magus.bd.entity.SysAnotation">
+	  insert into sys_annotation
+	  (	   
+		   pollOrSulfur,
+		   groupOrCity,
+		   groupIdOrCityId,
+		   year,
+		   month,
+		   content,
+		   create_date,
+		   is_delete,
+		   annotation_user_id,
+		   pollutant
+	   )
+	  values
+	  (
+		  #{pollOrSulfur},
+		  #{groupOrCity},
+		  #{groupIdOrCityId},
+		  #{year},
+		  #{month},
+		  #{content},
+		  #{createDate},
+		  #{isDelete},
+		  #{annotationUserId},
+		  #{pollutant}
+	  )
+	</insert>
+	
+		<delete id="removeAnotation" parameterType="java.lang.String">
+		 delete  
+		 from sys_annotation 
+		 where 
+		 id = #{id}
+	</delete>
+</mapper>

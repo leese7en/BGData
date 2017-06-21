@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>超低排放执行方案研究</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen">
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet">
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/program.css" />
+		<style>
+.con {
+	line-height: 100px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.color1 {
+	background: pink;
+}
+
+.color2 {
+	background: red;
+}
+
+.tableInfo td {
+	text-align: center; /*设置水平居中*/
+	vertical-align: middle; /*设置垂直居中*/
+}
+</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">方案名称</span> <input
+						type="text" id="programNameQuery" class="form-control" placeholder="请输入方案名称"> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">方案创建人</span> <input
+						type="text" id="programUserQuery" class="form-control" placeholder="请输入方案创建人"> </span>
+			</div>
+			<div class="col-md-2">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">方案描述</span> <input
+						type="text" id="programDescQuery" class="form-control" placeholder="请输入方案描述"> </span>
+			</div>
+			<div class="col-md-2">
+				<span id="beginTimeQuery" class="input-group date form_datetime"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">开始日期</span> <input class="form-control" type="text" value="2016-01-01">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span> </span>
+			</div>
+			<div class="col-md-2">
+				<span id="endTimeQuery" class="input-group date form_datetime"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">结束日期</span> <input class="form-control" type="text" value="2016-03-01">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span> </span>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-left">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="queryProgramInfo()">
+						<span class="glyphicon glyphicon-ok"></span> 查询
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:60px;">
+		<table id="programInfo" class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<td>
+						序号
+					</td>
+					<td>
+						方案名称
+					</td>
+					<td>
+						方案创建人
+					</td>
+					<td>
+						方案描述
+					</td>
+					<td>
+						创建时间
+					</td>
+					<td>
+						查看
+					</td>
+					<td>
+						删除
+					</td>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		</nav>
+		<div class="modal fade in" id="standardInfo" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeStandardInfoModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							超低排放标准
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">SO2</span>
+										<input type="text" class="form-control" placeholder="35" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">NOx</span>
+										<input type="text" class="form-control" placeholder="50" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">烟尘</span>
+										<input type="text" class="form-control" placeholder="10" disabled="disabled">
+										<span class="input-group-addon" style="color: black;">mg/m3</span>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="closeStandardInfoModal()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeStandardInfoModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="insertPowerUnitModel" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 440px; margin-top: 100px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeInsertPowerUnitModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							新增机组
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="userId">
+						<div>
+							<form class="form-horizontal" role="form" action="#" style="padding-top: 10px;">
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerCode">
+										电厂编码:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerCode" name="powerCode" placeholder="请输入电厂编码">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerName">
+										电厂名称:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerName" name="powerName" placeholder="请输入电厂名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="cityId">
+										盟市名称:
+									</label>
+									<div class="col-md-9">
+										<select id="cityId" class="selectpicker">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="groupId">
+										电厂集团:
+									</label>
+									<div class="col-md-9">
+										<select id="groupId" class="selectpicker">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitCode">
+										机组编码:
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="powerUnitCode" name="powerUnitCode" placeholder="请输入机组编码">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitInstalled">
+										装机容量:
+									</label>
+									<div class="col-md-8">
+										<div class="input-group">
+											<input type="text" class="form-control" id="powerUnitInstalled" name="powerUnitInstalled"
+												placeholder="请输入方装机容量" />
+											<span class="input-group-addon" style="color: black;">WM</span>
+										</div>
+									</div>
+
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="powerUnitDate">
+										投产时间:
+									</label>
+									<div class="col-md-9">
+										<div id="powerUnitDate" class="input-group date form_datetime" style="width: 260px">
+											<input class="form-control" type="text" value="2016-12">
+											<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="insertPowerUnit()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeInsertPowerUnitModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/programManager.js">
+</script>
+	</body>
+</html>

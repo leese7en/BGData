@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.ProgramDao">
+	<select id="getCountByProgramHeading" parameterType="com.magus.bd.entity.Program" resultType="java.lang.Integer">
+		SELECT
+			count(*) as count
+		FROM
+			res_program
+		WHERE
+			heading = #{heading}
+		AND user_Id = #{userId}
+		AND is_delete = 0
+	</select>
+	<select id="getProgram" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programId,
+			heading AS heading
+		FROM
+			res_program
+		WHERE
+			user_id = #{userId}
+	</select>
+	<select id="getProgramParent" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programId,
+			heading AS heading,
+			beginDate AS beginYear,
+			endDate AS endYear,
+			poll AS poll
+		FROM
+			res_program
+		WHERE
+			is_delete = 0
+		AND id = #{programId};
+	</select>
+	<select id="getProgramDetail" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programDetailId,
+			YEAR AS YEAR,
+			cityId AS cityId,
+			effective AS effectives,
+			installed AS installeds
+		FROM
+			res_program_detail
+		WHERE
+			program_id = #{programId};
+	</select>
+	<select id="getProgramDetails" parameterType="java.util.List" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programDetailsId,
+			program_detail_id AS programDetailId,
+			psname as psName,
+			pscode AS psCode,
+			cityName as cityName,
+			unit AS unit,
+			installed AS installed,
+			operatorType AS operatorType,
+			before_amount AS amountBefore,
+			after_amount AS amountAfter,
+			less_amount AS lessAmount
+		FROM
+			res_program_details
+		WHERE
+			program_detail_id in 
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}  
+	   </foreach>
+	</select>
+	
+	<delete id="deleteProgramDetail" parameterType="com.magus.bd.entity.Program">
+		delete from
+			res_program_detail
+		WHERE
+			program_id = #{programId};
+	</delete>
+	<delete id="deleteProgramDetails" parameterType="java.util.List">
+		delete from
+			res_program_details
+		WHERE
+			program_detail_id in 
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}  
+	   </foreach>
+	</delete>
+	<select id="getCountByProgramBackHeading" parameterType="com.magus.bd.entity.Program" resultType="java.lang.Integer">
+		SELECT
+			count(*) as count
+		FROM
+			res_program_back
+		WHERE
+			heading = #{heading}
+		AND user_Id = #{userId}
+		AND is_delete = 0
+	</select>
+	<select id="getProgramBack" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programId,
+			heading AS heading
+		FROM
+			res_program_back
+		WHERE
+			user_id = #{userId}
+	</select>
+	<select id="getProgramBackParent" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programId,
+			heading AS heading,
+			beginDate AS beginYear,
+			endDate AS endYear,
+			poll AS poll
+		FROM
+			res_program_back
+		WHERE
+			is_delete = 0
+		AND id = #{programId};
+	</select>
+	<select id="getProgramBackDetail" parameterType="com.magus.bd.entity.Program" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programDetailId,
+			YEAR AS YEAR,
+			cityId AS cityId,
+			effective AS effectives,
+			installed AS installeds
+		FROM
+			res_program_back_detail
+		WHERE
+			program_id = #{programId};
+	</select>
+	<select id="getProgramBackDetails" parameterType="java.util.List" resultType="com.magus.bd.entity.Program">
+		SELECT
+			id AS programDetailsId,
+			program_detail_id AS programDetailId,
+			pscode AS psCode,
+			unit AS unit,
+			installed AS installed,
+			operatorType AS operatorType,
+			before_amount AS amountBefore,
+			after_amount AS amountAfter,
+			less_amount AS lessAmount
+		FROM
+			res_program_back_details
+		WHERE
+			program_detail_id in 
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}  
+	   </foreach>
+	</select>
+	<delete id="deleteProgramBackDetail" parameterType="com.magus.bd.entity.Program">
+		delete from
+			res_program_back_detail
+		WHERE
+			program_id = #{programId};
+	</delete>
+	<delete id="deleteProgramBackDetails" parameterType="java.util.List">
+		delete from
+			res_program_back_details
+		WHERE
+			program_detail_id in 
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}  
+	   </foreach>
+	</delete>
+
+	<insert id="addProgram" parameterType="com.magus.bd.entity.Program" useGeneratedKeys="true" keyProperty="programId">
+		INSERT INTO res_program (
+			user_id,
+			heading,
+			beginDate,
+			endDate,
+			poll,
+			description,
+			create_date,
+			update_date
+		)
+		VALUES
+		(
+			#{userId},
+			#{heading},
+			#{beginYear},
+			#{endYear},
+			#{poll},
+			#{description},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+    <insert id="addProgramDetail" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="programDetailId">
+      INSERT INTO res_program_detail (
+			program_id,
+			YEAR,
+			cityId,
+			installed,
+			effective,
+			before_amount,
+			after_amount,
+			less_amount
+		)
+		VALUES
+	        (
+	        #{programId},
+	        #{year},
+	        #{cityId},
+	        #{installeds},
+	        #{effectives},
+	        #{amountBefore},
+	        #{amountAfter},
+	        #{lessAmount}
+	        )  
+    </insert>
+    
+    <insert id="addProgramDetails" parameterType="java.util.List">
+     INSERT INTO res_program_details (
+			program_detail_id,
+			psCode,
+			psName,
+			cityName,
+			unit,
+			installed,
+			operatorType,
+			before_amount,
+			after_amount,
+			less_amount
+		)
+		VALUES
+		 <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	        #{item.programDetailId},
+	        #{item.psCode},
+	        #{item.psName},
+	        #{item.cityName},
+	        #{item.unit},
+	        #{item.installed},
+	        #{item.operatorType},
+	        #{item.amountBefore},
+	        #{item.amountAfter},
+	        #{item.lessAmount}
+	        )  
+    	</foreach>  
+     </insert>
+    	<insert id="addProgramBack" parameterType="com.magus.bd.entity.Program" useGeneratedKeys="true" keyProperty="programId">
+		INSERT INTO res_program_back (
+			user_id,
+			heading,
+			beginDate,
+			endDate,
+			poll,
+			description,
+			create_date,
+			update_date
+		)
+		VALUES
+			(
+			#{userId},
+			#{heading},
+			#{beginYear},
+			#{endYear},
+			#{poll},
+			#{description},
+			#{createDate},
+			#{updateDate}
+			)
+	</insert>
+    <insert id="addProgramBackDetail" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="programDetailId">
+      INSERT INTO res_program_back_detail (
+			program_id,
+			YEAR,
+			cityId,
+			installed,
+			effective,
+			goal_amount,
+			before_amount,
+			after_amount,
+			less_amount
+		)
+		VALUES
+	        (
+	        #{programId},
+	        #{year},
+	        #{cityId},
+	        #{installeds},
+	        #{effectives},
+	        #{aims},
+	        #{amountBefore},
+	        #{amountAfter},
+	        #{lessAmount}
+	        )  
+    </insert>
+    
+    <insert id="addProgramBackDetails" parameterType="java.util.List">
+     INSERT INTO res_program_back_details (
+			program_detail_id,
+			psCode,
+			psName,
+			unit,
+			installed,
+			operatorType,
+			before_amount,
+			after_amount,
+			less_amount
+		)
+		VALUES
+		 <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	        #{item.programDetailId},
+	        #{item.psCode},
+	        #{item.psName},
+	        #{item.unit},
+	        #{item.installed},
+	        #{item.operatorType},
+	        #{item.amountBefore},
+	        #{item.amountAfter},
+	        #{item.lessAmount}
+	        )  
+    	</foreach>  
+	</insert>
+</mapper>

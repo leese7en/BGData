@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑角色</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link rel="stylesheet" type="text/css" href="css/opConfig.css" />
+		<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+	<script src="js/opConfig.js">
+</script>
+	</head>
+	<body>
+		<div class="appbar">
+			配置
+		</div>
+		<div style="clear: both; padding-top: 6px; margin-left: 212px">
+			<div class="leftPane">
+				<ul id="leftList" style="margin: 0; padding: 0; border: 0" role="tablist">
+					<li>
+						<span>数据库连接</span>
+					</li>
+				</ul>
+			</div>
+			<div class="rightPane" role="tabPanel">
+				<div style="width: 100%">
+					<div id="connSec" style="display: block;">
+						<div class="sect">
+							<h2 class="sectHdr">
+								使用说明
+							</h2>
+
+							<div class="subsect">
+								<ol>
+									<li>
+										配置openPlant数据库连接(即连接测试)，配置完成测试连接,连接成功后保存连接
+									</li>
+								</ol>
+							</div>
+						</div>
+						<div class="sect">
+							<h2 class="sectHdr">
+								连接测试
+							</h2>
+
+							<div style="padding: 10px 60px 20px 60px">
+								<table cellpadding="5" style="font-size: 12px;">
+									<tr>
+										<td>
+											链接地址:
+										</td>
+										<td>
+											<input id="host" name="host" class="easyui-textbox" style="width: 180px;height:28px;" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											端口:
+										</td>
+										<td>
+											<input id="port" name="port" class="easyui-textbox" style="width: 180px;height:28px;" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											用户名:
+										</td>
+										<td>
+											<input id="userName" name="userName" class="easyui-textbox" style="width: 180px;height:28px;" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											密码:
+										</td>
+										<td>
+											<input id="password" name="password" type="password" class="easyui-textbox" style="width: 180px;height:28px;" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											连接池数量:
+										</td>
+										<td>
+											<input id="connCount" name="connCount" class="easyui-textbox" style="width: 180px;height:28px;" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<input type="button" onclick="test();" style="font-size: 12px; width: 80px;border:none;outline:midium;" class="s_btns" value="测试链接" />
+										</td>
+										<td>
+											<input type="button" onclick="save()" style="font-size: 12px; width: 80px;border:none;outline:midium;" value="保存"  class="s_btna"/>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<a href="connectInfo_get" onclick="window.showModalDialog('connectInfo_get');return false;">查看连接信息</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footerlinks"></div>
+	</body>
+	</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>数据质量改善分析</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="../css/tooltip/tooltip.css">
+		<script src="../js/jquery.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+
+		<script src="../js/jquery.easyui.min.js">
+</script>
+		<script src="../js/easyui-lang-zh_CN.js">
+</script>
+		<script src="../js/echarts.min.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="../js/checkInput.js">
+</script>
+		<script src="js/qualityImprove.js">
+</script>
+		<style>
+.panel-body {
+	padding: 0;
+	overflow: hidden;
+}
+
+.datagrid-toolbar {
+	border: none;
+}
+
+.l-btn-text {
+	color: #fff;
+}
+
+.l-btn {
+	margin-bottom: 10px;
+}
+
+.s_btns {
+	padding: 6px 16px;
+	text-align: center;
+	border: none;
+}
+
+.s_btns:hover {
+	color: #fff;
+	background: #569fe8;
+	text-decoration: none;
+}
+
+#qualityPSTypeCondition .input-group-addon,#qualityResCondition .input-group-addon,.easyui-tabs .input-group-addon
+	{
+	padding: 0;
+}
+
+#qualityPSTypeCondition .glyphicon,#qualityResCondition .glyphicon,.easyui-tabs .glyphicon
+	{
+	left: -10px;
+}
+
+.datagrid-view {
+	border-top: 1px solid #e1e1e1;
+	top: 5px;
+}
+
+.panel {
+	margin-bottom: 0;
+}
+
+.datagrid-body {
+	width: auto;
+	overflow: auto;
+}
+
+.datagrid .panel-body {
+	height: auto;
+}
+
+.pagination-info {
+	margin-right: 20px;
+}
+
+.pagination {
+	border-color: #fff;
+}
+</style>
+	</head>
+	<body class="easyui-layout">
+		<div id="improveCityDialog" style="font-size: 15px; display: none;">
+			<!-- <div class="easyui-tabs" data-options="fit:true"> -->
+			<div title="盟市明细信息">
+				<div style="padding-left: 20px; padding-top: 10px;">
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px;">开始时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="beginTimeCityDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="endTimeCityDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2016-07" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<button class="s_btns" onclick="improveCityDiaPieQuery()" style="display: inline-block;">
+						查询
+					</button>
+
+				</div>
+				<div id="cityPieChart" style="float: left; clear: both; margin-top: 50px; margin-left: 75px;"></div>
+				<div id="cityRadarChart" style="float: right; margin-top: 50px; margin-right: 75px;"></div>
+			</div>
+			<!-- </div> -->
+		</div>
+		<div id="improvePSTypeDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;">
+			<!-- <div class="easyui-tabs" data-options="fit:true"> -->
+			<div title="行业明细信息">
+				<div style="padding-left: 20px; padding-top: 10px;">
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px;">开始时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="beginTimePSTypeDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="endTimePSTypeDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<button class="s_btns" onclick="improvePsTypeDiaPieQuery()" style="display: inline-block;">
+						查询
+					</button>
+				</div>
+				<div id="psTypePieChart" style="float: left; clear: both; margin-top: 50px; margin-left: 75px;"></div>
+				<div id="psTypeRadarChart" style="float: right; margin-top: 50px; margin-right: 75px;"></div>
+			</div>
+			<!-- </div> -->
+		</div>
+
+		<div id="improveResDialog" style="width: 500px; height: 270px; font-size: 15px; display: none;">
+			<!-- <div class="easyui-tabs" data-options="fit:true"> -->
+			<div title="企业明细信息">
+				<div style="padding-left: 20px; padding-top: 10px;">
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px;">开始时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="beginTimeEnterpriseDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<div style="height: 31px; float: left">
+						<span style="display: inline-block; margin-top: 8px">结束时间:</span>
+					</div>
+					<div style="width: 135px; float: left">
+						<div id="endTimeEnterpriseDiaPieQuery" class="input-group date form_datetime" style="width: 130px">
+							<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+							<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+						</div>
+					</div>
+					<button class="s_btns" onclick="improveResDiaPieQuery()" style="display: inline-block;">
+						查询
+					</button>
+				</div>
+				<div id="resPieChart" style="float: left; clear: both; margin-top: 50px; margin-left: 75px;"></div>
+				<div id="resRadarChart" style="float: right; margin-top: 50px; margin-right: 75px;"></div>
+			</div>
+			<!-- </div> -->
+		</div>
+
+		<div id="qualityPSTypeCondition" style="padding-left: 20px; height: 40px; padding-top: 5px;">
+			<div style="height: 31px; float: left">
+				<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">开始时间:</span>
+			</div>
+			<div style="width: 135px; float: left">
+				<div id="beginTimePSTypeQuery" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<div style="height: 31px; float: left">
+				<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">结束时间:</span>
+			</div>
+			<div style="width: 135px; float: left">
+				<div id="endTimePSTypeQuery" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<button class="s_btns" onclick="improvePSTypeQuery()" style="display: inline-block;">
+				查询
+			</button>
+			<div class="help-tip" style="position: fixed; top: 10px; right: 20px;">
+				<p></p>
+			</div>
+		</div>
+		<div id="qualityResCondition" style="padding-left: 20px;">
+			<div style="float: left">
+				<span>企业名称</span>
+				<input id="resName" class="easyui-textbox" style="width: 150px; height: 28px;" />
+				<span>盟市：</span>
+				<select id="resCity" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px; height: 28px;"></select>
+			</div>
+			<div style="height: 31px; float: left">
+				<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">开始时间:</span>
+			</div>
+			<div style="width: 135px; float: left">
+				<div id="beginTimeResQuery" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<div style="height: 31px; float: left">
+				<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">结束时间:</span>
+			</div>
+			<div style="width: 135px; float: left">
+				<div id="endTimeResQuery" class="input-group date form_datetime" style="width: 130px">
+					<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<button class="s_btns" onclick="improveResQuery()" style="display: inline-block;">
+				查询
+			</button>
+			<div class="help-tip" style="position: fixed; top: 10px; right: 20px;">
+				<p></p>
+			</div>
+		</div>
+		<div data-options="region:'center',fit:false">
+
+			<div class="easyui-tabs" data-options="fit:true">
+				<div title="盟市">
+					<div id="qualityCityCondition" style="padding-left: 20px; height: 40px; padding-top: 5px;">
+						<div style="height: 31px; float: left">
+							<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">开始时间:</span>
+						</div>
+						<div style="width: 135px; float: left">
+							<div id="beginTimeCityQuery" class="input-group date form_datetime" style="width: 130px">
+								<input class="form-control" type="text" value="2015-01" style="font-size: 12px">
+								<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+						<div style="height: 31px; float: left">
+							<span style="display: inline-block; margin-top: 8px; margin-right: 6px;">结束时间:</span>
+						</div>
+						<div style="width: 135px; float: left">
+							<div id="endTimeCityQuery" class="input-group date form_datetime" style="width: 130px">
+								<input class="form-control" type="text" value="2016-01" style="font-size: 12px">
+								<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+						<button class="s_btns" onclick="improveCityQuery()" style="display: inline-block;">
+							查询
+						</button>
+						<div class="help-tip" style="position: fixed; top: 10px; right: 20px;">
+							<p></p>
+						</div>
+					</div>
+					<table id="improveCityTable" class="easyui-datagrid" style="width: auto;" toolbar="#qualityCityCondition"
+						data-options="rownumbers:true,singleSelect:true,fit:true" pagination="true">
+						<thead>
+							<tr>
+								<th field="cityName" width="6%">
+									盟市
+								</th>
+								<th field="mutation" width="7%" align="left" formatter="formatNumber">
+									陡升陡降(原始)
+								</th>
+								<th field="mutationWeights" width="7%" align="left" formatter="formatNumber">
+									陡升陡降(权重)
+								</th>
+								<th field="handicapping" width="6%" align="left" formatter="formatNumber">
+									设限值(原始)
+								</th>
+								<th field="handicappingWeights" width="6%" align="left" formatter="formatNumber">
+									设限值(权重)
+								</th>
+								<th field="constant" width="6%" align="left" formatter="formatNumber">
+									恒定值(原始)
+								</th>
+								<th field="constantWeights" width="6%" align="left" formatter="formatNumber">
+									恒定值(权重)
+								</th>
+								<th field="fluctuation" width="7%" align="left" formatter="formatNumber">
+									波动异常(原始)
+								</th>
+								<th field="fluctuationWeights" width="7%" align="left" formatter="formatNumber">
+									波动异常(权重)
+								</th>
+								<th field="screenJump" width="6%" align="left" formatter="formatNumber">
+									满屏跳(原始)
+								</th>
+								<th field="screenJumpWeights" width="6%" align="left" formatter="formatNumber">
+									满屏跳(权重)
+								</th>
+								<th field="effective" width="6%" align="left" formatter="formatNumber">
+									有效性(原始)
+								</th>
+								<th field="effectiveWeights" width="6%" align="left" formatter="formatNumber">
+									有效性(权重)
+								</th>
+								<th field="complete" width="6%" align="left" formatter="formatNumber">
+									完整性(原始)
+								</th>
+								<th field="completeWeights" width="6%" align="left" formatter="formatNumber">
+									完整性(权重)
+								</th>
+								<th field="reliable" width="6%" align="center" formatter="formatNumber">
+									可靠性(原始)
+								</th>
+								<th field="reliableWeights" width="6%" align="center" formatter="formatNumber">
+									可靠性(权重)
+								</th>
+								<th field="total" width="5%" align="center" formatter="formatNumber">
+									总得分
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="行业">
+					<table id="improvePSTypeTable" class="easyui-datagrid" style="width: auto;" toolbar="#qualityPSTypeCondition"
+						data-options="rownumbers:true,singleSelect:true,fit:true" pagination="true">
+						<thead>
+							<tr>
+								<th field="psType" width="15%">
+									行业
+								</th>
+								<th field="mutation" width="7%" align="left" formatter="formatNumber">
+									陡升陡降(原始)
+								</th>
+								<th field="mutationWeights" width="7%" align="left" formatter="formatNumber">
+									陡升陡降(权重)
+								</th>
+								<th field="handicapping" width="6%" align="left" formatter="formatNumber">
+									设限值(原始)
+								</th>
+								<th field="handicappingWeights" width="6%" align="left" formatter="formatNumber">
+									设限值(权重)
+								</th>
+								<th field="constant" width="6%" align="left" formatter="formatNumber">
+									恒定值(原始)
+								</th>
+								<th field="constantWeights" width="6%" align="left" formatter="formatNumber">
+									恒定值(权重)
+								</th>
+								<th field="fluctuation" width="7%" align="left" formatter="formatNumber">
+									波动异常(原始)
+								</th>
+								<th field="fluctuationWeights" width="7%" align="left" formatter="formatNumber">
+									波动异常(权重)
+								</th>
+								<th field="screenJump" width="6%" align="left" formatter="formatNumber">
+									满屏跳(原始)
+								</th>
+								<th field="screenJumpWeights" width="6%" align="left" formatter="formatNumber">
+									满屏跳(权重)
+								</th>
+								<th field="effective" width="6%" align="left" formatter="formatNumber">
+									有效性(原始)
+								</th>
+								<th field="effectiveWeights" width="6%" align="left" formatter="formatNumber">
+									有效性(权重)
+								</th>
+								<th field="complete" width="6%" align="left" formatter="formatNumber">
+									完整性(原始)
+								</th>
+								<th field="completeWeights" width="6%" align="left" formatter="formatNumber">
+									完整性(权重)
+								</th>
+								<th field="reliable" width="6%" align="center" formatter="formatNumber">
+									可靠性(原始)
+								</th>
+								<th field="reliableWeights" width="6%" align="center" formatter="formatNumber">
+									可靠性(权重)
+								</th>
+								<th field="total" width="5%" align="center" formatter="formatNumber">
+									总得分
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="企业">
+					<table id="improveResTable" class="easyui-datagrid" style="width: auto;" toolbar="#qualityResCondition"
+						data-options="rownumbers:true,singleSelect:true,fit:true" pagination="true">
+						<thead>
+							<tr>
+								<th field="psName" width="13%">
+									企业名称
+								</th>
+								<th field="mutation" width="5%" align="left" formatter="formatNumber">
+									陡升陡降(原始)
+								</th>
+								<th field="mutationWeights" width="7%" align="left" formatter="formatNumber">
+									陡升陡降(权重)
+								</th>
+								<th field="handicapping" width="6%" align="left" formatter="formatNumber">
+									设限值(原始)
+								</th>
+								<th field="handicappingWeights" width="6%" align="left" formatter="formatNumber">
+									设限值(权重)
+								</th>
+								<th field="constant" width="6%" align="left" formatter="formatNumber">
+									恒定值(原始)
+								</th>
+								<th field="constantWeights" width="6%" align="left" formatter="formatNumber">
+									恒定值(权重)
+								</th>
+								<th field="fluctuation" width="7%" align="left" formatter="formatNumber">
+									波动异常(原始)
+								</th>
+								<th field="fluctuationWeights" width="7%" align="left" formatter="formatNumber">
+									波动异常(权重)
+								</th>
+								<th field="screenJump" width="6%" align="left" formatter="formatNumber">
+									满屏跳(原始)
+								</th>
+								<th field="screenJumpWeights" width="6%" align="left" formatter="formatNumber">
+									满屏跳(权重)
+								</th>
+								<th field="effective" width="6%" align="left" formatter="formatNumber">
+									有效性(原始)
+								</th>
+								<th field="effectiveWeights" width="6%" align="left" formatter="formatNumber">
+									有效性(权重)
+								</th>
+								<th field="complete" width="6%" align="left" formatter="formatNumber">
+									完整性(原始)
+								</th>
+								<th field="completeWeights" width="6%" align="left" formatter="formatNumber">
+									完整性(权重)
+								</th>
+								<th field="reliable" width="6%" align="center" formatter="formatNumber">
+									可靠性(原始)
+								</th>
+								<th field="reliableWeights" width="6%" align="center" formatter="formatNumber">
+									可靠性(权重)
+								</th>
+								<th field="total" width="5%" align="center" formatter="formatNumber">
+									总得分
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+
+

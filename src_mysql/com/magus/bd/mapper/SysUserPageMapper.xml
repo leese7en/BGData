@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysUserPageDao">
+	<select id="getUserMenus" resultType="com.magus.bd.entity.SysUserPage"
+	 parameterType="java.lang.Integer"> 
+	SELECT
+		USER .user_id AS userId,
+		USER .user_name AS userName,
+		page.PAGE_ID AS pageId,
+		page.PAGE_NAME AS pageName,
+		page.URL AS url
+	FROM
+		sys_user_page userPage
+	LEFT JOIN sys_user USER ON USER .user_id = userPage.user_id
+	LEFT JOIN sys_page page ON page.page_id = userPage.page_id
+	WHERE
+		userPage.user_id = #{userId}
+	</select>
+	<insert id="addUserPage" parameterType="com.magus.bd.entity.SysUserPage">
+	  insert into sys_user_page
+	        (user_id,page_id)
+	  values
+	        (#{userId},#{pageId})
+	</insert>
+	<delete id="deleteUserPage" parameterType="com.magus.bd.entity.SysUserPage">
+	  delete from sys_user_page 
+         where 
+           user_id = #{userId} 
+         and page_id =#{pageId}
+	</delete>
+	<select id="getUserPage" resultType="java.lang.Integer" parameterType="com.magus.bd.entity.SysUserPage" >
+		SELECT
+			count(*) AS count
+		FROM
+			sys_user_page
+		WHERE
+			PAGE_ID = #{pageId}
+		GROUP BY
+			PAGE_ID
+	</select>
+	
+	<update id="deletePage" parameterType="com.magus.bd.entity.SysUserPage">
+		UPDATE sys_page
+			SET IS_DELETED = 1
+		WHERE
+			PAGE_ID = #{pageId}
+	</update>
+	
+	
+</mapper>

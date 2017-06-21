@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<title>部门管理</title>
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet" />
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen" />
+		<link rel="stylesheet" href="../js/bootstrap-treegrid/css/jquery.treegrid.css" />
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet" />
+		 <link rel="stylesheet" href="../js/jqwidgets/styles/jqx.base.css" type="text/css" />
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 40px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-3">
+				<span class="input-group" style="color: black; padding: 3px;"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">部门名称</span> <input type="text" id="deptNameQuery" class="form-control"
+						placeholder="请输入部门名称"> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group" style="color: black; padding: 3px;"> <span class="input-group-addon"
+					style="color: black; padding: 3px;">部门描述</span> <input type="text" id="deptDescQuery" class="form-control"
+						placeholder="请输入部门描述" /> </span>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-right" style="color: black; padding: 3px;">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="deptQuery()">
+						<span class="glyphicon glyphicon-ok"></span> 查询
+					</button>
+					<button type="button" class="btn btn-success btn-sm" onclick="insertDeptModel()">
+						<span class="glyphicon glyphicon-plus"></span> 添加
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar" style="postion:absolute;top:60px;">
+		<div id="deptInfoTable" >
+		</div>
+		<input type="hidden" id="deptTableId" />
+		
+		</nav>
+		<div class="modal fade in" id="deptMessageInsert" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 20px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeDeptInsertModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							添加部门
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">上级部门</span>
+										<select id="deptPreInsert" class="selectpicker"></select>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">部门名称</span>
+										<input id="deptNameInsert" type="text" class="form-control" placeholder="请输入部门名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">部门描述</span>
+										<input id="deptDescInsert" type="text" class="form-control" placeholder="请输入部门描述">
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="insertDept()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeDeptInsertModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade in" id="deptMessage" role="dialog" aria-hidden="true" style="z-index: 1100;">
+			<div class="modal-dialog" style="width: 350px; margin-top: 20px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" aria-hidden="true" onclick="closeDeptMessageoModal()">
+							&times;
+						</button>
+						<h4 class="modal-title" id="point-title">
+							部门信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="deptId" />
+						<div style="margin-left: 25px;">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">上级部门</span>
+										<select id="deptPreUpdate" class="selectpicker"></select>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">部门名称</span>
+										<input id="deptNameUpdate" type="text" class="form-control" placeholder="请输入部门名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group" style="width: 300px">
+										<span class="input-group-addon" style="color: black;">部门描述</span>
+										<input id="deptDescUpdate" type="text" class="form-control" placeholder="请输入部门描述">
+									</div>
+								</div>
+							</form>
+							<div class="modal-footer" style="text-align: center;">
+								<button class="btn btn-primary" type="button" onclick="updateDeptMessage()">
+									确认
+								</button>
+								<button class="btn btn-default" type="button" onclick="closeDeptMessageoModal()">
+									取消
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+ <script type="text/javascript" src="../js/jqwidgets/jqxcore.js"></script>
+ <script type="text/javascript" src="../js/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="../js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="../js/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="../js/jqwidgets/jqxdatatable.js"></script>
+    <script type="text/javascript" src="../js/jqwidgets/jqxtreegrid.js"></script>
+<script type="text/javascript" src="../js/bootstrap-treegrid/js/jquery.treegrid.js">
+</script>
+		<script type="text/javascript" src="../js/bootstrap-treegrid/js/jquery.treegrid.bootstrap3.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/deptManage.js">
+</script>
+	</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.IndustryADao">
+	<select id="getIndustryAByAlarmLogId" parameterType="com.magus.bd.entity.IndustryA"
+		resultType="com.magus.bd.entity.IndustryA">
+		SELECT
+			m.begin_time as beginTime,
+			m.end_time AS endTime,
+			i.ALARM_CAUSES as alarmCause,
+			i.ALARM_EXPLAIN as alarmExplain,
+			c.city_Name as cityName,
+			round(
+				timestampdiff(
+					SECOND,
+					m.begin_time,
+					m.end_time
+				) / 3600,
+				2
+			) AS hourLong,
+			i.POLL_SOURCE_NAME AS psName
+		FROM
+			t_industry_a AS i
+		LEFT JOIN t_industry_alarmlog AS m ON i.ALARM_LOG_ID = m.ALARM_LOG_ID
+		LEFT JOIN sys_city c ON LEFT (i.psCode, 4) = c.city_id
+		WHERE
+			i.ALARM_LOG_ID = #{alarmLogId} 
+		limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="queryIndustryA" parameterType="com.magus.bd.entity.IndustryA"
+		resultType="com.magus.bd.entity.IndustryA">
+		SELECT
+			m.begin_time AS beginTime,
+			m.end_time AS endTime,
+			i.ALARM_CAUSES AS alarmCause,
+			i.ALARM_EXPLAIN AS alarmExplain,
+			c.city_Name AS cityName,
+			round(
+				timestampdiff(
+					SECOND,
+					m.begin_time,
+					m.end_time
+				) / 3600,
+				2
+			) AS hourLong,
+			i.POLL_SOURCE_NAME AS psName
+		FROM
+			t_industry_a AS i
+		LEFT JOIN t_industry_alarmlog AS m ON i.ALARM_LOG_ID = m.ALARM_LOG_ID
+		LEFT JOIN sys_city c ON LEFT (i.psCode, 4) = c.city_id
+		LEFT JOIN res_baseinfo b ON i.PSCode = b.PSCode
+		WHERE 1=1
+		<if test="psName !=null and psName != ''">
+			and b.psName LIKE '%${psName}%'
+		</if>
+		<if test="beginTime !=null and beginTime != '' and endTime != null and endTime != ''">
+		<![CDATA[ 
+			AND 
+			((date_format(m.begin_time, '%Y-%m') BETWEEN #{beginTime} and #{endTime} or date_format(m.end_time, '%Y-%m') BETWEEN #{beginTime} and #{endTime})
+	                   or (date_format(m.begin_time, '%Y-%m')< #{beginTime} and date_format(m.end_time, '%Y-%m')> #{endTime}))
+	        ]]>           
+		</if>
+		<if test="cityId!=null and cityId!='-1'">
+			and c.city_id = #{cityId}
+		</if>
+		limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="queryIndustryACount" parameterType="com.magus.bd.entity.IndustryA"
+		resultType="java.lang.Integer">
+		SELECT
+			count(*) as count
+		FROM
+			t_industry_a AS i
+		LEFT JOIN t_industry_alarmlog AS m ON i.ALARM_LOG_ID = m.ALARM_LOG_ID
+		LEFT JOIN sys_city c ON LEFT (i.psCode, 4) = c.city_id
+		LEFT JOIN res_baseinfo b ON i.PSCode = b.PSCode
+		WHERE 1=1
+		<if test="psName !=null and psName != ''">
+			and b.psName LIKE '%${psName}%'
+		</if>
+		<if test="beginTime !=null and beginTime != '' and endTime != null and endTime != ''">
+		<![CDATA[ 
+			AND 
+			((date_format(m.begin_time, '%Y-%m') BETWEEN #{beginTime} and #{endTime} or date_format(m.end_time, '%Y-%m') BETWEEN #{beginTime} and #{endTime})
+	                   or (date_format(m.begin_time, '%Y-%m')< #{beginTime} and date_format(m.end_time, '%Y-%m')> #{endTime}))
+	        ]]>           
+		</if>
+		<if test="cityId!=null and cityId!='-1'">
+			and c.city_id = #{cityId}
+		</if>
+	</select>
+</mapper>

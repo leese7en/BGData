@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.OPConnectInfoDao">
+	<select id="getOPConnectInfo" resultType="com.magus.bd.entity.OPConnectInfo"> 
+	SELECT
+		id AS id,
+		ip AS ip,
+		PORT AS PORT,
+		username AS username,
+		PASSWORD AS PASSWORD,
+		number AS number
+	FROM
+		sys_openplant
+	WHERE
+		id = 1
+	</select>	
+	
+	<update id="setOPConnectInfo" parameterType="com.magus.bd.entity.OPConnectInfo">
+	  update sys_openplant 
+	  set ip=#{ip},
+		  username=#{username},
+		  password=#{password},
+		  port=#{port},
+		  number=#{number}
+	  where id = #{id}
+	 </update>
+</mapper>

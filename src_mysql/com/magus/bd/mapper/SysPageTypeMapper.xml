@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magus.bd.dao.SysPageTypeDao">
+	<select id="blurryPageType" resultType="com.magus.bd.entity.SysPageType"
+	 parameterType="com.magus.bd.entity.SysPageType"> 
+	SELECT
+		PAGE_TYPE_ID AS pageTypeId,
+		TYPE_NAME AS typeName,
+		description AS description,
+		IS_ENABLE AS isEnable,
+		IS_DELETED AS isDeleted
+	FROM
+		sys_page_type
+	 where type_name like '%${typeName}%'
+	   and description like '%${description}%'
+	   limit #{pageNumber},#{pageSize}
+	</select>
+	<select id="blurryPageTypeCount" resultType="java.lang.Integer"
+	 parameterType="com.magus.bd.entity.SysPageType"> 
+	SELECT
+		count(1) as count
+	FROM
+		sys_page_type
+	 where type_name like '%${typeName}%'
+	   and description like '%${description}%'
+	</select>
+	<select id="getPageTypeByName" resultType="java.lang.Integer"
+	 parameterType="com.magus.bd.entity.SysPageType"> 
+	SELECT
+		count(1) as count
+	FROM
+		sys_page_type
+	 where type_name = #{typeName}
+	   
+	</select>
+	<select id="getPageTypeInUse" resultType="java.lang.Integer"
+	 parameterType="java.lang.Integer"> 
+		SELECT
+			count(1) count
+		FROM
+			sys_page
+		WHERE
+			PAGE_TYPE_ID = #{pageTypeId}
+	   
+	</select>
+	<select id="getAllPageType" resultType="com.magus.bd.entity.SysPageType"
+	 parameterType="com.magus.bd.entity.SysPageType"> 
+	SELECT
+		PAGE_TYPE_ID AS pageTypeId,
+		TYPE_NAME AS typeName,
+		description AS description,
+		IS_ENABLE AS isEnable,
+		IS_DELETED AS isDeleted
+	FROM
+		sys_page_type
+		where is_enable =0 and is_deleted =0 
+	</select>
+	
+	<insert id="addPageType" parameterType="com.magus.bd.entity.SysPageType">
+	  insert into sys_page_type
+	  (TYPE_NAME,description,IS_ENABLE,IS_DELETED)
+	  values(#{typeName},#{description},#{isEnable},#{isDeleted})
+	</insert>
+	
+	<select id="getPageTypeById" resultType="com.magus.bd.entity.SysPageType" parameterType="java.lang.Integer">
+	  select 
+	    PAGE_TYPE_ID AS pageTypeId,
+		TYPE_NAME AS typeName,
+		description AS description,
+		IS_ENABLE AS isEnable,
+		IS_DELETED AS isDeleted
+	  from 
+	  sys_page_type
+	  where
+	  PAGE_TYPE_ID = #{pageTypeId}
+	</select>
+	
+	
+	
+	<update id="updatePageType" parameterType="com.magus.bd.entity.SysPageType">
+      update sys_page_type 
+      set
+		TYPE_NAME = #{typeName},
+		description = #{description}
+      where 
+      PAGE_TYPE_ID = #{pageTypeId}
+	</update>
+	
+	<delete id="removePageType" parameterType="java.lang.Integer">
+		 delete  
+		 from sys_page_type 
+		 where 
+		 PAGE_TYPE_ID = #{pageTypeId}
+	</delete>
+	
+	
+</mapper>

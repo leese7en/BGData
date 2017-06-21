@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>小时数据列表</title>
+		<meta charset="utf-8">
+		<link rel="icon" href="../images/title.png">
+		<link href="../js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet" />
+		<link href="../js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" media="screen" />
+		<link rel="stylesheet" href="../js/bootstrap-table/css/bootstrap-table.min.css" />
+		<link href="../js/toastr/toastr.min.css" rel="stylesheet" />
+		<link href="../js/sweetalert/sweetalert.css" rel="stylesheet" />
+		<link href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<script src="../js/jquery-1.9.1.min.js">
+</script>
+		<script src="../js/bootstrap-3.3.5/js/bootstrap.min.js">
+</script>
+	<script type="text/javascript" src="../js/bootstrap-table/js/bootstrap-table.min.js">
+</script>
+<script type="text/javascript" src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js">
+</script>
+<script type="text/javascript" src="../js/bootstrap-table/extensions/export/bootstrap-table-export.min.js">
+</script>
+<script type="text/javascript" src="../js/bootstrap-table/js/tableExport.js">
+</script>
+		<script src="../js/toastr/toastr.min.js">
+</script>
+		<script src="../js/sweetalert/sweetalert-dev.js">
+</script>
+		<script src="../js/bootstrap-select/js/bootstrap-select.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js">
+</script>
+		<script src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js">
+</script>
+		<script src="../js/utils.js">
+</script>
+		<script src="js/fachourdataTable.js">
+</script>
+</style>
+	</head>
+	<body >
+		<nav class="navbar navbar-default navbar-fixed-top" style="height: 90px">
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">企业类型</span> 
+						<select id="psTypeQuery" class="selectpicker">
+						<option value="0">废水</option>
+						<option value="1">废气</option>
+					</select> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">企业</span> <select
+						id="psEnterQuery" class="selectpicker" data-live-search="true">
+					</select> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">排口</span> <select
+						id="outPutCodeQuery" class="selectpicker">
+					</select> </span>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">污染物</span> <select
+						id="pollutantCodeQuery" class="selectpicker" multiple>
+					</select> </span>
+			</div>
+		
+		</div>
+		<div class="row" style="padding-top: 8px; padding-left: 20px;">
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">开始时间</span> 
+				<div id="beginTimeQuery" class="input-group date form_datetime" >
+					<input class="form-control" type="text"  style="font-size: 12px; height: 32px;">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<span class="input-group"> <span class="input-group-addon" style="color: black; padding: 3px;">结束时间</span> 
+				<div id="endTimeQuery" class="input-group date form_datetime">
+					<input class="form-control" type="text" style="font-size: 12px; height: 32px;">
+					<span class="input-group-addon" style="height: 31px"> <span class="glyphicon glyphicon-calendar"></span> </span>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<ul class="nav navbar-left">
+					<button type="button" class="btn btn-primary btn-sm" style="" onclick="hourDataQuery()">
+						<span class="glyphicon glyphicon-ok"></span>查询
+					</button>
+				</ul>
+			</div>
+		</div>
+		</nav>
+		<nav class="navbar " style="postion:absolute;top:80px;">
+			<table id="facHourDataTable">
+			</table>
+		</nav>
+		</div>
+	</body>
+</html>
+

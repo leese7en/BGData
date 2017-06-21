@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ECharts">
+    <meta name="author" content="kener.linfeng@gmail.com">
+    <title>发电量与污染物排· Example</title>
+    <link rel="shortcut icon" href="../asset/ico/favicon.png">
+    <link rel="stylesheet" type="text/css" href="../css/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/jqueryUI/themes/icon.css">
+    <script src="../js/echarts-all.js"></script>
+    <script src="../js/jquery-1.7.2.js"></script>
+</head>
+<body>
+    <div style="margin-left:20px;margin-top:10px;">
+            <span style="font-size:13px;">年份:</span>
+            <select id="selectYear" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                <option value="select">请选择</option>
+                <option value="2011">2011</option>
+                <option value="2012">2012</option>
+                <option value="2013">2013</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+            </select>
+            <span style="font-size:13px;">维度:</span>
+            <select id="viewPoint" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                <option value="city">盟市</option>
+                <option value="industry">电力集团</option>
+            </select>
+            <span style="font-size:13px;">污染物类型:</span>
+            <select id="pollutionKind" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 100px;height:28px;">
+                <option value="SO2">SO2</option>
+                <option value="NOx">NOx</option>
+                <option value="粉尘">粉尘</option>
+            </select>
+        <a href="#" class="s_btns"  onclick="queryData()" style="font-size:13px;">查询</a>
+        <div id="main" class="main" style='margin-bottom:1px;padding-bottom:0;border-bottom-width:0;margin-top:20px;'></div>
+    </div>
+
+    <script src="../js/jquery-1.7.2.js"></script>
+    <script src="../js/jquery.easyui.min.js"></script>
+    <!--<script src="../asset/js/echartsExample.js"></script>
+-->
+<script src="js/powerAndPoll.js"></script>
+</body>
+</html>

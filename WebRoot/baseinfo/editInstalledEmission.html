@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>编辑基本区间类型</title>
+		<Meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/default/easyui.css' />
+		<link rel='stylesheet' href='../css/jqueryUI/themes/icon.css' />
+		<script src="../js/jquery-1.7.2.js">
+</script>
+	<script src="../js/jquery.easyui.min.js">
+</script>
+	<script src="../js/easyui-lang-zh_CN.js">
+</script>
+	<script src="../js/utils.js">
+</script>
+	<script src="js/installedEmission.js">
+</script>
+		<style>
+		#installedEmissionDialog tr td{
+		padding:5px 0;
+		}
+		</style>
+	</head>
+	<body class="easyui-layout">
+
+		<div id="editInstalledEmission" class="easyui-menu" style="width: 100px; display: none">
+			<div iconCls="icon-add" name="basic">
+				基本信息
+			</div>
+			<div iconCls="icon-remove" name="delete">
+				删除
+			</div>
+		</div>
+		<div id="installedEmissionDialog" style="width: 550px; height:auto; font-size: 15px; display: none;" title="添加管理">
+			<table style="font-size: 15px; color: MidnightBlue;margin-top:10px;margin-left:40px;">
+				<tr>
+					<td align="right">
+						类别：
+					</td>
+					<td>
+						<select id="addInstalledOrEmission" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						最小值：
+					</td>
+					<td>
+						<input id="addMin" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span id="unit"></span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						最大值：
+					</td>
+					<td>
+						<input id="addMax" class="easyui-textbox" style="width: 150px;height:28px;" />
+						<span id="unit1"></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="installedOrEmissionCondition" style="padding-left:20px;padding-top:10px;">
+			<span>类别：</span>
+			<select id="installedOrEmission" class="easyui-combobox" data-options="panelHeight:'auto'" style="width: 150px;height:28px;">
+				<option value="select">请选择</option>
+				<option value="SO2">SO2</option>
+				<option value="NOx">NOx</option>
+				<option value="粉尘">粉尘</option>
+				<option value="-1" selected = "selected">装机容量</option>
+			</select>
+			<a href="#" class="s_btns" onclick="query()">查询</a>
+			<a href="#" class="s_btna"  onclick="add()">添加</a>
+		</div>
+		<div data-options="region:'center',fit:false">
+			<table id="installedEmissionTable" class="easyui-datagrid" style="width: auto;"
+				toolbar="#installedOrEmissionCondition" data-options="rownumbers:true,singleSelect:true,fit:true,striped:true" pagination="true">
+				<thead>
+					<tr>
+						<th field="id" width="10%" align="center">
+							编码
+						</th>
+						<th field="content" width="40%" align="center" formatter="myFormat">
+							区间范围
+						</th>
+						<th field="min" width="25%"  align="center">
+							最小值
+						</th>
+						<th field="max" width="25%" align="center" formatter="formatOperater">
+							最大值
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+	</html>

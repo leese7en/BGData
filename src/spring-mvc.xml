@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/aop   
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!--
+		自动扫描controller包下的所有类，使其认为spring mvc的控制器 根据需要可以配置多个
+	-->
+
+	<context:component-scan base-package="com.magus.bd.action" />
+	<mvc:annotation-driven />
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<!--
+		<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/" p:suffix=".jsp" />
+	-->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="logInterceptor" class="com.magus.bd.interceptor.LogInterceptor" />
+	<aop:config>
+		<aop:aspect id="asp" ref="logInterceptor">
+			<aop:pointcut id="mycut"
+				expression="execution(* com.magus.bd.action..*.*(..))" />
+			<aop:before pointcut-ref="mycut" method="doAccessCheck" />
+			<aop:after-returning pointcut-ref="mycut"
+				method="doAfterReturning" />
+			<aop:after-throwing pointcut-ref="mycut" method="doAfterThrowing" />
+			<aop:after pointcut-ref="mycut" method="doAfter" />
+			<aop:around pointcut-ref="mycut" method="doBasicProfiling" />
+		</aop:aspect>
+	</aop:config>
+	<!-- 静态资源 -->
+	<!--		文件下载-->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxInMemorySize" value="4096" />
+	</bean>
+</beans>
